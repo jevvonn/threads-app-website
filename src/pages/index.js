@@ -1,3 +1,5 @@
+import LoginButton from "@/components/LoginButton";
+
 export default function Home() {
-  return <h1>Under Development</h1>;
+  return <LoginButton />;
 }
