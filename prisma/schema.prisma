@@ -10,27 +10,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  profile       Profile?
+  threads       Thread[]
+
+  voted_up_threads    Thread[]  @relation("vote_up_thread")
+  voted_down_threads  Thread[]  @relation("vote_down_thread")
+  liked_threads       Thread[]  @relation("likes_thread")
+  saved_threads       Thread[]  @relation("saved_thread")
+  comments            Comment[]
+  voted_up_comments   Comment[] @relation("vote_up_comment")
+  voted_down_comments Comment[] @relation("vote_down_comment")
+  liked_comments      Comment[] @relation("likes_comment")
+}
+
+model Profile {
+  id           String @id @default(uuid())
+  display_name String
+  bio          String
+  avatar       String
+  user         User   @relation(fields: [userId], references: [id])
+  userId       String @unique
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 // Thread
 model Thread {
-  id      String    @id @unique @default(uuid())
-  //  user  
-  type    String
-  title   String
-  body    String?
-  source  String[]
-  //  vote_up 
-  //  vote_down
-  draft   Boolean
-  // likes
-  // saved
-  Comment Comment[]
+  id        String    @id @unique @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  type      String
+  title     String
+  body      String?
+  source    String[]
+  vote_up   User[]    @relation("vote_up_thread")
+  vote_down User[]    @relation("vote_down_thread")
+  draft     Boolean
+  likes     User[]    @relation("likes_thread")
+  saved     User[]    @relation("saved_thread")
+  Comment   Comment[]
 }
 
 // Comment
 
 model Comment {
   id       String @id @unique @default(uuid())
-  // user
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
   threadId String
   thread   Thread @relation(fields: [threadId], references: [id])
 
@@ -38,7 +105,7 @@ model Comment {
   parent    Comment   @relation("childrens_comment", fields: [parentId], references: [id])
   childrens Comment[] @relation("childrens_comment")
   body      String
-  // vote_up 
-  // vote_down 
-  // likes
+  vote_up   User[]    @relation("vote_up_comment")
+  vote_down User[]    @relation("vote_down_comment")
+  likes     User[]    @relation("likes_comment")
 }
