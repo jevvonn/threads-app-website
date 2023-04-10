@@ -16,6 +16,11 @@ export const authOptions = {
       clientSecret: process.env.FACEBOOK_SECRET,
     }),
   ],
+  callbacks: {
+    async jwt({ token }) {
+      return token;
+    },
+  },
 };
 
 export default NextAuth(authOptions);

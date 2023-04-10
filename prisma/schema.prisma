@@ -43,28 +43,22 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  bio           String?
   accounts      Account[]
   sessions      Session[]
-  profile       Profile?
-  threads       Thread[]
 
-  voted_up_threads    Thread[]  @relation("vote_up_thread")
-  voted_down_threads  Thread[]  @relation("vote_down_thread")
-  liked_threads       Thread[]  @relation("likes_thread")
-  saved_threads       Thread[]  @relation("saved_thread")
+  // thread relation
+  threads            Thread[]
+  voted_up_threads   Thread[] @relation("vote_up_thread")
+  voted_down_threads Thread[] @relation("vote_down_thread")
+  liked_threads      Thread[] @relation("likes_thread")
+  saved_threads      Thread[] @relation("saved_thread")
+
+  // comment relation
   comments            Comment[]
   voted_up_comments   Comment[] @relation("vote_up_comment")
   voted_down_comments Comment[] @relation("vote_down_comment")
   liked_comments      Comment[] @relation("likes_comment")
-}
-
-model Profile {
-  id           String @id @default(uuid())
-  display_name String
-  bio          String
-  avatar       String
-  user         User   @relation(fields: [userId], references: [id])
-  userId       String @unique
 }
 
 model VerificationToken {
