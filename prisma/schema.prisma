@@ -10,28 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  User      User     @relation(fields: [authorId], references: [id])
+// Thread
+model Thread {
+  id      String    @id @unique @default(uuid())
+  //  user  
+  type    String
+  title   String
+  body    String?
+  source  String[]
+  //  vote_up 
+  //  vote_down
+  draft   Boolean
+  // likes
+  // saved
+  Comment Comment[]
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  User   User    @relation(fields: [userId], references: [id])
-}
+// Comment
 
-model User {
-  id      Int      @id @default(autoincrement())
-  name    String?  @db.VarChar(255)
-  email   String   @unique @db.VarChar(255)
-  Post    Post[]
-  Profile Profile?
-}
+model Comment {
+  id       String @id @unique @default(uuid())
+  // user
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id])
 
+  parentId  String
+  parent    Comment   @relation("childrens_comment", fields: [parentId], references: [id])
+  childrens Comment[] @relation("childrens_comment")
+  body      String
+  // vote_up 
+  // vote_down 
+  // likes
+}
