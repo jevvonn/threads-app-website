@@ -1,7 +1,6 @@
-import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 
-export default function Home() {
+export default function LoginButton() {
   const { data: session } = useSession();
   if (session) {
     return (
@@ -14,7 +13,7 @@ export default function Home() {
   return (
     <>
       Not signed in <br />
-      <Link href={`/login`}>Login</Link>
+      <button onClick={() => signIn()}>Sign In</button>
     </>
   );
 }
