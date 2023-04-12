@@ -1,5 +1,5 @@
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
