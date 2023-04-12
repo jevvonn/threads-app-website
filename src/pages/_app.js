@@ -1,5 +1,8 @@
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({ subsets: ["latin"], weight: ["300", "500", "700"] });
 
 export default function App({
   Component,
@@ -7,7 +10,9 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <div className={roboto.className}>
+        <Component {...pageProps} />
+      </div>
     </SessionProvider>
   );
 }
