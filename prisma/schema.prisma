@@ -71,21 +71,23 @@ model VerificationToken {
 
 // Thread
 model Thread {
-  id        String    @id @unique @default(uuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  type      String
-  title     String
-  body      String?
-  source    String[]
-  vote_up   User[]    @relation("vote_up_thread")
-  vote_down User[]    @relation("vote_down_thread")
-  draft     Boolean
-  likes     User[]    @relation("likes_thread")
-  saved     User[]    @relation("saved_thread")
-  Comment   Comment[]
-  tags      Tags[]
-  category  Category?
+  id         String    @id @unique @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  type       String
+  title      String
+  body       String?
+  source     String[]
+  vote_up    User[]    @relation("vote_up_thread")
+  vote_down  User[]    @relation("vote_down_thread")
+  draft      Boolean
+  likes      User[]    @relation("likes_thread")
+  saved      User[]    @relation("saved_thread")
+  comments   Comment[]
+  tags       Tags[]
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String
+  // category   Category? @relation(fields: [categoryId], references: [id])
 }
 
 // Comment
@@ -109,19 +111,19 @@ model Comment {
 // Tags
 
 model Tags {
-  type     String
-  title    String
-  body     String?
-  threadId String  @id @unique @default(uuid())
-  thread   Thread  @relation(fields: [threadId], references: [id])
+  id      String   @id @unique @default(uuid())
+  type    String
+  name    String
+  threads Thread[]
 }
 
 // Category
 
 model Category {
-  type     String
-  title    String
-  body     String?
-  threadId String  @unique
-  thread   Thread  @relation(fields: [threadId], references: [id])
+  id      String   @unique
+  type    String
+  name    String
+  threads Thread[]
 }
+
+// Note "Kalo g dikasih id nanti type 88 error, kalo category doang yg dikasih, tags error"
