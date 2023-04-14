@@ -112,7 +112,6 @@ model Comment {
 
 model Tags {
   id      String   @id @unique @default(uuid())
-  type    String
   name    String
   threads Thread[]
 }
@@ -121,7 +120,6 @@ model Tags {
 
 model Category {
   id      String   @unique
-  type    String
   name    String
   threads Thread[]
 }
