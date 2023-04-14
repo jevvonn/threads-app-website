@@ -69,25 +69,39 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// enum
+enum ThreadType {
+  POST_BODY
+  POST_SOURCE
+}
+
+// Thread Source
+model ThreadSource {
+  id       String @id @unique @default(uuid())
+  type     String
+  url      String
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id])
+}
+
 // Thread
 model Thread {
-  id         String    @id @unique @default(uuid())
+  id         String         @id @unique @default(uuid())
   userId     String
-  user       User      @relation(fields: [userId], references: [id])
-  type       String
+  user       User           @relation(fields: [userId], references: [id])
+  type       ThreadType
   title      String
   body       String?
-  source     String[]
-  vote_up    User[]    @relation("vote_up_thread")
-  vote_down  User[]    @relation("vote_down_thread")
+  source     ThreadSource[]
+  vote_up    User[]         @relation("vote_up_thread")
+  vote_down  User[]         @relation("vote_down_thread")
   draft      Boolean
-  likes      User[]    @relation("likes_thread")
-  saved      User[]    @relation("saved_thread")
+  likes      User[]         @relation("likes_thread")
+  saved      User[]         @relation("saved_thread")
   comments   Comment[]
   tags       Tags[]
-  category   Category? @relation(fields: [categoryId], references: [id])
+  category   Category?      @relation(fields: [categoryId], references: [id])
   categoryId String
-  // category   Category? @relation(fields: [categoryId], references: [id])
 }
 
 // Comment
@@ -123,5 +137,3 @@ model Category {
   name    String
   threads Thread[]
 }
-
-// Note "Kalo g dikasih id nanti type 88 error, kalo category doang yg dikasih, tags error"
