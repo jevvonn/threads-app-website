@@ -21,10 +21,17 @@ export default async function handler(req, res) {
         createMany: { data: source },
       },
       tags: {
-        createMany: { data: tags },
+        create: tags,
       },
       category: {
-        connect: categoryId,
+        connect: {
+          id: categoryId,
+        },
+      },
+      user: {
+        session: {
+          id: session.user.id,
+        },
       },
     },
   });

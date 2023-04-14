@@ -133,7 +133,7 @@ model Tags {
 // Category
 
 model Category {
-  id      String   @unique
+  id      String   @id @unique @default(uuid())
   name    String
   threads Thread[]
 }
