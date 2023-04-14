@@ -84,6 +84,8 @@ model Thread {
   likes     User[]    @relation("likes_thread")
   saved     User[]    @relation("saved_thread")
   Comment   Comment[]
+  tags      Tags[]
+  category  Category?
 }
 
 // Comment
@@ -102,4 +104,24 @@ model Comment {
   vote_up   User[]    @relation("vote_up_comment")
   vote_down User[]    @relation("vote_down_comment")
   likes     User[]    @relation("likes_comment")
+}
+
+// Tags
+
+model Tags {
+  type     String
+  title    String
+  body     String?
+  threadId String  @id @unique @default(uuid())
+  thread   Thread  @relation(fields: [threadId], references: [id])
+}
+
+// Category
+
+model Category {
+  type     String
+  title    String
+  body     String?
+  threadId String  @unique
+  thread   Thread  @relation(fields: [threadId], references: [id])
 }
