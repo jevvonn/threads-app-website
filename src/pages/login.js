@@ -45,7 +45,7 @@ const Login = () => {
               })
             }
           >
-            <FaTwitter color="white" />
+            <FaTwitter />
             Continue with Twitter
           </button>
         </div>
