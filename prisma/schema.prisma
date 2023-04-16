@@ -125,8 +125,8 @@ model Comment {
 // Tags
 
 model Tag {
-  id      String   @id @unique @default(uuid())
-  name    String
+  // id      String   @id @unique @default(uuid())
+  name    String   @id @unique
   threads Thread[]
 }
 
