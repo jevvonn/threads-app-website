@@ -21,7 +21,11 @@ export default async function handler(req, res) {
         createMany: { data: source },
       },
       tags: {
-        create: tags,
+        connectOrCreate: tags.map((tag) =>
+          tag.exist
+            ? { where: { name: tag.name } }
+            : { create: { name: tag.name } }
+        ),
       },
       category: {
         connect: {
