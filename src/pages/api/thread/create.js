@@ -21,11 +21,9 @@ export default async function handler(req, res) {
         createMany: { data: source },
       },
       tags: {
-        connectOrCreate: tags.map((tag) =>
-          tag.exist
-            ? { where: { name: tag.name } }
-            : { create: { name: tag.name } }
-        ),
+        connectOrCreate: tags.map((tag) => {
+          return { where: { name: tag.name }, create: { name: tag.name } };
+        }),
       },
       category: {
         connect: {
@@ -33,12 +31,12 @@ export default async function handler(req, res) {
         },
       },
       user: {
-        session: {
+        connect: {
           id: session.user.id,
         },
       },
     },
   });
 
-  res.status(201).json({ massage: "Thread created" });
+  res.status(201).json({ massage: "Thread created", threadId: thread.id });
 }
