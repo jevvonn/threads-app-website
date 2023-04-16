@@ -102,6 +102,7 @@ model Thread {
   tags       Tag[]
   category   Category?      @relation(fields: [categoryId], references: [id])
   categoryId String
+  created_at DateTime       @default(now())
 }
 
 // Comment
