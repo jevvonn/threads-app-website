@@ -99,7 +99,7 @@ model Thread {
   likes      User[]         @relation("likes_thread")
   saved      User[]         @relation("saved_thread")
   comments   Comment[]
-  tags       Tags[]
+  tags       Tag[]
   category   Category?      @relation(fields: [categoryId], references: [id])
   categoryId String
 }
@@ -124,7 +124,7 @@ model Comment {
 
 // Tags
 
-model Tags {
+model Tag {
   id      String   @id @unique @default(uuid())
   name    String
   threads Thread[]
