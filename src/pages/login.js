@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Head from "next/head";
 
 const Login = () => {
@@ -40,18 +40,34 @@ const Login = () => {
           <button
             className="btn rounded-full shadow-[0_5px_7px_-5px_gray] w-full sm:w-96 flex justify-center gap-4 text-lg capitalize tracking-widest bg-[#5165EA] text-white hover:bg-white hover:text-[#5165EA]"
             onClick={() =>
-              signIn("facebook", {
+              signIn("twitter", {
                 callbackUrl: "/",
               })
             }
           >
-            <FaFacebook />
-            Continue with Facebook
+            <FaTwitter />
+            Continue with Twitter
           </button>
         </div>
       </div>
     </>
   );
+};
+
+export const gerServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
 };
 
 export default Login;
