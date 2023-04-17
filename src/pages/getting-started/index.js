@@ -1,7 +1,14 @@
 import { BiEdit } from "react-icons/bi";
 import Head from "next/head";
+import { getSession, useSession } from "next-auth/react";
+import Image from "next/image";
 
 const Settings = () => {
+  const { data: session, update } = useSession();
+  if (!session) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Head>
@@ -18,9 +25,16 @@ const Settings = () => {
             </h1>
           </div>
 
-          <div className="avatar w-32 h-32 relative">
-            <div className="w-32 h-32 rounded-full ring-2 ring-white absolute">
-              <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"></img>
+          <div className="w-32 h-32 relative ">
+            <div className="avatar">
+              <div className="w-32  rounded-full ring-2 ring-white">
+                <Image
+                  src={session.user.image}
+                  alt="user-image"
+                  width={200}
+                  height={200}
+                />
+              </div>
             </div>
             <label className="w-10 h-10 flex justify-center items-center bg-white border rounded-full cursor-pointer absolute bottom-0 right-0 text-black text-xl">
               <input type="file" className="hidden"></input>
@@ -36,8 +50,9 @@ const Settings = () => {
               <input
                 type="text"
                 name="display-name"
-                className="w-full py-2 px-4 text-lg rounded-xl border border-[#777777] outline-none focus:border focus:border-primary"
-              ></input>
+                className="w-full py-2 px-4 text-lg rounded-2xl border border-[#777777] outline-none focus:border focus:border-primary"
+                defaultValue={session.user.name}
+              />
             </label>
           </div>
 
@@ -48,7 +63,7 @@ const Settings = () => {
               </p>
               <textarea
                 name="bio"
-                className="w-full h-32 py-2 px-4 text-lg rounded-xl outline-none resize-none border border-[#777777] focus:border focus:border-primary"
+                className="w-full h-32 py-2 px-4 text-lg rounded-2xl outline-none resize-none border border-[#777777] focus:border focus:border-primary"
               ></textarea>
             </label>
           </div>
@@ -60,6 +75,22 @@ const Settings = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
 };
 
 export default Settings;

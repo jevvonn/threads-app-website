@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { FaTwitter } from "react-icons/fa";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Head from "next/head";
 
 const Login = () => {
@@ -52,6 +52,22 @@ const Login = () => {
       </div>
     </>
   );
+};
+
+export const gerServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
 };
 
 export default Login;
