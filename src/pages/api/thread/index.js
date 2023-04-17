@@ -27,9 +27,27 @@ export default async function handler(req, res) {
     orderBy: {
       created_at: "desc",
     },
+
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          vote_up: true,
+          vote_down: true,
+          saved: true,
+          comments: true,
+        },
+      },
+
+      tags: true,
+      category: true,
+      user: true,
+      source: true,
+    },
+
     take: parseInt(limit),
     skip: (page - 1) * limit,
   });
 
-  res.status(201).json({ massage: "Success get thread", threads });
+  res.status(200).json({ massage: "Success get threads", threads });
 }
