@@ -1,8 +1,10 @@
 import { FcGoogle } from "react-icons/fc";
 import { FaTwitter } from "react-icons/fa";
 import Image from "next/image";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Login = () => {
   return (
@@ -55,7 +57,7 @@ const Login = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (session)
     return {
