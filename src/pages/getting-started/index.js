@@ -1,10 +1,12 @@
 import { BiEdit } from "react-icons/bi";
 import Head from "next/head";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 const Settings = () => {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   if (!session) {
     return <div>Loading...</div>;
   }
@@ -78,7 +80,7 @@ const Settings = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session)
     return {
