@@ -23,19 +23,19 @@ export default function Home() {
   }
   return (
     <>
-      <div className="navbar w-full fixed top-0 z-[1] border-b-2 lg:px-6 lg:py-3 flex justify-between gap-2 bg-base-100">
+      <div className="navbar w-full fixed top-0 z-[1] border-b-2 lg:px-6 lg:py-0 flex justify-between gap-2 bg-base-100">
         <div className="w-8 md:w-1/5">
           <img
             src="img/logo-combine.png"
-            className="hidden lg:w-3/5 md:block"
+            className="hidden lg:w-2/4 md:block"
           />
           <img src="img/logo-self.png" className="w-full md:hidden" />
         </div>
-        <div className="form-control relative flex justify-center items-center lg:w-3/5">
+        <div className="form-control relative flex justify-center lg:w-3/5">
           <input
             type="text"
             placeholder="Search Thread's"
-            className="input input-bordered w-full pr-10 lg:pr-14 rounded-full focus:outline-none"
+            className="input input-bordered w-full h-11 pr-10 lg:pr-14 rounded-full focus:outline-none"
           />
           <AiOutlineSearch
             size={24}
@@ -67,9 +67,9 @@ export default function Home() {
           </ul>
         </div>
       </div>
-      <div className="w-full p-3 flex gap-3 mt-20">
-        <div className="w-full lg:w-3/4 flex flex-col items-end gap-3">
-          <div className="w-11/12 flex justify-between border">
+      <div className="w-full lg:w-3/4 md:p-3 flex gap-3 mx-auto mt-16">
+        <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
+          <div className="w-full md:w-11/12 flex border rounded">
             <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
               <Link
                 href=""
@@ -98,7 +98,7 @@ export default function Home() {
               <span className="font-semibold">News Thred</span>
             </div>
           </div>
-          <div className="w-11/12 p-3 flex justify-between items-center border">
+          <div className="w-full md:w-11/12 p-3 flex justify-between items-center border rounded">
             <div className="avatar">
               <div className="w-10 rounded-full border">
                 <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" />
@@ -106,24 +106,29 @@ export default function Home() {
             </div>
             <Link
               href=""
-              className="w-9/12 h-10 pl-5 flex items-center border-2 border-primary"
+              className="w-9/12 h-10 flex items-center border-2 border-primary rounded"
             >
-              Whats on your mind
+              <input
+                type="text"
+                placeholder="Whats on your mind"
+                className="w-full h-full pl-5 focus:outline-none rounded"
+              />
             </Link>
           </div>
           <div className="w-full flex">
-            <div className="w-1/12 flex flex-col items-center text-primary">
+            <div className="w-1/12 hidden md:flex flex-col items-center text-primary">
               <button>
-                <BiUpvote size={30} className="md:hidden" />
-                <BiUpvote size={50} className="hidden md:block" />
+                <BiUpvote size={40} className="hidden md:block" />
               </button>
               <span className="font-semibold text-black">20.k</span>
               <button>
-                <BiDownvote size={30} className="md:hidden" />
-                <BiDownvote size={50} className="hidden md:block" />
+                <BiDownvote size={40} className="hidden md:block" />
               </button>
             </div>
-            <Link href="" className="w-11/12 border p-3 flex flex-col gap-3">
+            <Link
+              href=""
+              className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2"
+            >
               <div className="w-full flex gap-2">
                 <div className="avatar">
                   <div className="w-12 rounded-full border">
@@ -144,6 +149,17 @@ export default function Home() {
                 className="w-full"
               ></img>
               <div className="flex justify-end gap-3">
+                <div className="md:hidden flex items-center text-primary">
+                  <button>
+                    <BiUpvote size={27} />
+                  </button>
+                  <span className="w-10 text-center font-semibold text-black">
+                    20.k
+                  </span>
+                  <button>
+                    <BiDownvote size={27} />
+                  </button>
+                </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
                     <AiOutlineHeart size={30} />
@@ -166,18 +182,19 @@ export default function Home() {
             </Link>
           </div>
           <div className="w-full flex">
-            <div className="w-1/12 flex flex-col items-center text-primary">
+            <div className="w-1/12 hidden md:flex flex-col items-center text-primary">
               <button>
-                <BiUpvote size={30} className="md:hidden" />
-                <BiUpvote size={50} className="hidden md:block" />
+                <BiUpvote size={40} className="hidden md:block" />
               </button>
               <span className="font-semibold text-black">20.k</span>
               <button>
-                <BiDownvote size={30} className="md:hidden" />
-                <BiDownvote size={50} className="hidden md:block" />
+                <BiDownvote size={40} className="hidden md:block" />
               </button>
             </div>
-            <Link href="" className="w-11/12 border p-3 flex flex-col gap-3">
+            <Link
+              href=""
+              className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2"
+            >
               <div className="w-full flex gap-2">
                 <div className="avatar">
                   <div className="w-12 rounded-full border">
@@ -198,6 +215,17 @@ export default function Home() {
                 className="w-full"
               ></img>
               <div className="flex justify-end gap-3">
+                <div className="md:hidden flex items-center text-primary">
+                  <button>
+                    <BiUpvote size={27} />
+                  </button>
+                  <span className="w-10 text-center font-semibold text-black">
+                    20.k
+                  </span>
+                  <button>
+                    <BiDownvote size={27} />
+                  </button>
+                </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
                     <AiOutlineHeart size={30} />
@@ -220,8 +248,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="hidden w-1/4 lg:block">
-          <div className="w-full py-6 px-4 flex flex-col items-center gap-4 border mt-32">
+        <div className="hidden w-2/6 lg:block">
+          <div className="w-full py-6 px-4 flex flex-col items-center gap-4 border rounded mt-32">
             <h2 className="font-semibold text-xl">Follow More thred'er</h2>
             <div className="w-14 h-14 flex justify-center items-center bg-secondary text-primary border rounded-full">
               <AiOutlineUsergroupAdd size={30} />
@@ -243,7 +271,7 @@ export default function Home() {
                   <img src="https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj" />
                 </div>
               </div>
-              <span className="font-semibold">Aughest mantap betul</span>
+              <span className="font-semibold">Agung Setiyawan</span>
               <button className="btn btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
