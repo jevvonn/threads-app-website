@@ -23,7 +23,7 @@ export default function Home() {
   }
   return (
     <>
-      <div className="w-full fixed top-0 z-[1] border-b py-2 px-2 lg:px-12 lg:py-0 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
+      <div className="w-full fixed top-0 z-[1] border-b py-2 px-2 lg:px-12 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
         <div className="w-8 md:w-1/5">
           <img
             src="img/logo-combine.png"
