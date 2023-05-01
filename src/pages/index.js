@@ -1,5 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { AiOutlineComment } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
@@ -8,7 +9,6 @@ import { BsFire } from "react-icons/bs";
 import { BsBarChartFill } from "react-icons/bs";
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
 import { MdNewReleases } from "react-icons/md";
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
   }
   return (
     <>
-      <div className="w-full fixed top-0 z-[1] border-b-2 px-2 lg:px-12 lg:py-0 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
+      <div className="w-full fixed top-0 z-[1] border-b py-2 px-2 lg:px-12 lg:py-0 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
         <div className="w-8 md:w-1/5">
           <img
             src="img/logo-combine.png"
@@ -51,7 +51,7 @@ export default function Home() {
             </label>
             <ul
               tabIndex={0}
-              className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+              className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 w-52 border rounded"
             >
               <li>
                 <a className="justify-between">
@@ -69,7 +69,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-3/4 md:p-3 flex gap-3 mx-auto mt-12">
+      <div className="w-full lg:w-3/4 md:p-3 flex gap-3 mx-auto mt-16">
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
           <div className="w-full md:w-11/12 flex border rounded">
             <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
@@ -164,13 +164,13 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
-                    <AiOutlineHeart size={30} />
+                    <AiOutlineHeart size={27} />
                   </button>
                   <p>25.4k</p>
                 </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
-                    <FaRegComment size={27} />
+                    <AiOutlineComment size={27} />
                   </button>
                   <p>120k</p>
                 </div>
@@ -247,13 +247,13 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
-                    <AiOutlineHeart size={30} />
+                    <AiOutlineHeart size={27} />
                   </button>
                   <p>2.6M</p>
                 </div>
                 <div className="flex items-center gap-1 font-semibold">
                   <button>
-                    <FaRegComment size={27} />
+                    <AiOutlineComment size={27} />
                   </button>
                   <p>1.5M</p>
                 </div>
@@ -274,57 +274,67 @@ export default function Home() {
               <AiOutlineUsergroupAdd size={30} />
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-              <div className="avatar">
-                <div className="w-14 rounded-full border">
-                  <img src="https://mediapublica.co/wp-content/uploads/2015/01/Mr_beans_holiday_ver2.jpg" />
+              <div className="flex items-center gap-2">
+                <div className="avatar">
+                  <div className="w-14 rounded-full border">
+                    <img src="https://mediapublica.co/wp-content/uploads/2015/01/Mr_beans_holiday_ver2.jpg" />
+                  </div>
                 </div>
+                <span className="font-semibold">Ibrahim Syah Qordhawi</span>
               </div>
-              <span className="font-semibold">Ibrahim Syah Qordhawi</span>
-              <button className="btn btn-primary text-white capitalize tracking-wider">
+              <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-              <div className="avatar">
-                <div className="w-14 rounded-full border">
-                  <img src="https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj" />
+              <div className="flex items-center gap-2">
+                <div className="avatar">
+                  <div className="w-14 rounded-full border">
+                    <img src="https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj" />
+                  </div>
                 </div>
+                <span className="font-semibold">Ibrahim Syah Qordhawi</span>
               </div>
-              <span className="font-semibold">Agung Setiyawan</span>
-              <button className="btn btn-primary text-white capitalize tracking-wider">
+              <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-              <div className="avatar">
-                <div className="w-14 rounded-full border">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTqpDrWQGagrqaEccS7Wd97j2tD4Mo16RRA&usqp=CAU" />
+              <div className="flex items-center gap-2">
+                <div className="avatar">
+                  <div className="w-14 rounded-full border">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTqpDrWQGagrqaEccS7Wd97j2tD4Mo16RRA&usqp=CAU" />
+                  </div>
                 </div>
+                <span className="font-semibold">Mr Beast</span>
               </div>
-              <span className="font-semibold">Mr Beast</span>
-              <button className="btn btn-primary text-white capitalize tracking-wider">
+              <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-              <div className="avatar">
-                <div className="w-14 rounded-full border">
-                  <img src="https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj" />
+              <div className="flex items-center gap-2">
+                <div className="avatar">
+                  <div className="w-14 rounded-full border">
+                    <img src="https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj" />
+                  </div>
                 </div>
+                <span className="font-semibold">Vidi Fadhil Arofah</span>
               </div>
-              <span className="font-semibold">Vidi Fadhil Arofah</span>
-              <button className="btn btn-primary text-white capitalize tracking-wider">
+              <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-              <div className="avatar">
-                <div className="w-14 rounded-full border">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTqpDrWQGagrqaEccS7Wd97j2tD4Mo16RRA&usqp=CAU" />
+              <div className="flex items-center gap-2">
+                <div className="avatar">
+                  <div className="w-14 rounded-full border">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTqpDrWQGagrqaEccS7Wd97j2tD4Mo16RRA&usqp=CAU" />
+                  </div>
                 </div>
+                <span className="font-semibold">Kijang Balap</span>
               </div>
-              <span className="font-semibold">bis</span>
-              <button className="btn btn-primary text-white capitalize tracking-wider">
+              <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
                 Follow
               </button>
             </div>
