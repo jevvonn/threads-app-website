@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Account {
@@ -27,6 +28,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -35,6 +37,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -43,7 +47,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  bio           String?
+  bio           String?   @db.Text
   accounts      Account[]
   sessions      Session[]
 
@@ -69,21 +73,45 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// enum
+enum ThreadType {
+  POST_BODY
+  POST_SOURCE
+}
+
+// Thread Source
+model ThreadSource {
+  id       String @id @unique @default(uuid())
+  type     String
+  url      String
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id])
+
+  @@index([threadId])
+}
+
 // Thread
 model Thread {
-  id        String    @id @unique @default(uuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  type      String
-  title     String
-  body      String?
-  source    String[]
-  vote_up   User[]    @relation("vote_up_thread")
-  vote_down User[]    @relation("vote_down_thread")
-  draft     Boolean
-  likes     User[]    @relation("likes_thread")
-  saved     User[]    @relation("saved_thread")
-  Comment   Comment[]
+  id         String         @id @unique @default(uuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id])
+  type       ThreadType
+  title      String
+  body       String?        @db.Text
+  source     ThreadSource[]
+  vote_up    User[]         @relation("vote_up_thread")
+  vote_down  User[]         @relation("vote_down_thread")
+  draft      Boolean
+  likes      User[]         @relation("likes_thread")
+  saved      User[]         @relation("saved_thread")
+  comments   Comment[]
+  tags       Tag[]
+  category   Category?      @relation(fields: [categoryId], references: [id])
+  categoryId String
+  created_at DateTime       @default(now())
+
+  @@index([userId])
+  @@index([categoryId])
 }
 
 // Comment
@@ -96,10 +124,30 @@ model Comment {
   thread   Thread @relation(fields: [threadId], references: [id])
 
   parentId  String
-  parent    Comment   @relation("childrens_comment", fields: [parentId], references: [id])
+  parent    Comment   @relation("childrens_comment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childrens Comment[] @relation("childrens_comment")
-  body      String
+  body      String    @db.Text
   vote_up   User[]    @relation("vote_up_comment")
   vote_down User[]    @relation("vote_down_comment")
   likes     User[]    @relation("likes_comment")
+
+  @@index([userId])
+  @@index([threadId])
+  @@index([parentId])
+}
+
+// Tags
+
+model Tag {
+  // id      String   @id @unique @default(uuid())
+  name    String   @id @unique
+  threads Thread[]
+}
+
+// Category
+
+model Category {
+  id      String   @id @unique @default(uuid())
+  name    String
+  threads Thread[]
 }
