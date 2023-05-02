@@ -3,6 +3,8 @@ import { FaTwitter } from "react-icons/fa";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Login = () => {
   return (
@@ -52,6 +54,22 @@ const Login = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
 };
 
 export default Login;
