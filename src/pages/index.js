@@ -8,6 +8,7 @@ import UserDropdown from "@/components/navigation/UserDropdown";
 import SingleLogo from "@/components/logo/SingleLogo";
 import FullLogo from "@/components/logo/FullLogo";
 import SingleThread from "@/components/thread/SingleThread";
+import { SingleUpload } from "../../firebase/upload";
 
 const data = [
   {
@@ -82,6 +83,14 @@ const data = [
     },
   },
 ];
+
+async function handleChange(event) {
+  const file = event.target.files[0];
+
+  const url = await SingleUpload(file, "puta", "images");
+
+  console.log(url);
+}
 
 export default function Home() {
   return (
@@ -232,6 +241,9 @@ export default function Home() {
               </button>
             </div>
           </div>
+        </div>
+        <div>
+          <input type="file" onChange={handleChange} accept="/image/*" />
         </div>
       </div>
     </>
