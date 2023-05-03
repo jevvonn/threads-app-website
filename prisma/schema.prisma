@@ -97,7 +97,7 @@ model Thread {
   user       User           @relation(fields: [userId], references: [id])
   type       ThreadType
   title      String
-  body       String?
+  body       String?        @db.Text
   source     ThreadSource[]
   vote_up    User[]         @relation("vote_up_thread")
   vote_down  User[]         @relation("vote_down_thread")
@@ -126,7 +126,7 @@ model Comment {
   parentId  String
   parent    Comment   @relation("childrens_comment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childrens Comment[] @relation("childrens_comment")
-  body      String
+  body      String    @db.Text
   vote_up   User[]    @relation("vote_up_comment")
   vote_down User[]    @relation("vote_down_comment")
   likes     User[]    @relation("likes_comment")
