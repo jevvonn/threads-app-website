@@ -13,6 +13,7 @@
     "@prisma/client": "^4.12.0",
     "autoprefixer": "10.4.14",
     "daisyui": "^2.51.5",
+    "firebase": "^9.21.0",
     "next": "13.3.0",
     "next-auth": "^4.22.0",
     "postcss": "8.4.21",
