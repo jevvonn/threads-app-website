@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Thred{`'`}s</title>
+        <title>Threds</title>
       </Head>
 
       <Navbar />

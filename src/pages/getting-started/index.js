@@ -39,7 +39,7 @@ const Settings = () => {
       return;
     }
     await update(inputForm);
-    router.push("/");
+    router.push(`/`, null, { shallow: true });
   };
 
   return (
@@ -61,14 +61,14 @@ const Settings = () => {
               </h1>
             </div>
 
-            <div className="w-32 h-32 relative ">
+            <div className=" relative ">
               <div className="avatar">
-                <div className="w-32  rounded-full ring-2 ring-white">
+                <div className="w-24 rounded-full ring-2 ring-white">
                   <Image
                     src={inputForm.image}
                     alt="user-image"
-                    width={200}
-                    height={200}
+                    width={500}
+                    height={500}
                   />
                 </div>
               </div>
