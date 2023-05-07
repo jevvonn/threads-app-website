@@ -5,6 +5,7 @@ import { BsBarChartFill } from "react-icons/bs";
 import { MdNewReleases } from "react-icons/md";
 import SingleThread from "@/components/thread/SingleThread";
 import Navbar from "@/components/navigation/Navbar";
+import Head from "next/head";
 
 const data = [
   {
