@@ -83,6 +83,10 @@ const data = [
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>Thred{`'`}s</title>
+      </Head>
+
       <Navbar />
       <div className="w-full lg:w-3/4 md:p-3 flex gap-3 mx-auto mt-16">
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">

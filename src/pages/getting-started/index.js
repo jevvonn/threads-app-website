@@ -45,7 +45,7 @@ const Settings = () => {
   return (
     <>
       <Head>
-        <title>Start</title>
+        <title>Setting Up Profile</title>
       </Head>
 
       <div className="w-full h-screen overflow-hidden relative">
