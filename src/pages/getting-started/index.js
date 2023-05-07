@@ -41,7 +41,7 @@ const Settings = () => {
     await update(inputForm);
     router.push(`/`, null, { shallow: true });
   };
-
+  
   return (
     <>
       <Head>
