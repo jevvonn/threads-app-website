@@ -1,24 +1,40 @@
-import { getServerSession } from "next-auth";
 import prisma from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
+import { getServerAuthSession } from "../auth/[...nextauth]";
+/**
+ *
+ * @param {import("next").NextApiRequest} req
+ * @param {import("next").NextApiResponse} res
+ * @returns
+ */
 
 export default async function handler(req, res) {
   if (req.method != "POST")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, source, draft, tags, categoryId } = req.body;
+  const { type, title, body, threadSources, isDraft, tags, categoryId } =
+    req.body;
+  if (
+    !type ||
+    !title ||
+    !body ||
+    !threadSources ||
+    !isDraft ||
+    !tags ||
+    !categoryId
+  )
+    return res.status(400).json({ massage: "Bad Request" });
 
   const thread = await prisma.thread.create({
     data: {
       type,
       title,
       body,
-      draft,
-      source: {
-        createMany: { data: source },
+      isDraft,
+      sources: {
+        createMany: threadSources.map((source) => ({ data: source })),
       },
       tags: {
         connectOrCreate: tags.map((tag) => {
