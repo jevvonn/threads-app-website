@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ massage: "Method not allowed" });
 
   const session = await getServerAuthSession(req, res);
-  const cursorUser = session ? { cursor: session.user.id } : false;
+  const cursorUser = session ? { cursor: { id: session.user.id } } : false;
   const { id } = req.query;
 
   const thread = await prisma.thread.findUnique({

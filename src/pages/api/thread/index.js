@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       .json({ massage: "Please provide page and limit params" });
 
   const session = await getServerAuthSession(req, res);
-  const cursorUser = session ? { cursor: session.user.id } : false;
+  const cursorUser = session ? { cursor: { id: session.user.id } } : false;
 
   const threads = await prisma.thread.findMany({
     where: {
