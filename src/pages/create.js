@@ -5,6 +5,7 @@ import { useState } from "react";
 import { BsFileRichtext } from "react-icons/bs";
 import { BsCardImage } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { getServerAuthSession } from "./api/auth/[...nextauth]";
 
 export default function Create() {
   const [active, setActive] = useState(1);
@@ -72,3 +73,19 @@ export default function Create() {
     </>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context.req, context.res);
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};

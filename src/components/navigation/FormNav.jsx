@@ -1,23 +1,25 @@
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
+import { BiPlus } from "react-icons/bi";
 
-export default function FormNav(){
-    return (
-      <div className="w-full md:w-11/12 p-3 flex justify-between items-center border rounded">
-        <div className="avatar">
-          <div className="w-10 rounded-full border">
-            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" />
-          </div>
+export default function FormNav() {
+  const { data } = useSession();
+
+  return (
+    <div className="w-full md:w-11/12 p-3 flex justify-between items-center border rounded">
+      <div className="avatar">
+        <div className="w-12 rounded-full border">
+          <Image src={data?.user.image} width={40} height={40} alt="avatar" />
         </div>
-        <Link
-          href=""
-          className="w-9/12 h-10 flex items-center border-2 border-primary rounded"
-        >
-          <input
-            type="text"
-            placeholder="Whats on your mind"
-            className="w-full h-full pl-5 focus:outline-none rounded"
-          />
-        </Link>
       </div>
-    );
+      <Link
+        href={`/create`}
+        className="btn btn-ghost btn-group flex items-center rounded-full"
+      >
+        <BiPlus size={25} />
+        <span>New Thread</span>
+      </Link>
+    </div>
+  );
 }
