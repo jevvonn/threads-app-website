@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       category: true,
     },
 
-    take: parseInt(limit),
+    take: parseInt(limit) + 1,
     skip: (page - 1) * limit,
   });
 
