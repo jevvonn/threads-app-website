@@ -34,6 +34,10 @@ export default async function handler(req, res) {
       savedBy: cursorUser,
       votedDownBy: cursorUser,
       votedUpBy: cursorUser,
+      tags: true,
+      user: true,
+      sources: true,
+      category: true,
     },
   });
 
