@@ -55,6 +55,8 @@ export default async function handler(req, res) {
     skip: (page - 1) * limit,
   });
 
+  let nextPage = undefined;
+
   if (threads.length > parseInt(limit)) {
     threads.pop();
     nextPage = parseInt(page) + 1;

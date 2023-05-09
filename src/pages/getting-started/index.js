@@ -2,8 +2,7 @@ import { BiEdit } from "react-icons/bi";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerAuthSession } from "../api/auth/[...nextauth]";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -39,9 +38,10 @@ const Settings = () => {
       return;
     }
     await update(inputForm);
-    router.push(`/`, null, { shallow: true });
+    await update();
+    router.push(`/`);
   };
-  
+
   return (
     <>
       <Head>
@@ -118,7 +118,7 @@ const Settings = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getServerAuthSession(context.req, context.res);
 
   if (!session)
     return {
