@@ -1,7 +1,5 @@
-import { getServerSession } from "next-auth";
 import prisma from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
-
+import { getServerAuthSession } from "../auth/[...nextauth]";
 /**
  *
  * @param {import("next").NextApiRequest} req
@@ -13,6 +11,8 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
+  const session = await getServerAuthSession(req, res);
+  const cursorUser = session ? { cursor: { id: session.user.id } } : false;
   const { id } = req.query;
 
   const thread = await prisma.thread.findUnique({
@@ -23,18 +23,17 @@ export default async function handler(req, res) {
     include: {
       _count: {
         select: {
-          likes: true,
-          vote_up: true,
-          vote_down: true,
-          saved: true,
           comments: true,
+          likedBy: true,
+          savedBy: true,
+          votedDownBy: true,
+          votedUpBy: true,
         },
       },
-
-      tags: true,
-      category: true,
-      user: true,
-      source: true,
+      likedBy: cursorUser,
+      savedBy: cursorUser,
+      votedDownBy: cursorUser,
+      votedUpBy: cursorUser,
     },
   });
 

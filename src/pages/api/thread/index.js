@@ -1,7 +1,5 @@
-import { getServerSession } from "next-auth";
 import prisma from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
-
+import { getServerAuthSession } from "../auth/[...nextauth]";
 /**
  *
  * @param {import("next").NextApiRequest} req
@@ -20,29 +18,31 @@ export default async function handler(req, res) {
       .status(406)
       .json({ massage: "Please provide page and limit params" });
 
+  const session = await getServerAuthSession(req, res);
+  const cursorUser = session ? { cursor: { id: session.user.id } } : false;
+
   const threads = await prisma.thread.findMany({
     where: {
-      draft: false,
+      isDraft: false,
     },
     orderBy: {
-      created_at: "desc",
+      createdAt: "desc",
     },
 
     include: {
       _count: {
         select: {
-          likes: true,
-          vote_up: true,
-          vote_down: true,
-          saved: true,
           comments: true,
+          likedBy: true,
+          savedBy: true,
+          votedDownBy: true,
+          votedUpBy: true,
         },
       },
-
-      tags: true,
-      category: true,
-      user: true,
-      source: true,
+      likedBy: cursorUser,
+      savedBy: cursorUser,
+      votedDownBy: cursorUser,
+      votedUpBy: cursorUser,
     },
 
     take: parseInt(limit),
