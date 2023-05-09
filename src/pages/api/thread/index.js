@@ -55,14 +55,14 @@ export default async function handler(req, res) {
     skip: (page - 1) * limit,
   });
 
-  if (!threads.length)
-    return res.status(404).json({ massage: "No threads found" });
+  if (threads.length > parseInt(limit)) {
+    threads.pop();
+    nextPage = parseInt(page) + 1;
+  }
 
   res.status(200).json({
     massage: "Success get threads",
     threads,
-    nextPage: parseInt(page) + 1,
-    prevPage: parseInt(page) - 1,
-    currentPage: parseInt(page),
+    nextPage,
   });
 }
