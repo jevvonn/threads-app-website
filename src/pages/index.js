@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { AiOutlineSearch } from "react-icons/ai";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { BsFire } from "react-icons/bs";
 import { BsBarChartFill } from "react-icons/bs";
 import { MdNewReleases } from "react-icons/md";
-import UserDropdown from "@/components/navigation/UserDropdown";
-import SingleLogo from "@/components/logo/SingleLogo";
-import FullLogo from "@/components/logo/FullLogo";
 import SingleThread from "@/components/thread/SingleThread";
-import { SingleUpload } from "../../firebase/upload";
+import Navbar from "@/components/navigation/Navbar";
+import Head from "next/head";
 
 const data = [
   {
@@ -84,39 +81,14 @@ const data = [
   },
 ];
 
-async function handleChange(event) {
-  const file = event.target.files[0];
-
-  const url = await SingleUpload(file, "puta", "images");
-
-  console.log(url);
-}
-
 export default function Home() {
   return (
     <>
-      <div className="w-full fixed top-0 z-[1] border-b py-2 px-2 lg:px-12 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
-        <div className="w-8 md:w-1/5">
-          <Link href="/" title="Thred's">
-            <SingleLogo className="hidden lg:w-2/4 md:block" />
-            <FullLogo className="w-full md:hidden" />
-          </Link>
-        </div>
-        <div className="md:w-4/5 flex justify-between items-center gap-2">
-          <div className="form-control h-full relative flex justify-center md:w-1/2">
-            <input
-              type="text"
-              placeholder="Search Thread's"
-              className="input input-bordered w-full h-10 pr-10 lg:pr-14 rounded-full focus:outline-none"
-            />
-            <AiOutlineSearch
-              size={24}
-              className="absolute right-3 lg:right-5  bg-transparent"
-            />
-          </div>
-          <UserDropdown />
-        </div>
-      </div>
+      <Head>
+        <title>Threds</title>
+      </Head>
+
+      <Navbar />
       <div className="w-full lg:w-3/4 md:p-3 flex gap-3 mx-auto mt-16">
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
           <div className="w-full md:w-11/12 flex border rounded">
@@ -241,9 +213,6 @@ export default function Home() {
               </button>
             </div>
           </div>
-        </div>
-        <div>
-          <input type="file" onChange={handleChange} accept="/image/*" />
         </div>
       </div>
     </>
