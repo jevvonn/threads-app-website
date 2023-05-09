@@ -19,7 +19,9 @@ export default async function handler(req, res) {
       .json({ massage: "Please provide page and limit params" });
 
   const session = await getServerAuthSession(req, res);
-  const cursorUser = session ? { cursor: { id: session.user.id } } : false;
+  const cursorUser = session
+    ? { cursor: { id: session.user.id }, select: { id: true } }
+    : false;
 
   const threads = await prisma.thread.findMany({
     where: {
@@ -43,11 +45,24 @@ export default async function handler(req, res) {
       savedBy: cursorUser,
       votedDownBy: cursorUser,
       votedUpBy: cursorUser,
+      tags: true,
+      user: true,
+      sources: true,
+      category: true,
     },
 
     take: parseInt(limit),
     skip: (page - 1) * limit,
   });
 
-  res.status(200).json({ massage: "Success get threads", threads });
+  if (!threads.length)
+    return res.status(404).json({ massage: "No threads found" });
+
+  res.status(200).json({
+    massage: "Success get threads",
+    threads,
+    nextPage: parseInt(page) + 1,
+    prevPage: parseInt(page) - 1,
+    currentPage: parseInt(page),
+  });
 }
