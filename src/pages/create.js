@@ -25,8 +25,8 @@ export default function Create() {
               onClick={() => changePost(1)}
               className={
                 active === 1
-                  ? "w-1/2 h-14 border border-blue-700 rounded text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
-                  : "w-1/2 h-14 border rounded flex justify-center items-center gap-3 text-sm md:text-base"
+                  ? "w-1/2 h-14 border border-blue-700 rounded-l text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
+                  : "w-1/2 h-14 border rounded-l flex justify-center items-center gap-3 text-sm md:text-base"
               }
             >
               <BsFileRichtext size={30} />
@@ -36,8 +36,8 @@ export default function Create() {
               onClick={() => changePost(2)}
               className={
                 active === 2
-                  ? "w-1/2 h-14 border border-blue-700 rounded text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
-                  : "w-1/2 h-14 border rounded flex justify-center items-center gap-3 text-sm md:text-base"
+                  ? "w-1/2 h-14 border border-blue-700 rounded-r text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
+                  : "w-1/2 h-14 border rounded-r flex justify-center items-center gap-3 text-sm md:text-base"
               }
             >
               <BsCardImage size={30} />
@@ -68,18 +68,6 @@ export default function Create() {
             </button>
           </div>
         </div>
-      </div>
-      <div className="form-control w-full fixed bottom-0 bg-secondary px-4 py-1 pb-2">
-        <label className="label cursor-pointer flex justify-start gap-3">
-          <input type="checkbox" className="checkbox-xs" />
-          <span className="label-text font-semibold">
-            Send me post reply notifications
-          </span>
-        </label>
-        <p className="px-1 flex gap-1 text-sm text-blue-700">
-          Connect accounts to share you post{" "}
-          <AiOutlineInfoCircle size={21} color="gray" />
-        </p>
       </div>
     </>
   );
