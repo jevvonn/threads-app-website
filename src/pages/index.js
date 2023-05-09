@@ -5,6 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import FilterWidget from "@/components/navigation/FilterWidget";
 import RecommendationSide from "@/components/user/RecommendationSide";
 import FormNav from "@/components/navigation/FormNav";
+import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 
 export default function Home() {
   const { data } = useInfiniteQuery({
@@ -33,9 +34,13 @@ export default function Home() {
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
           <FilterWidget />
           <FormNav />
-          {threads?.map((thread) => (
-            <SingleThread thread={thread} key={thread.id} />
-          ))}
+          {threads ? (
+            threads.map((thread) => (
+              <SingleThread thread={thread} key={thread.id} />
+            ))
+          ) : (
+            <ThreadSkeleton total={5} />
+          )}
         </div>
         <RecommendationSide />
       </div>

@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
 import { Roboto } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
