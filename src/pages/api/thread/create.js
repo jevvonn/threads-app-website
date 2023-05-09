@@ -7,6 +7,7 @@ import { getServerAuthSession } from "../auth/[...nextauth]";
  * @returns
  */
 
+
 export default async function handler(req, res) {
   if (req.method != "POST")
     return res.status(405).json({ massage: "Method not allowed" });
