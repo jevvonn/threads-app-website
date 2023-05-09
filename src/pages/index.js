@@ -6,82 +6,24 @@ import { MdNewReleases } from "react-icons/md";
 import SingleThread from "@/components/thread/SingleThread";
 import Navbar from "@/components/navigation/Navbar";
 import Head from "next/head";
-
-const data = [
-  {
-    id: "c40a8157-4878-4f2d-a271-85f10e684ca0",
-    userId: "clh6b3v450000vng0img2thev",
-    type: "POST_BODY",
-    title: "Cerpen Setelah Beliin Anak Mobil Baru",
-    body: `Sebelumnya, Mantan pejabat Direktorat Jenderal Pajak Kementerian                 Keuangan (DJP Kemenkeu) Rafael Alun Trisambodo ditahan KPK. Dia                 diduga menerima USD 90 ribu atau sekitar Rp 1,3 miliar melalui                 perusahaan konsultan pajak miliknya. <br></br>Ketua KPK Firli Bahuri mengatakan, kasus ini bermula                 saat Rafael diangkat menjadi Kepala Bidang Pemeriksaan,                 Penyidikan, dan Penagihan Pajak pada Kantor Wilayah Ditjen Pajak                 Jawa Timur I pada 2011.                  <br></br>                 "Dengan jabatannya tersebut diduga RAT (Rafael Alun) menerima                 gratifikasi dari beberapa wajib pajak atas pengondisian berbagai                 temuan pemeriksaan perpajakannya," ujar Firli dalam jumpa pers                 di Gedung KPK, Jakarta Selatan, Senin (3/4/2023). Firli                 mengatakan, Rafael juga diduga memiliki beberapa usaha yang satu                 di antaranya PT Artha Mega Ekadhana (PT AME) yang bergerak dalam                 bidang jasa konsultansi terkait pembukuan dan perpajakan.`,
-    draft: false,
-    categoryId: "649b40bb-db26-4c96-81d7-d18702df459e",
-    created_at: "2023-05-02T14:19:51.974Z",
-    tags: [],
-    category: {
-      id: "649b40bb-db26-4c96-81d7-d18702df459e",
-      name: "Gaming",
-    },
-    user: {
-      id: "clh6b3v450000vng0img2thev",
-      name: "Jevon Mozart",
-      email: "jmcb1602@gmail.com",
-      emailVerified: null,
-      image:
-        "https://lh3.googleusercontent.com/a/AGNmyxbAJTBi9ghnDb9aEUJJSw9LSoI1fYn6PvkKd2Z3rA=s96-c",
-      bio: null,
-    },
-    source: [],
-    _count: {
-      likes: 0,
-      vote_up: 0,
-      vote_down: 0,
-      saved: 0,
-      comments: 0,
-    },
-  },
-  {
-    id: "7ae39b4e-599e-41e4-af7e-af9596d9f62e",
-    userId: "clh6b3v450000vng0img2thev",
-    type: "POST_SOURCE",
-    title: "Beliin anak mobil baru ",
-    body: null,
-    draft: false,
-    categoryId: "649b40bb-db26-4c96-81d7-d18702df459e",
-    created_at: "2023-05-02T14:17:07.122Z",
-    tags: [],
-    category: {
-      id: "649b40bb-db26-4c96-81d7-d18702df459e",
-      name: "Gaming",
-    },
-    user: {
-      id: "clh6b3v450000vng0img2thev",
-      name: "Jevon Mozart",
-      email: "jmcb1602@gmail.com",
-      emailVerified: null,
-      image:
-        "https://lh3.googleusercontent.com/a/AGNmyxbAJTBi9ghnDb9aEUJJSw9LSoI1fYn6PvkKd2Z3rA=s96-c",
-      bio: null,
-    },
-    source: [
-      {
-        id: "a4fde2a6-ef6b-4521-9126-cfd490120116",
-        type: "jpg",
-        url: "https://www.viv.co.id/uploads/large/b6be9ec3653241b91edd9c848d43632f.jpg",
-        threadId: "7ae39b4e-599e-41e4-af7e-af9596d9f62e",
-      },
-    ],
-    _count: {
-      likes: 0,
-      vote_up: 0,
-      vote_down: 0,
-      saved: 0,
-      comments: 0,
-    },
-  },
-];
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function Home() {
+  const { data } = useInfiniteQuery({
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await fetch(`/api/thread?page=${pageParam}&limit=10`);
+      const data = await res.json();
+
+      return data;
+    },
+    queryKey: ["threads"],
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
+
+  const threads = data?.pages.flatMap((page, idx) =>
+    page.threads.map((thread) => ({ ...thread, page: idx }))
+  );
+
   return (
     <>
       <Head>
@@ -137,7 +79,7 @@ export default function Home() {
               />
             </Link>
           </div>
-          {data.map((thread) => (
+          {threads?.map((thread) => (
             <SingleThread thread={thread} key={thread.id} />
           ))}
         </div>
