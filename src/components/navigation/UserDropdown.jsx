@@ -3,19 +3,27 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Skeleton from "react-loading-skeleton";
 
 function UserDropdown() {
   const { data: session, status } = useSession();
 
   if (status == "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div className="my-2">
+        <div className="flex gap-2">
+          <Skeleton width={30} height={30} circle={true} />
+          <Skeleton width={100} height={30} />
+        </div>
+      </div>
+    );
   }
 
   if (!session) {
     return (
       <button
         onClick={() => signIn()}
-        className="btn btn-primary text-white btn-sm"
+        className="btn btn-primary text-white btn-sm my-2"
       >
         Login
       </button>
