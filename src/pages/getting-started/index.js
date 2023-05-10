@@ -42,6 +42,32 @@ const Settings = () => {
     router.push(`/`);
   };
 
+  useEffect(() => {
+    if (session) {
+      setInputForm((prev) => ({
+        name: session.user.name,
+        image: session.user.image,
+        bio: session.user.bio,
+      }));
+    }
+  }, [session]);
+
+  const handleChange = (e) => {
+    setInputForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!inputForm.name || !inputForm.image) {
+      return;
+    }
+    await update(inputForm);
+    router.push(`/`, null, { shallow: true });
+  };
+  
   return (
     <>
       <Head>
