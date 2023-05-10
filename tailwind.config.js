@@ -6,6 +6,17 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  theme: {
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "100ch", // add required value here
+          },
+        },
+      },
+    },
+  },
   daisyui: {
     themes: [
       {

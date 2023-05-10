@@ -1,3 +1,4 @@
+import relativeDateTime from "@/utils/relativeDateTime";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +9,7 @@ import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
 function SingleThread({ thread }) {
   const contentRef = useRef(null);
   const [needCut, setNeedCut] = useState(false);
+  const timestamp = new Date(thread.createdAt).getTime();
 
   useEffect(() => {
     if (contentRef.current.clientHeight > 250) {
@@ -21,7 +23,7 @@ function SingleThread({ thread }) {
         <button>
           <IoCaretUpOutline
             size={35}
-            color={!!thread.votedUpBy.length && "gray"}
+            color={!thread.votedUpBy?.length ? "gray" : ""}
             className="hidden md:block"
           />
         </button>
@@ -31,54 +33,57 @@ function SingleThread({ thread }) {
         <button>
           <IoCaretDownOutline
             size={35}
-            color={!!thread.votedUpBy.length && "gray"}
+            color={!thread.votedDownBy?.length ? "gray" : ""}
             className="hidden md:block"
           />
         </button>
       </div>
-      <Link
-        href=""
-        className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2"
-      >
-        <div className="w-full flex gap-2">
-          <div className="avatar">
-            <div className="w-12 rounded-full border">
-              <Image
-                src={thread.user.image}
-                alt={thread.user.name}
-                width={50}
-                height={50}
-              />
+
+      <div className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2 ">
+        <Link href={`/t/${thread.id}`} className="flex flex-col gap-2">
+          <Link
+            href={`/u/${thread.user.id}`}
+            className="group w-full flex gap-2"
+          >
+            <div className="avatar">
+              <div className="w-12 rounded-full border">
+                <Image
+                  src={thread.user.image}
+                  alt={thread.user.name}
+                  width={50}
+                  height={50}
+                />
+              </div>
             </div>
-          </div>
-          <div className="">
-            <span className="font-semibold">{thread.user.name}</span>
-            <div className="flex gap-1">
-              {/* <p>Dirjen***</p> */}
-              {thread.createdAt.toString()}
-              {/* <span>uploaded 5 minutes ago</span> */}
+            <div>
+              <span className="group-hover:underline font-semibold">
+                {thread.user.name}
+              </span>
+              <div className="flex gap-1 font-normal">
+                {relativeDateTime(timestamp)}
+              </div>
             </div>
-          </div>
-        </div>
-        <h3 className="font-semibold text-xl">{thread.title}</h3>
-        {thread.type == "POST_SOURCE" &&
-          thread.sources.map((src) => <img src={src.url} className="w-full" />)}
-        {thread.type == "POST_BODY" && (
-          <div
-            ref={contentRef}
-            className={`w-full relative ${
-              needCut
-                ? "line-clamp-[12] before:content-[''] before:w-full before:h-20 before:absolute before:bottom-0 before:bg-gradient-to-b from-transparent to-white"
-                : ""
-            }`}
-            dangerouslySetInnerHTML={{ __html: thread.body }}
-          />
-        )}
+          </Link>
+          <h3 className="font-semibold text-xl">{thread.title}</h3>
+          {thread.type == "POST_SOURCE" &&
+            thread.sources.map((src) => (
+              <img src={src.url} className="w-full" />
+            ))}
+          {thread.type == "POST_BODY" && (
+            <div
+              ref={contentRef}
+              className={`w-full relative ${
+                needCut ? "cute-content" : ""
+              } prose prose-base`}
+              dangerouslySetInnerHTML={{ __html: thread.body }}
+            />
+          )}
+        </Link>
         <div className="flex justify-end gap-3">
           <div className="md:hidden flex items-center text-primary">
             <button>
               <IoCaretUpOutline
-                color={!!thread.votedUpBy.length && "gray"}
+                color={!thread.votedUpBy?.length ? "gray" : ""}
                 size={27}
               />
             </button>
@@ -87,14 +92,14 @@ function SingleThread({ thread }) {
             </span>
             <button>
               <IoCaretDownOutline
-                color={!!thread.votedUpBy.length && "gray"}
+                color={!thread.votedDownBy?.length ? "gray" : ""}
                 size={27}
               />
             </button>
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
-              {!!thread.likedBy.length ? (
+              {!!thread.likedBy?.length ? (
                 <AiFillHeart color="red" size={27} />
               ) : (
                 <AiOutlineHeart size={27} />
@@ -110,7 +115,7 @@ function SingleThread({ thread }) {
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
-              {!!thread.savedBy.length ? (
+              {!!thread.savedBy?.length ? (
                 <BsBookmarkFill color="orange" size={27} />
               ) : (
                 <BsBookmark size={25} />
@@ -119,7 +124,7 @@ function SingleThread({ thread }) {
             <p>{thread._count.savedBy}</p>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
