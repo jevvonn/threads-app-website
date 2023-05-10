@@ -13,6 +13,10 @@ export default function Create() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
+  function handleSubmit() {
+    console.log(body);
+  }
+
   return (
     <>
       <Head>
@@ -87,7 +91,10 @@ export default function Create() {
             <button className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide">
               Save Draft
             </button>
-            <button className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide">
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide"
+            >
               Post
             </button>
           </div>

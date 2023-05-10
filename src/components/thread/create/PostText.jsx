@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
+import { SingleUpload } from "../../../../firebase/upload";
 
 export default function PostText({ value, onChange }) {
+  const quillRef = useRef(null);
   const TOOLBAR_OPTION = [
-    [{ header: [1, 2, false] }],
+    [{ size: ["large", false, "small"] }],
     ["bold", "italic", "underline", "strike", "link"],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ script: "sub" }, { script: "super" }],
@@ -13,9 +15,52 @@ export default function PostText({ value, onChange }) {
   ];
 
   const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
+    () =>
+      dynamic(
+        async () => {
+          const { default: RQ } = await import("react-quill");
+          // eslint-disable-next-line react/display-name
+          return ({ forwardedRef, ...props }) => (
+            <RQ ref={forwardedRef} {...props} />
+          );
+        },
+        { ssr: false }
+      ),
     []
   );
+
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: TOOLBAR_OPTION,
+        handlers: {
+          image: imageHandler,
+        },
+      },
+    }),
+    []
+  );
+
+  function imageHandler() {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    const quillObj = quillRef?.current?.getEditor();
+    const range = quillObj?.getSelection();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      const url = await SingleUpload(
+        file,
+        `body-${Math.random()}`,
+        "post-body"
+      );
+      input.remove();
+      quillObj.editor.insertEmbed(range.index, "image", url);
+    };
+  }
 
   return (
     <>
@@ -23,7 +68,8 @@ export default function PostText({ value, onChange }) {
         value={value}
         theme="snow"
         onChange={onChange}
-        modules={{ toolbar: TOOLBAR_OPTION }}
+        modules={modules}
+        forwardedRef={quillRef}
         placeholder="What's on your mind ?"
       />
 
