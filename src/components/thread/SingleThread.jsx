@@ -1,17 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmark } from "react-icons/bs";
+import { useEffect, useRef, useState } from "react";
+import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
+import { BsBookmarkFill, BsBookmark } from "react-icons/bs";
 import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
 
 function SingleThread({ thread }) {
+  const contentRef = useRef(null);
+  const [needCut, setNeedCut] = useState(false);
+
+  useEffect(() => {
+    if (contentRef.current.clientHeight > 250) {
+      setNeedCut(true);
+    }
+  }, []);
+
   return (
     <div className="w-full flex">
       <div className="w-1/12 hidden md:flex flex-col  items-center text-primary">
         <button>
           <IoCaretUpOutline
             size={35}
-            color="gray"
+            color={!!thread.votedUpBy.length && "gray"}
             className="hidden md:block"
           />
         </button>
@@ -21,7 +31,7 @@ function SingleThread({ thread }) {
         <button>
           <IoCaretDownOutline
             size={35}
-            color="gray"
+            color={!!thread.votedUpBy.length && "gray"}
             className="hidden md:block"
           />
         </button>
@@ -52,28 +62,43 @@ function SingleThread({ thread }) {
         </div>
         <h3 className="font-semibold text-xl">{thread.title}</h3>
         {thread.type == "POST_SOURCE" &&
-          thread.source.map((src) => <img src={src.url} className="w-full" />)}
+          thread.sources.map((src) => <img src={src.url} className="w-full" />)}
         {thread.type == "POST_BODY" && (
-          <p
-            className="w-full relative line-clamp-[12] before:content-[''] before:w-full before:h-20 before:absolute before:bottom-0 before:bg-gradient-to-b from-transparent to-white"
+          <div
+            ref={contentRef}
+            className={`w-full relative ${
+              needCut
+                ? "line-clamp-[12] before:content-[''] before:w-full before:h-20 before:absolute before:bottom-0 before:bg-gradient-to-b from-transparent to-white"
+                : ""
+            }`}
             dangerouslySetInnerHTML={{ __html: thread.body }}
           />
         )}
         <div className="flex justify-end gap-3">
           <div className="md:hidden flex items-center text-primary">
             <button>
-              <IoCaretUpOutline size={27} />
+              <IoCaretUpOutline
+                color={!!thread.votedUpBy.length && "gray"}
+                size={27}
+              />
             </button>
             <span className="w-10 text-center font-semibold text-black">
               {thread._count.votedUpBy - thread._count.votedDownBy}
             </span>
             <button>
-              <IoCaretDownOutline size={27} />
+              <IoCaretDownOutline
+                color={!!thread.votedUpBy.length && "gray"}
+                size={27}
+              />
             </button>
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
-              <AiOutlineHeart size={27} />
+              {!!thread.likedBy.length ? (
+                <AiFillHeart color="red" size={27} />
+              ) : (
+                <AiOutlineHeart size={27} />
+              )}
             </button>
             <p>{thread._count.likedBy}</p>
           </div>
@@ -85,7 +110,11 @@ function SingleThread({ thread }) {
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
-              <BsBookmark size={25} />
+              {!!thread.savedBy.length ? (
+                <BsBookmarkFill color="orange" size={27} />
+              ) : (
+                <BsBookmark size={25} />
+              )}
             </button>
             <p>{thread._count.savedBy}</p>
           </div>
