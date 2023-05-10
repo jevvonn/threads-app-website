@@ -16,7 +16,7 @@ function SingleThread({ thread }) {
           />
         </button>
         <span className="font-semibold text-black">
-          {thread._count.vote_up - thread._count.vote_down}
+          {thread._count.votedUpBy - thread._count.votedDownBy}
         </span>
         <button>
           <IoCaretDownOutline
@@ -45,7 +45,8 @@ function SingleThread({ thread }) {
             <span className="font-semibold">{thread.user.name}</span>
             <div className="flex gap-1">
               {/* <p>Dirjen***</p> */}
-              <span>uploaded 5 minutes ago</span>
+              {thread.createdAt.toString()}
+              {/* <span>uploaded 5 minutes ago</span> */}
             </div>
           </div>
         </div>
@@ -64,7 +65,7 @@ function SingleThread({ thread }) {
               <IoCaretUpOutline size={27} />
             </button>
             <span className="w-10 text-center font-semibold text-black">
-              20.k
+              {thread._count.votedUpBy - thread._count.votedDownBy}
             </span>
             <button>
               <IoCaretDownOutline size={27} />
@@ -74,19 +75,19 @@ function SingleThread({ thread }) {
             <button>
               <AiOutlineHeart size={27} />
             </button>
-            <p>25.4k</p>
+            <p>{thread._count.likedBy}</p>
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
               <AiOutlineComment size={27} />
             </button>
-            <p>120k</p>
+            <p>{thread._count.comments}</p>
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <button>
               <BsBookmark size={25} />
             </button>
-            <p>5k</p>
+            <p>{thread._count.savedBy}</p>
           </div>
         </div>
       </Link>

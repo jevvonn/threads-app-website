@@ -1,7 +1,5 @@
-import { getServerSession } from "next-auth";
 import prisma from "../../../../prisma/prisma";
-import { authOptions } from "../auth/[...nextauth]";
-
+import { getServerAuthSession } from "../auth/[...nextauth]";
 /**
  *
  * @param {import("next").NextApiRequest} req
@@ -20,34 +18,53 @@ export default async function handler(req, res) {
       .status(406)
       .json({ massage: "Please provide page and limit params" });
 
+  const session = await getServerAuthSession(req, res);
+  const cursorUser = session
+    ? { cursor: { id: session.user.id }, select: { id: true } }
+    : false;
+
   const threads = await prisma.thread.findMany({
     where: {
-      draft: false,
+      isDraft: false,
     },
     orderBy: {
-      created_at: "desc",
+      createdAt: "desc",
     },
 
     include: {
       _count: {
         select: {
-          likes: true,
-          vote_up: true,
-          vote_down: true,
-          saved: true,
           comments: true,
+          likedBy: true,
+          savedBy: true,
+          votedDownBy: true,
+          votedUpBy: true,
         },
       },
-
+      likedBy: cursorUser,
+      savedBy: cursorUser,
+      votedDownBy: cursorUser,
+      votedUpBy: cursorUser,
       tags: true,
-      category: true,
       user: true,
-      source: true,
+      sources: true,
+      category: true,
     },
 
-    take: parseInt(limit),
+    take: parseInt(limit) + 1,
     skip: (page - 1) * limit,
   });
 
-  res.status(200).json({ massage: "Success get threads", threads });
+  let nextPage = undefined;
+
+  if (threads.length > parseInt(limit)) {
+    threads.pop();
+    nextPage = parseInt(page) + 1;
+  }
+
+  res.status(200).json({
+    massage: "Success get threads",
+    threads,
+    nextPage,
+  });
 }
