@@ -6,7 +6,7 @@ import { SingleUpload } from "../../../../firebase/upload";
 export default function PostText({ value, onChange }) {
   const quillRef = useRef(null);
   const TOOLBAR_OPTION = [
-    [{ size: ["large", false, "small"] }],
+    [{ size: ["0.75em", "1em", "1.5em"] }],
     ["bold", "italic", "underline", "strike", "link"],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ script: "sub" }, { script: "super" }],
@@ -20,6 +20,11 @@ export default function PostText({ value, onChange }) {
         async () => {
           const { default: RQ } = await import("react-quill");
           // eslint-disable-next-line react/display-name
+          const Size = RQ.Quill.import("attributors/style/size");
+          Size.whitelist = ["0.75em", "1em", "1.5em"];
+          RQ.Quill.register(Size, true);
+          RQ.Quill.register(RQ.Quill.import("attributors/style/align"), true);
+
           return ({ forwardedRef, ...props }) => (
             <RQ ref={forwardedRef} {...props} />
           );
@@ -86,6 +91,42 @@ export default function PostText({ value, onChange }) {
 
         .ql-editor {
           min-height: 200px;
+        }
+
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="0.75em"]::before {
+          content: "Small";
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="1em"]::before {
+          content: "Normal";
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="1.5em"]::before {
+          content: "Large";
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="2.5em"]::before {
+          content: "Huge";
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="0.75em"]::before {
+          content: "Small";
+          font-size: 0.75em !important;
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="1em"]::before {
+          content: "Normal";
+          font-size: 1em !important;
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="1.5em"]::before {
+          content: "Large";
+          font-size: 1.5em !important;
+        }
+      
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="2.5em"]::before {
+          content: "Huge";
+          font-size: 2.5em !important;
         }
       `}</style>
     </>
