@@ -25,6 +25,7 @@
     "react-icons": "^4.8.0",
     "react-loading-skeleton": "^3.3.1",
     "react-quill": "^2.0.0",
+    "react-select": "^5.7.3",
     "tailwindcss": "3.3.1"
   },
   "devDependencies": {

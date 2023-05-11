@@ -1,17 +1,23 @@
 import PostFile from "@/components/thread/create/PostFile";
 import PostText from "@/components/thread/create/PostText";
 import Navbar from "@/components/navigation/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFileRichtext } from "react-icons/bs";
 import { BsCardImage } from "react-icons/bs";
 import { getServerAuthSession } from "./api/auth/[...nextauth]";
 import Head from "next/head";
 import autosize from "autosize";
+import { TagInput } from "@/components/thread/create/TagInput";
 
 export default function Create() {
   const [activeTab, setActiveTab] = useState("POST_BODY");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    console.log(tags);
+  }, [tags]);
 
   function handleSubmit() {
     console.log(body);
@@ -82,9 +88,10 @@ export default function Create() {
             <PostFile />
           )}
           <div>
-            <button className="w-28 h-8 pl-5 mx-auto flex items-center gap-2 border rounded-full">
+            <TagInput onNewTags={setTags} />
+            {/* <button className="w-28 h-8 pl-5 mx-auto flex items-center gap-2 border rounded-full">
               <span className="text-3xl">+</span> Tags
-            </button>
+            </button> */}
           </div>
           <hr />
           <div className="flex justify-end pr-6 gap-3">
