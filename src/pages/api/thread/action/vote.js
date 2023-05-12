@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       if (hasVoted) {
         if (hasVotedType === "voted_up") {
           data.votedUpBy = {
-            disconect: {
+            disconnect: {
               id: session.user.id,
             },
           };
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
         if (hasVotedType === "voted_down") {
           data.votedDownBy = {
-            disconect: {
+            disconnect: {
               id: session.user.id,
             },
           };
@@ -45,11 +45,11 @@ export default async function handler(req, res) {
         },
       };
       break;
-    case "voted_down":
+    case "vote_down":
       if (hasVoted) {
         if (hasVotedType === "voted_down") {
           data.votedDownBy = {
-            disconect: {
+            disconnect: {
               id: session.user.id,
             },
           };
