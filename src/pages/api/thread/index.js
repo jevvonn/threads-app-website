@@ -83,7 +83,6 @@ export default async function handler(req, res) {
       tags: true,
       user: true,
       sources: true,
-      category: true,
     },
 
     take: parseInt(limit) + 1,

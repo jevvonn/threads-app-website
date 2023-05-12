@@ -37,7 +37,6 @@ export default async function handler(req, res) {
       tags: true,
       user: true,
       sources: true,
-      category: true,
     },
   });
 

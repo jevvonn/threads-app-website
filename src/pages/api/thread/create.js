@@ -14,8 +14,7 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, threadSources, isDraft, tags, categoryId } =
-    req.body;
+  const { type, title, body, threadSources, isDraft, tags } = req.body;
 
   if (!type || !title || !body || !tags.length) {
     return res.status(400).json({ massage: "Bad Request" });
@@ -37,13 +36,6 @@ export default async function handler(req, res) {
           return { where: { name: tag }, create: { name: tag } };
         }),
       },
-      category: categoryId
-        ? {
-            connect: {
-              id: categoryId,
-            },
-          }
-        : undefined,
       user: {
         connect: {
           id: session.user.id,
