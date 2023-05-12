@@ -40,6 +40,8 @@ export default async function handler(req, res) {
         _count: "asc",
       };
       break;
+    case "oldest":
+      orderBy.createdAt = "asc";
     default:
       orderBy.createdAt = "desc";
       break;
