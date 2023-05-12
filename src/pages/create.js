@@ -8,19 +8,63 @@ import { getServerAuthSession } from "./api/auth/[...nextauth]";
 import Head from "next/head";
 import autosize from "autosize";
 import { TagInput } from "@/components/thread/create/TagInput";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 export default function Create() {
+  const router = useRouter();
+  let toastId;
+
   const [activeTab, setActiveTab] = useState("POST_BODY");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [tags, setTags] = useState([]);
 
-  useEffect(() => {
-    console.log(tags);
-  }, [tags]);
+  const { mutateAsync: mutatePostBody, isLoading } = useMutation(
+    async ({ title, body, tags, type, isDraft }) => {
+      const res = await fetch("/api/thread/create", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          body,
+          tags,
+          type,
+          isDraft,
+        }),
+      });
+      const data = await res.json();
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        toast.success("Your Thred has been posted", {
+          id: toastId,
+        });
+        router.push(`/t/${data.threadId}`);
+      },
+    }
+  );
 
-  function handleSubmit() {
-    console.log(body);
+  async function handleSubmit(isDraft) {
+    if (!title) {
+      toast.error("Please fill title fields");
+      return;
+    }
+
+    if (activeTab == "POST_BODY" && !body) {
+      toast.error("Please fill your content fields");
+      return;
+    }
+
+    if (activeTab == "POST_BODY") {
+      toastId = toast.loading(`Posting your Thread's`);
+      await mutatePostBody({ title, body, tags, type: activeTab, isDraft });
+    }
   }
 
   return (
@@ -87,20 +131,22 @@ export default function Create() {
           ) : (
             <PostFile />
           )}
-          <div>
+          <div className="flex flex-col gap-2">
             <TagInput onNewTags={setTags} />
-            {/* <button className="w-28 h-8 pl-5 mx-auto flex items-center gap-2 border rounded-full">
-              <span className="text-3xl">+</span> Tags
-            </button> */}
           </div>
           <hr />
           <div className="flex justify-end pr-6 gap-3">
-            <button className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide">
+            <button
+              onClick={() => handleSubmit(true)}
+              disabled={isLoading}
+              className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide disabled:opacity-50"
+            >
               Save Draft
             </button>
             <button
-              onClick={handleSubmit}
-              className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide"
+              onClick={() => handleSubmit(false)}
+              disabled={isLoading}
+              className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
             >
               Post
             </button>

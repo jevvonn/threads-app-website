@@ -6,11 +6,17 @@ export const TagInput = ({ onNewTags }) => {
   const [input, setInput] = useState("");
   const [defaultTags, setDefaultTags] = useState([]);
 
-  const { data } = useQuery(["tags", input], async () => {
-    const res = await fetch(`/api/tag/search?query=${input}`);
-    const data = await res.json();
-    return data;
-  });
+  const { data } = useQuery(
+    ["tags", input],
+    async () => {
+      const res = await fetch(`/api/tag/search?query=${input}`);
+      const data = await res.json();
+      return data;
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const TagSelector = useMemo(() => {
     return dynamic(
