@@ -68,67 +68,13 @@ export default function PostText({ value, onChange }) {
   }
 
   return (
-    <>
-      <ReactQuill
-        value={value}
-        theme="snow"
-        onChange={onChange}
-        modules={modules}
-        forwardedRef={quillRef}
-        placeholder="What's on your mind ?"
-      />
-
-      <style>{`
-        .ql-toolbar{
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
-        }
-
-        .ql-container{
-          border-bottom-left-radius: 5px;
-          border-bottom-right-radius: 5px;
-        }
-
-        .ql-editor {
-          min-height: 200px;
-        }
-
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="0.75em"]::before {
-          content: "Small";
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="1em"]::before {
-          content: "Normal";
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="1.5em"]::before {
-          content: "Large";
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="2.5em"]::before {
-          content: "Huge";
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="0.75em"]::before {
-          content: "Small";
-          font-size: 0.75em !important;
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="1em"]::before {
-          content: "Normal";
-          font-size: 1em !important;
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="1.5em"]::before {
-          content: "Large";
-          font-size: 1.5em !important;
-        }
-      
-        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="2.5em"]::before {
-          content: "Huge";
-          font-size: 2.5em !important;
-        }
-      `}</style>
-    </>
+    <ReactQuill
+      value={value}
+      theme="snow"
+      onChange={onChange}
+      modules={modules}
+      forwardedRef={quillRef}
+      placeholder="What's on your mind ?"
+    />
   );
 }

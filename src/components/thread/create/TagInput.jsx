@@ -3,11 +3,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 
 export const TagInput = ({ onNewTags }) => {
-  const [input, setInput] = useState("t");
+  const [input, setInput] = useState("");
   const [defaultTags, setDefaultTags] = useState([]);
 
   const { data } = useQuery(["tags", input], async () => {
-    const res = await fetch(`/api/tag/search?query=${input ? input : "t"}`);
+    const res = await fetch(`/api/tag/search?query=${input}`);
     const data = await res.json();
     return data;
   });
