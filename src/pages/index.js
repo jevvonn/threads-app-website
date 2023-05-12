@@ -7,18 +7,20 @@ import RecommendationSide from "@/components/user/RecommendationSide";
 import FormNav from "@/components/navigation/FormNav";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export default function Home() {
   const { data: session } = useSession();
   const { data } = useInfiniteQuery({
     queryFn: async ({ pageParam = 1 }) => {
-      const res = await fetch(`/api/thread?page=${pageParam}&limit=10`);
-      const data = await res.json();
-
+      const { data } = await axios.get(
+        `/api/thread?page=${pageParam}&limit=10`
+      );
       return data;
     },
     queryKey: ["threads"],
     getNextPageParam: (lastPage) => lastPage.nextPage,
+    refetchOnWindowFocus: false,
   });
 
   const threads = data?.pages.flatMap((page, idx) =>
