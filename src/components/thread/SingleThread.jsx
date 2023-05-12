@@ -190,14 +190,14 @@ function SingleThread({ thread }) {
         <div className="flex justify-end gap-3">
           <div className="md:hidden flex items-center text-primary">
             <button onClick={() => handleVote("vote_up")}>
-              <IoCaretUpOutline color={hasVotedUp ? "gray" : ""} size={27} />
+              <IoCaretUpOutline color={hasVotedUp ? "" : "gray"} size={27} />
             </button>
             <span className="w-10 text-center font-semibold text-black">
               {thread._count.votedUpBy - thread._count.votedDownBy}
             </span>
             <button onClick={() => handleVote("vote_down")}>
               <IoCaretDownOutline
-                color={hasVotedDown ? "gray" : ""}
+                color={hasVotedDown ? "" : "gray"}
                 size={27}
               />
             </button>
