@@ -4,9 +4,10 @@ function SingleLogo({ className }) {
   return (
     <Image
       src={`/img/logo-combine.png`}
-      className={className ?? ""}
+      className={`${className ?? ""} w-auto h-auto`}
       alt="Thred's Logo"
       width={100}
+      priority
       height={100}
     />
   );

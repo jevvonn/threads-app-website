@@ -8,10 +8,14 @@ import FormNav from "@/components/navigation/FormNav";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import useScrollPosition from "@/hooks/useScrollPosition";
+import { useEffect } from "react";
 
 export default function Home() {
   const { data: session } = useSession();
-  const { data } = useInfiniteQuery({
+  const scrollPosition = useScrollPosition();
+
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axios.get(
         `/api/thread?page=${pageParam}&limit=10`
@@ -22,10 +26,15 @@ export default function Home() {
     getNextPageParam: (lastPage) => lastPage.nextPage,
     refetchOnWindowFocus: false,
   });
-
   const threads = data?.pages.flatMap((page, idx) =>
     page.threads.map((thread) => ({ ...thread, page: idx }))
   );
+
+  useEffect(() => {
+    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <>
@@ -38,13 +47,12 @@ export default function Home() {
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
           <FilterWidget />
           {session && <FormNav />}
-          {threads ? (
-            threads.map((thread) => (
-              <SingleThread thread={thread} key={thread.id} />
-            ))
-          ) : (
-            <ThreadSkeleton total={5} />
-          )}
+          {threads
+            ? threads.map((thread) => (
+                <SingleThread thread={thread} key={thread.id} />
+              ))
+            : null}
+          {isFetching && <ThreadSkeleton total={5} />}
         </div>
         <RecommendationSide />
       </div>

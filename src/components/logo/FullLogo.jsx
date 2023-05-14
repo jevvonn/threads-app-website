@@ -4,9 +4,10 @@ function FullLogo({ className }) {
   return (
     <Image
       src={`/img/logo-self.png`}
-      className={className ?? ""}
+      className={`${className ?? ""} w-auto h-auto`}
       alt="Thred's Logo"
       width={100}
+      priority
       height={100}
     />
   );
