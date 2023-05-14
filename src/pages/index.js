@@ -1,34 +1,21 @@
 import SingleThread from "@/components/thread/SingleThread";
 import Navbar from "@/components/navigation/Navbar";
 import Head from "next/head";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import FilterWidget from "@/components/navigation/FilterWidget";
 import RecommendationSide from "@/components/user/RecommendationSide";
 import FormNav from "@/components/navigation/FormNav";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import { useSession } from "next-auth/react";
-import axios from "axios";
 import useScrollPosition from "@/hooks/useScrollPosition";
 import { useEffect } from "react";
+import useInfiniteThreads from "@/hooks/thread/useInfiniteThreads";
 
 export default function Home() {
   const { data: session } = useSession();
   const scrollPosition = useScrollPosition();
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await axios.get(
-        `/api/thread?page=${pageParam}&limit=10`
-      );
-      return data;
-    },
-    queryKey: ["threads"],
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-    refetchOnWindowFocus: false,
-  });
-  const threads = data?.pages.flatMap((page, idx) =>
-    page.threads.map((thread) => ({ ...thread, page: idx }))
-  );
+  const { threads, hasNextPage, fetchNextPage, isFetching } =
+    useInfiniteThreads(["threads"]);
 
   useEffect(() => {
     if (scrollPosition > 90 && hasNextPage && !isFetching) {

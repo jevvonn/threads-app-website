@@ -2,8 +2,10 @@ import { useMemo, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { SingleUpload } from "../../../../firebase/upload";
+import { toast } from "react-hot-toast";
 
 export default function PostText({ value, onChange }) {
+  let toastLoadingId;
   const quillRef = useRef(null);
   const TOOLBAR_OPTION = [
     [{ size: ["0.75em", "1em", "1.5em"] }],
@@ -57,12 +59,14 @@ export default function PostText({ value, onChange }) {
 
     input.onchange = async () => {
       const file = input.files[0];
+      toastLoadingId = toast.loading("Uploading...", { id: toastLoadingId });
       const url = await SingleUpload(
         file,
         `body-${Math.random()}`,
         "post-body"
       );
       input.remove();
+      toast.success("Uploaded Successfully", { id: toastLoadingId });
       quillObj.editor.insertEmbed(range.index, "image", url);
     };
   }
