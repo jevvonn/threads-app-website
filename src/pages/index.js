@@ -1,29 +1,27 @@
 import SingleThread from "@/components/thread/SingleThread";
 import Navbar from "@/components/navigation/Navbar";
 import Head from "next/head";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import FilterWidget from "@/components/navigation/FilterWidget";
 import RecommendationSide from "@/components/user/RecommendationSide";
 import FormNav from "@/components/navigation/FormNav";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import { useSession } from "next-auth/react";
+import useInfiniteThreads from "@/hooks/threads/useInfiniteThreads";
+import { useEffect } from "react";
+import useScrollPosition from "@/hooks/useScrollPosition";
 
 export default function Home() {
   const { data: session } = useSession();
-  const { data } = useInfiniteQuery({
-    queryFn: async ({ pageParam = 1 }) => {
-      const res = await fetch(`/api/thread?page=${pageParam}&limit=10`);
-      const data = await res.json();
+  const scrollPosition = useScrollPosition();
 
-      return data;
-    },
-    queryKey: ["threads"],
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-  });
+  const { threads, hasNextPage, fetchNextPage, isFetching } =
+    useInfiniteThreads(["threads"]);
 
-  const threads = data?.pages.flatMap((page, idx) =>
-    page.threads.map((thread) => ({ ...thread, page: idx }))
-  );
+  useEffect(() => {
+    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <>
@@ -36,13 +34,12 @@ export default function Home() {
         <div className="w-full lg:w-4/6 flex flex-col items-end gap-3">
           <FilterWidget />
           {session && <FormNav />}
-          {threads ? (
-            threads.map((thread) => (
-              <SingleThread thread={thread} key={thread.id} />
-            ))
-          ) : (
-            <ThreadSkeleton total={5} />
-          )}
+          {threads
+            ? threads.map((thread) => (
+                <SingleThread thread={thread} key={thread.id} />
+              ))
+            : null}
+          {isFetching && <ThreadSkeleton total={5} />}
         </div>
         <RecommendationSide />
       </div>
