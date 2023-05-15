@@ -41,10 +41,7 @@ function SingleThread({ thread }) {
 
       <div className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2 ">
         <Link href={`/t/${thread.id}`} className="flex flex-col gap-2">
-          <Link
-            href={`/u/${thread.user.id}`}
-            className="group w-full flex gap-2"
-          >
+          <div className="group w-full flex gap-2">
             <div className="avatar">
               <div className="w-12 rounded-full border">
                 <Image
@@ -63,7 +60,7 @@ function SingleThread({ thread }) {
                 {relativeDateTime(timestamp)}
               </div>
             </div>
-          </Link>
+          </div>
           <h3 className="font-semibold text-xl">{thread.title}</h3>
           {thread.type == "POST_SOURCE" &&
             thread.sources.map((src) => (
