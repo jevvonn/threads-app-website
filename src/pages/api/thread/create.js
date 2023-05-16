@@ -7,7 +7,6 @@ import { getServerAuthSession } from "../auth/[...nextauth]";
  * @returns
  */
 
-
 export default async function handler(req, res) {
   if (req.method != "POST")
     return res.status(405).json({ massage: "Method not allowed" });
@@ -15,18 +14,11 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, threadSources, isDraft, tags, categoryId } =
-    req.body;
-  if (
-    !type ||
-    !title ||
-    !body ||
-    !threadSources ||
-    !isDraft ||
-    !tags ||
-    !categoryId
-  )
+  const { type, title, body, threadSources, isDraft, tags } = req.body;
+
+  if (!type || !title || !body || !tags.length) {
     return res.status(400).json({ massage: "Bad Request" });
+  }
 
   const thread = await prisma.thread.create({
     data: {
@@ -34,18 +26,15 @@ export default async function handler(req, res) {
       title,
       body,
       isDraft,
-      sources: {
-        createMany: threadSources.map((source) => ({ data: source })),
-      },
+      sources: threadSources
+        ? {
+            createMany: threadSources.map((source) => ({ data: source })),
+          }
+        : undefined,
       tags: {
         connectOrCreate: tags.map((tag) => {
-          return { where: { name: tag.name }, create: { name: tag.name } };
+          return { where: { name: tag }, create: { name: tag } };
         }),
-      },
-      category: {
-        connect: {
-          id: categoryId,
-        },
       },
       user: {
         connect: {

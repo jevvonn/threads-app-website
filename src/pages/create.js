@@ -1,44 +1,73 @@
-import PostFile from "@/components/PostFile";
-import PostText from "@/components/PostText";
+import PostFile from "@/components/thread/create/PostFile";
+import PostText from "@/components/thread/create/PostText";
 import Navbar from "@/components/navigation/Navbar";
 import { useState } from "react";
-import { BsFileRichtext } from "react-icons/bs";
-import { BsCardImage } from "react-icons/bs";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { BsFileRichtext, BsCardImage } from "react-icons/bs";
 import { getServerAuthSession } from "./api/auth/[...nextauth]";
+import Head from "next/head";
+import autosize from "autosize";
+import { TagInput } from "@/components/thread/create/TagInput";
+import { toast } from "react-hot-toast";
+import useMutationCreate from "@/hooks/thread/useMutationCreate";
+import AlertToast from "@/components/toast/AlertToast";
 
 export default function Create() {
-  const [active, setActive] = useState(1);
+  const [activeTab, setActiveTab] = useState("POST_BODY");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [tags, setTags] = useState([]);
 
-  function changePost(id) {
-    setActive(id);
+  const { mutatePost, isLoading } = useMutationCreate();
+
+  async function handleSubmit(isDraft) {
+    if (!title)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your title"} />
+      ));
+    if (activeTab == "POST_BODY" && !body)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      ));
+    if (!tags.length)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please add at least one tag"} />
+      ));
+
+    if (activeTab == "POST_BODY") {
+      mutatePost({ title, body, tags, type: activeTab, isDraft });
+    }
   }
+
   return (
     <>
+      <Head>
+        <title>Create a Thred</title>
+      </Head>
+
       <Navbar />
-      <div className="lg:w-3/4 p-2 mx-auto mt-20">
+      <div className="lg:w-3/5 p-2 mx-auto mt-20">
         <h1 className="text-center text-3xl font-semibold">
-          Create <span className="text-primary">a</span> Post
+          Create <span className="text-primary">a</span> {`Thred${"'"}s`}
         </h1>
         <div className="mt-5 flex flex-col gap-3">
           <div className="flex">
             <button
-              onClick={() => changePost(1)}
+              onClick={() => setActiveTab("POST_BODY")}
               className={
-                active === 1
-                  ? "w-1/2 h-14 border border-blue-700 rounded-l text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
-                  : "w-1/2 h-14 border rounded-l flex justify-center items-center gap-3 text-sm md:text-base"
+                activeTab === "POST_BODY"
+                  ? `activeTabStyle rounded-l font-semibold`
+                  : `baseStyleTab rounded-l font-semibold`
               }
             >
               <BsFileRichtext size={30} />
-              Post
+              Story
             </button>
             <button
-              onClick={() => changePost(2)}
+              onClick={() => setActiveTab("POST_SOURCE")}
               className={
-                active === 2
-                  ? "w-1/2 h-14 border border-blue-700 rounded-r text-blue-700 flex justify-center items-center gap-3 text-sm md:text-base"
-                  : "w-1/2 h-14 border rounded-r flex justify-center items-center gap-3 text-sm md:text-base"
+                activeTab === "POST_SOURCE"
+                  ? `activeTabStyle rounded-r font-semibold`
+                  : `baseStyleTab rounded-r font-semibold`
               }
             >
               <BsCardImage size={30} />
@@ -46,25 +75,50 @@ export default function Create() {
             </button>
           </div>
           <div className="flex justify-between items-center relative">
-            <input
+            <textarea
               type="text"
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                }
+                autosize(e.target);
+              }}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
               placeholder="Title"
-              className="w-full px-4 pr-16 py-2 border rounded focus:outline-none"
+              className="w-full px-4 pr-16 py-2 border rounded focus:outline-none resize-none"
             />
-            <p className="absolute right-5">
-              <span>0</span>/300
+            <p
+              className={`absolute right-5 ${
+                title.length > 300 && "text-red-500"
+              }`}
+            >
+              <span>{title.length}</span>/300
             </p>
           </div>
-          {active === 1 ? <PostText /> : <PostFile />}
-          <button className="w-28 h-8 pl-5 mx-auto flex items-center gap-2 border rounded-full">
-            <span className="text-3xl">+</span> Tags
-          </button>
+          {activeTab === "POST_BODY" ? (
+            <PostText value={body} onChange={setBody} />
+          ) : (
+            <PostFile />
+          )}
+          <div className="flex flex-col gap-2">
+            <TagInput onNewTags={setTags} />
+          </div>
           <hr />
           <div className="flex justify-end pr-6 gap-3">
-            <button className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide">
+            <button
+              onClick={() => handleSubmit(true)}
+              disabled={isLoading}
+              className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide disabled:opacity-50"
+            >
               Save Draft
             </button>
-            <button className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide">
+            <button
+              onClick={() => handleSubmit(false)}
+              disabled={isLoading}
+              className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
+            >
               Post
             </button>
           </div>

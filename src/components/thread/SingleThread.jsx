@@ -1,35 +1,25 @@
+import relativeDateTime from "@/utils/relativeDateTime";
 import Image from "next/image";
 import Link from "next/link";
-import { AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmark } from "react-icons/bs";
-import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
+import { useEffect, useRef, useState } from "react";
+import SideVote from "./partial/SideVote";
+import BottomAction from "./partial/BottomAction";
 
-function SingleThread({ thread }) {
+function SingleThread({ thread, needToCut = false }) {
+  const contentRef = useRef(null);
+  const [needCut, setNeedCut] = useState(false);
+  const timestamp = new Date(thread.createdAt).getTime();
+
+  useEffect(() => {
+    if (contentRef.current.clientHeight > 250 && needToCut) {
+      setNeedCut(true);
+    }
+  }, [contentRef]);
+
   return (
     <div className="w-full flex">
-      <div className="w-1/12 hidden md:flex flex-col  items-center text-primary">
-        <button>
-          <IoCaretUpOutline
-            size={35}
-            color="gray"
-            className="hidden md:block"
-          />
-        </button>
-        <span className="font-semibold text-black">
-          {thread._count.votedUpBy - thread._count.votedDownBy}
-        </span>
-        <button>
-          <IoCaretDownOutline
-            size={35}
-            color="gray"
-            className="hidden md:block"
-          />
-        </button>
-      </div>
-      <Link
-        href=""
-        className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2"
-      >
+      <SideVote thread={thread} />
+      <div className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2 ">
         <div className="w-full flex gap-2">
           <div className="avatar">
             <div className="w-12 rounded-full border">
@@ -41,56 +31,31 @@ function SingleThread({ thread }) {
               />
             </div>
           </div>
-          <div className="">
+          <div>
             <span className="font-semibold">{thread.user.name}</span>
-            <div className="flex gap-1">
-              {/* <p>Dirjen***</p> */}
-              {thread.createdAt.toString()}
-              {/* <span>uploaded 5 minutes ago</span> */}
+            <div className="flex gap-1 font-normal">
+              {relativeDateTime(timestamp)}
             </div>
           </div>
         </div>
-        <h3 className="font-semibold text-xl">{thread.title}</h3>
-        {thread.type == "POST_SOURCE" &&
-          thread.source.map((src) => <img src={src.url} className="w-full" />)}
-        {thread.type == "POST_BODY" && (
-          <p
-            className="w-full relative line-clamp-[12] before:content-[''] before:w-full before:h-20 before:absolute before:bottom-0 before:bg-gradient-to-b from-transparent to-white"
-            dangerouslySetInnerHTML={{ __html: thread.body }}
-          />
-        )}
-        <div className="flex justify-end gap-3">
-          <div className="md:hidden flex items-center text-primary">
-            <button>
-              <IoCaretUpOutline size={27} />
-            </button>
-            <span className="w-10 text-center font-semibold text-black">
-              {thread._count.votedUpBy - thread._count.votedDownBy}
-            </span>
-            <button>
-              <IoCaretDownOutline size={27} />
-            </button>
-          </div>
-          <div className="flex items-center gap-1 font-semibold">
-            <button>
-              <AiOutlineHeart size={27} />
-            </button>
-            <p>{thread._count.likedBy}</p>
-          </div>
-          <div className="flex items-center gap-1 font-semibold">
-            <button>
-              <AiOutlineComment size={27} />
-            </button>
-            <p>{thread._count.comments}</p>
-          </div>
-          <div className="flex items-center gap-1 font-semibold">
-            <button>
-              <BsBookmark size={25} />
-            </button>
-            <p>{thread._count.savedBy}</p>
-          </div>
-        </div>
-      </Link>
+        <Link href={`/t/${thread.id}`} className="flex flex-col gap-2">
+          <h3 className="font-semibold text-xl">{thread.title}</h3>
+          {thread.type == "POST_SOURCE" &&
+            thread.sources.map((src) => (
+              <Image key={src.id} src={src.url} className="w-full" />
+            ))}
+          {thread.type == "POST_BODY" && (
+            <div
+              ref={contentRef}
+              className={`w-full relative ${
+                needCut ? "cute-content" : ""
+              } prose prose-base prose-img:m-0 prose-img:rounded text-gray-700 prose-p:m-0`}
+              dangerouslySetInnerHTML={{ __html: thread.body }}
+            />
+          )}
+        </Link>
+        <BottomAction thread={thread} />
+      </div>
     </div>
   );
 }

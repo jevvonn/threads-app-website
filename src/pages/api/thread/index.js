@@ -11,12 +11,41 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit } = req.query;
+  const { page, limit, filter, tag, userId } = req.query;
 
   if (!page || !limit)
     return res
       .status(406)
       .json({ massage: "Please provide page and limit params" });
+
+  let orderBy = {};
+  switch (filter) {
+    case "most_voted":
+      orderBy.votedUpBy = {
+        _count: "desc",
+      };
+      break;
+    case "least_voted":
+      orderBy.votedDownBy = {
+        _count: "asc",
+      };
+      break;
+    case "most_liked":
+      orderBy.likedBy = {
+        _count: "desc",
+      };
+      break;
+    case "least_liked":
+      orderBy.likedBy = {
+        _count: "asc",
+      };
+      break;
+    case "oldest":
+      orderBy.createdAt = "asc";
+    default:
+      orderBy.createdAt = "desc";
+      break;
+  }
 
   const session = await getServerAuthSession(req, res);
   const cursorUser = session
@@ -26,11 +55,18 @@ export default async function handler(req, res) {
   const threads = await prisma.thread.findMany({
     where: {
       isDraft: false,
+      tags: tag
+        ? {
+            some: {
+              name: {
+                equals: tag,
+              },
+            },
+          }
+        : undefined,
+      userId: userId ? userId : undefined,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-
+    orderBy,
     include: {
       _count: {
         select: {
@@ -48,7 +84,6 @@ export default async function handler(req, res) {
       tags: true,
       user: true,
       sources: true,
-      category: true,
     },
 
     take: parseInt(limit) + 1,

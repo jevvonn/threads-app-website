@@ -5,7 +5,77 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/app/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [require("daisyui")],
+  plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  theme: {
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "100ch",
+            lineHeight: "1.3",
+          },
+        },
+      },
+      animation: {
+        "zoom-in-down": "zoom-in-down .5s",
+        "down-up": "down-up .5s",
+        "up-up": "up-up .8s",
+        "down-down": "down-down .8s",
+      },
+      keyframes: {
+        "zoom-in-down": {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.3)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        "down-up": {
+          "0%": {
+            transform: "translateY(0)",
+          },
+          "50%": {
+            transform: "translateY(5px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+        "up-up": {
+          "0%": {
+            transform: "translateY(0)",
+          },
+          "25%": {
+            transform: "translateY(-5px)",
+          },
+          "45%": {
+            transform: "translateY(-5px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+        "down-down": {
+          "0%": {
+            transform: "translateY(0)",
+          },
+          "25%": {
+            transform: "translateY(5px)",
+          },
+          "45%": {
+            transform: "translateY(5px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+      },
+    },
+  },
   daisyui: {
     themes: [
       {
