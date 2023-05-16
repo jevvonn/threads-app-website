@@ -62,7 +62,7 @@ export default function Create() {
     }
 
     if (activeTab == "POST_BODY") {
-      toastId = toast.loading(`Posting your Thread's`);
+      toastId = toast.loading(`Posting your Thread's`, { id: toastId });
       await mutatePostBody({ title, body, tags, type: activeTab, isDraft });
     }
   }
