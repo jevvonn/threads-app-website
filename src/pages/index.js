@@ -36,7 +36,11 @@ export default function Home() {
           {session && <FormNav />}
           {threads
             ? threads.map((thread) => (
-                <SingleThread thread={thread} key={thread.id} />
+                <SingleThread
+                  thread={thread}
+                  key={thread.id}
+                  needToCut={true}
+                />
               ))
             : null}
           {isFetching && <ThreadSkeleton total={5} />}

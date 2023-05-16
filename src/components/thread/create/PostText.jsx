@@ -1,8 +1,7 @@
 import { useMemo, useRef } from "react";
-import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
 import { SingleUpload } from "../../../../firebase/upload";
 import { toast } from "react-hot-toast";
+import ReactQuill from "@/components/quill/ReactQuill";
 
 export default function PostText({ value, onChange }) {
   let toastLoadingId;
@@ -15,26 +14,6 @@ export default function PostText({ value, onChange }) {
     [{ align: [] }],
     ["image", "blockquote", "code-block"],
   ];
-
-  const ReactQuill = useMemo(
-    () =>
-      dynamic(
-        async () => {
-          const { default: RQ } = await import("react-quill");
-          // eslint-disable-next-line react/display-name
-          const Size = RQ.Quill.import("attributors/style/size");
-          Size.whitelist = ["0.75em", "1em", "1.5em"];
-          RQ.Quill.register(Size, true);
-          RQ.Quill.register(RQ.Quill.import("attributors/style/align"), true);
-
-          return ({ forwardedRef, ...props }) => (
-            <RQ ref={forwardedRef} {...props} />
-          );
-        },
-        { ssr: false }
-      ),
-    []
-  );
 
   const modules = useMemo(
     () => ({
@@ -70,10 +49,10 @@ export default function PostText({ value, onChange }) {
       quillObj.editor.insertEmbed(range.index, "image", url);
     };
   }
+
   return (
     <ReactQuill
       value={value}
-      theme="snow"
       onChange={onChange}
       modules={modules}
       forwardedRef={quillRef}

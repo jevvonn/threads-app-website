@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import SideVote from "./partial/SideVote";
 import BottomAction from "./partial/BottomAction";
 
-function SingleThread({ thread }) {
+function SingleThread({ thread, needToCut = false }) {
   const contentRef = useRef(null);
   const [needCut, setNeedCut] = useState(false);
   const timestamp = new Date(thread.createdAt).getTime();
 
   useEffect(() => {
-    if (contentRef.current.clientHeight > 250) {
+    if (contentRef.current.clientHeight > 250 && needToCut) {
       setNeedCut(true);
     }
   }, [contentRef]);
