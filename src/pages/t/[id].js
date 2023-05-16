@@ -8,6 +8,8 @@ import useSingleThread from "@/hooks/thread/useSingleThread";
 import { useRouter } from "next/router";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import UserInfo from "@/components/user/UserInfo";
+import Head from "next/head";
+import Link from "next/link";
 
 export default function Thread() {
   const router = useRouter();
@@ -16,6 +18,10 @@ export default function Thread() {
 
   return (
     <>
+      <Head>
+        <title>{thread ? thread.title : "Thred"}</title>
+      </Head>
+
       <Navbar />
 
       <div className="md:w-11/12 lg:gap-3 flex p-3 mt-16 mx-auto">
@@ -183,8 +189,15 @@ export default function Thread() {
           )}
         </div>
         {thread && <UserInfo thread={thread} />}
-        {thread === null && <div>Post cannot be found.</div>}
       </div>
+      {thread === null && (
+        <div className="w-full flex justify-center flex-col items-center gap-3">
+          <h3 className="font-bold text-lg">Post cannot be found.</h3>
+          <Link href={"/"} className="underline font-semibold text-blue-500">
+            Go Back To Home
+          </Link>
+        </div>
+      )}
     </>
   );
 }
