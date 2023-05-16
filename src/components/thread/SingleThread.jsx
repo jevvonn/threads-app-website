@@ -49,7 +49,7 @@ function SingleThread({ thread, needToCut = false }) {
               ref={contentRef}
               className={`w-full relative ${
                 needCut ? "cute-content" : ""
-              } prose prose-base prose-img:m-0 prose-img:rounded`}
+              } prose prose-base prose-img:m-0 prose-img:rounded text-gray-700 prose-p:m-0`}
               dangerouslySetInnerHTML={{ __html: thread.body }}
             />
           )}
