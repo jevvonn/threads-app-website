@@ -52,12 +52,17 @@ export default function Create() {
 
   async function handleSubmit(isDraft) {
     if (!title) {
-      toast.error("Please fill title fields");
+      toast.error("Please fill title fields", { id: toastId });
       return;
     }
 
     if (activeTab == "POST_BODY" && !body) {
-      toast.error("Please fill your content fields");
+      toast.error("Please fill your content fields", { id: toastId });
+      return;
+    }
+
+    if (!tags.length) {
+      toast.error("Please add minimal 1 tag", { id: toastId });
       return;
     }
 
