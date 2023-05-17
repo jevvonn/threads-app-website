@@ -25,7 +25,7 @@ export default function UserInfo({ thread }) {
             </div>
             <p>{thread.user.bio}</p>
             <hr />
-            <button className="w-11/12 mx-auto py-1 border border-primary rounded-full font-semibold text-xl text-primary">
+            <button className="w-11/12 mx-auto py-1 border border-primary rounded-full font-semibold text-xl text-primary hover:bg-primary hover:text-white transition">
               Follow
             </button>
           </div>
