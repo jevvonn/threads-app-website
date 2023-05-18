@@ -14,7 +14,7 @@ import AlertToast from "@/components/toast/AlertToast";
 export default function Create() {
   const [activeTab, setActiveTab] = useState("POST_BODY");
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState("<p><br></p>");
   const [tags, setTags] = useState([]);
 
   const { mutatePost, isLoading } = useMutationCreate();
@@ -24,7 +24,7 @@ export default function Create() {
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your title"} />
       ));
-    if (activeTab == "POST_BODY" && !body)
+    if (activeTab == "POST_BODY" && (!body || body == "<p><br></p>"))
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your content"} />
       ));
