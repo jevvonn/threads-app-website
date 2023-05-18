@@ -1,12 +1,15 @@
 import Image from "next/image";
-import Link from "next/link";
+import TagItem from "../thread/addition/TagItem";
+import { useSession } from "next-auth/react";
 
 export default function UserInfo({ thread }) {
+  const { data: session } = useSession();
+
   return (
     <div className="lg:w-4/12 flex flex-col gap-5">
       <div className="flex flex-col gap-4">
         <div className="w-full hidden h-full border rounded lg:flex flex-col">
-          <h2 className="w-full h-12 flex justify-center items-center bg-primary rounded-t font-semibold text-xl text-white">
+          <h2 className="w-full py-2 flex justify-center items-center bg-primary rounded-t font-semibold text-xl text-white">
             About Account
           </h2>
           <div className="px-4 py-5 flex flex-col gap-4">
@@ -23,23 +26,24 @@ export default function UserInfo({ thread }) {
               </div>
               <span className="font-semibold">{thread.user.name}</span>
             </div>
-            <p>{thread.user.bio}</p>
-            <hr />
-            <button className="w-11/12 mx-auto py-1 border border-primary rounded-full font-semibold text-xl text-primary hover:bg-primary hover:text-white transition">
-              Follow
-            </button>
+            {thread.user.bio && <p>{thread.user.bio}</p>}
+            {session && (
+              <>
+                <hr />
+                <button className="w-11/12 mx-auto py-1 border border-primary rounded-full font-semibold text-xl text-primary hover:bg-primary hover:text-white transition">
+                  Follow
+                </button>
+              </>
+            )}
           </div>
         </div>
-        <div className="hidden lg:flex flex-col items-center gap-5 w-full py-4 border">
-          <h2 className="text-xl font-semibold">Tags</h2>
-          <div className="w-11/12 flex flex-wrap gap-1">
+        <div className="hidden lg:flex flex-col items-center  w-full  border">
+          <h2 className="w-full bg-primary py-2 items-center rounded-t font-semibold flex justify-center text-xl text-white">
+            Tags
+          </h2>
+          <div className="w-11/12 flex flex-wrap gap-1 py-4">
             {thread.tags.map((tag) => (
-              <Link
-                href={`/tags?q=${tag.name}`}
-                className="badge badge-ghost font-semibold badge-lg"
-              >
-                {tag.name}
-              </Link>
+              <TagItem tag={tag} />
             ))}
           </div>
         </div>
