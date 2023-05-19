@@ -4,16 +4,15 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 
-export default function useMutationLike(threadId, refreshPage) {
+export default function useDeleteThread(threadId, refreshPage) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
 
-  const { mutate: mutateLike } = useMutation(
-    async ({ hasLiked }) => {
-      const { data } = await axios.post("/api/thread/action/like", {
-        id: threadId,
-        hasLiked,
-      });
+  const { mutate: mutateDelete, isLoading } = useMutation(
+    async () => {
+      const { data } = await axios.delete(
+        `/api/thread/delete?threadId=${threadId}&userId=${session.user.id}`
+      );
       return data;
     },
     {
@@ -23,25 +22,12 @@ export default function useMutationLike(threadId, refreshPage) {
         });
         await queryClient.invalidateQueries(["thread", { id: threadId }]);
         toast.custom(
-          () => <AlertToast text={`Your like has been recorded!`} />,
+          () => <AlertToast text={`Your thred's has been deleted!`} />,
           { position: "bottom-center" }
         );
       },
     }
   );
 
-  const handleLike = (hasLiked) => {
-    if (!session) {
-      return toast.custom(
-        () => (
-          <AlertToast text={`Login to likes this Thred's!`} isSuccess={false} />
-        ),
-        { position: "bottom-center" }
-      );
-    }
-
-    mutateLike({ hasLiked });
-  };
-
-  return { handleLike };
+  return { mutateDelete, isLoading };
 }

@@ -14,26 +14,33 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, threadSources, tags } = req.body;
+  const { threadId, parentId, repliedToId, body } = req.body;
 
-  if (!type || !title || !body || !tags.length) {
+  if (!threadId) {
     return res.status(400).json({ massage: "Bad Request" });
   }
 
-  const thread = await prisma.thread.create({
+  const comment = await prisma.comment.create({
     data: {
-      type,
-      title,
       body,
-      sources: threadSources
+      repliedTo: repliedToId
         ? {
-            createMany: threadSources.map((source) => ({ data: source })),
+            connect: {
+              id: repliedToId,
+            },
           }
         : undefined,
-      tags: {
-        connectOrCreate: tags.map((tag) => {
-          return { where: { name: tag }, create: { name: tag } };
-        }),
+      parent: parentId
+        ? {
+            connect: {
+              id: parentId,
+            },
+          }
+        : undefined,
+      thread: {
+        connect: {
+          id: threadId,
+        },
       },
       user: {
         connect: {
@@ -43,5 +50,5 @@ export default async function handler(req, res) {
     },
   });
 
-  res.status(201).json({ massage: "Thread created", threadId: thread.id });
+  res.status(201).json({ massage: "Comment created", commentId: comment.id });
 }

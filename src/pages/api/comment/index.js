@@ -11,12 +11,12 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit, filter, tag, userId } = req.query;
+  const { page, limit, filter, threadId } = req.query;
 
-  if (!page || !limit)
+  if (!page || !limit || !threadId)
     return res
       .status(406)
-      .json({ massage: "Please provide page and limit params" });
+      .json({ massage: "Please provide page and limit params and threadId" });
 
   let orderBy = {};
   switch (filter) {
@@ -40,10 +40,8 @@ export default async function handler(req, res) {
         _count: "asc",
       };
       break;
-    case "oldest":
-      orderBy.createdAt = "asc";
     default:
-      orderBy.createdAt = "desc";
+      orderBy = undefined;
       break;
   }
 
@@ -52,37 +50,24 @@ export default async function handler(req, res) {
     ? { cursor: { id: session.user.id }, select: { id: true } }
     : false;
 
-  const threads = await prisma.thread.findMany({
+  const comments = await prisma.comment.findMany({
     where: {
-      tags: tag
-        ? {
-            some: {
-              name: {
-                equals: tag,
-              },
-            },
-          }
-        : undefined,
-      userId: userId ? userId : undefined,
+      threadId,
+      parent: null,
     },
     orderBy,
     include: {
       _count: {
         select: {
-          comments: true,
           likedBy: true,
-          savedBy: true,
           votedDownBy: true,
           votedUpBy: true,
         },
       },
       likedBy: cursorUser,
-      savedBy: cursorUser,
       votedDownBy: cursorUser,
       votedUpBy: cursorUser,
-      tags: true,
       user: true,
-      sources: true,
     },
 
     take: parseInt(limit) + 1,
@@ -91,14 +76,14 @@ export default async function handler(req, res) {
 
   let nextPage = undefined;
 
-  if (threads.length > parseInt(limit)) {
-    threads.pop();
+  if (comments.length > parseInt(limit)) {
+    comments.pop();
     nextPage = parseInt(page) + 1;
   }
 
   res.status(200).json({
-    massage: "Success get threads",
-    threads,
+    massage: "Success get comments",
+    comments,
     nextPage,
   });
 }

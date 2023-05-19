@@ -9,15 +9,21 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { threadId, userId } = req.query;
-  if (userId !== session.user.id)
-    return res.status(403).json({ massage: "Forbidden request" });
+  const { commentId, userId } = req.body;
 
-  const thread = await prisma.thread.delete({
+  if (!commentId || !userId) {
+    return res.status(400).json({ massage: "Bad request" });
+  }
+
+  if (session.user.id !== userId) {
+    return res.status(403).json({ massage: "Forbidden request" });
+  }
+
+  const comment = await prisma.comment.delete({
     where: {
-      id: threadId,
+      id: commentId,
     },
   });
 
-  res.status(201).json({ massage: "Thread deleted", threadId: thread.id });
+  res.status(201).json({ massage: "comment deleted" });
 }

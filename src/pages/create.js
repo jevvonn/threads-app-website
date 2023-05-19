@@ -1,69 +1,40 @@
 import PostFile from "@/components/thread/create/PostFile";
 import PostText from "@/components/thread/create/PostText";
 import Navbar from "@/components/navigation/Navbar";
-import { useEffect, useState } from "react";
-import { BsFileRichtext } from "react-icons/bs";
-import { BsCardImage } from "react-icons/bs";
+import { useState } from "react";
+import { BsFileRichtext, BsCardImage } from "react-icons/bs";
 import { getServerAuthSession } from "./api/auth/[...nextauth]";
 import Head from "next/head";
 import autosize from "autosize";
 import { TagInput } from "@/components/thread/create/TagInput";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
+import useMutationCreate from "@/hooks/thread/useMutationCreate";
+import AlertToast from "@/components/toast/AlertToast";
 
 export default function Create() {
-  const router = useRouter();
-  let toastId;
-
   const [activeTab, setActiveTab] = useState("POST_BODY");
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState("<p><br></p>");
   const [tags, setTags] = useState([]);
 
-  const { mutateAsync: mutatePostBody, isLoading } = useMutation(
-    async ({ title, body, tags, type, isDraft }) => {
-      const res = await fetch("/api/thread/create", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          body,
-          tags,
-          type,
-          isDraft,
-        }),
-      });
-      const data = await res.json();
-      return data;
-    },
-    {
-      onSuccess: (data) => {
-        toast.success("Your Thred has been posted", {
-          id: toastId,
-        });
-        router.push(`/t/${data.threadId}`);
-      },
-    }
-  );
+  const { mutatePost, isLoading } = useMutationCreate();
 
-  async function handleSubmit(isDraft) {
-    if (!title) {
-      toast.error("Please fill title fields", { id: toastId });
-      return;
-    }
-
-    if (activeTab == "POST_BODY" && !body) {
-      toast.error("Please fill your content fields");
-      return;
-    }
+  async function handleSubmit() {
+    if (!title)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your title"} />
+      ));
+    if (activeTab == "POST_BODY" && (!body || body == "<p><br></p>"))
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      ));
+    if (!tags.length)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please add at least one tag"} />
+      ));
 
     if (activeTab == "POST_BODY") {
-      toastId = toast.loading(`Posting your Thread's`, { id: toastId });
-      await mutatePostBody({ title, body, tags, type: activeTab, isDraft });
+      mutatePost({ title, body, tags, type: activeTab });
     }
   }
 
@@ -84,19 +55,19 @@ export default function Create() {
               onClick={() => setActiveTab("POST_BODY")}
               className={
                 activeTab === "POST_BODY"
-                  ? `activeTabStyle rounded-l`
-                  : `baseStyleTab rounded-l`
+                  ? `activeTabStyle rounded-l font-semibold`
+                  : `baseStyleTab rounded-l font-semibold`
               }
             >
               <BsFileRichtext size={30} />
-              {`Thred${"'"}s`}
+              Story
             </button>
             <button
               onClick={() => setActiveTab("POST_SOURCE")}
               className={
                 activeTab === "POST_SOURCE"
-                  ? `activeTabStyle rounded-r`
-                  : `baseStyleTab rounded-r`
+                  ? `activeTabStyle rounded-r font-semibold`
+                  : `baseStyleTab rounded-r font-semibold`
               }
             >
               <BsCardImage size={30} />
@@ -137,14 +108,7 @@ export default function Create() {
           <hr />
           <div className="flex justify-end pr-6 gap-3">
             <button
-              onClick={() => handleSubmit(true)}
-              disabled={isLoading}
-              className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide disabled:opacity-50"
-            >
-              Save Draft
-            </button>
-            <button
-              onClick={() => handleSubmit(false)}
+              onClick={handleSubmit}
               disabled={isLoading}
               className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
             >

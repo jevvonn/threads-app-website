@@ -6,9 +6,9 @@ import RecommendationSide from "@/components/user/RecommendationSide";
 import FormNav from "@/components/navigation/FormNav";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import { useSession } from "next-auth/react";
-import useScrollPosition from "@/hooks/useScrollPosition";
-import { useEffect } from "react";
 import useInfiniteThreads from "@/hooks/thread/useInfiniteThreads";
+import { useEffect } from "react";
+import useScrollPosition from "@/hooks/useScrollPosition";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -36,7 +36,11 @@ export default function Home() {
           {session && <FormNav />}
           {threads
             ? threads.map((thread) => (
-                <SingleThread thread={thread} key={thread.id} />
+                <SingleThread
+                  thread={thread}
+                  key={thread.id}
+                  needToCut={true}
+                />
               ))
             : null}
           {isFetching && <ThreadSkeleton total={5} />}
