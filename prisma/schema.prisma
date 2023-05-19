@@ -127,23 +127,29 @@ model Thread {
 
 // Comment
 model Comment {
-  id       String  @id @unique @default(cuid())
+  id       String   @id @unique @default(cuid())
   userId   String
-  user     User    @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
   threadId String
-  thread   Thread  @relation(fields: [threadId], references: [id])
-  parentId String
-  parent   Comment @relation("childrens_comment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  thread   Thread   @relation(fields: [threadId], references: [id])
+  parentId String?
+  parent   Comment? @relation("childrensComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  replies     Comment[] @relation("childrens_comment")
-  body        String    @db.Text
-  votedUpBy   User[]    @relation("votedUpComment")
-  votedDownBy User[]    @relation("votedDownComment")
-  likedBy     User[]    @relation("likedComment")
+  repliedToId String?
+  repliedTo   Comment? @relation("repliedComment", fields: [repliedToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  repliedBy Comment[] @relation("repliedComment")
+  childrens Comment[] @relation("childrensComment")
+
+  body        String @db.Text
+  votedUpBy   User[] @relation("votedUpComment")
+  votedDownBy User[] @relation("votedDownComment")
+  likedBy     User[] @relation("likedComment")
 
   @@index([userId])
   @@index([threadId])
   @@index([parentId])
+  @@index([repliedToId])
 }
 
 // Tags
