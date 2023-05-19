@@ -59,7 +59,7 @@ export default function DropdownMore({ thread }) {
             <div className="modal-action">
               <label
                 htmlFor={`modal-delete-${thread.id}`}
-                className="btn btn-secondary"
+                className="btn btn-ghost bg-base-300"
               >
                 Cancel
               </label>
