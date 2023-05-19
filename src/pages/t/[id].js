@@ -10,11 +10,16 @@ import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import UserInfo from "@/components/user/UserInfo";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
+import TagItem from "@/components/thread/addition/TagItem";
+import { useSession } from "next-auth/react";
+import CommentForm from "@/components/comment/create/CommentForm";
 
 export default function Thread() {
   const router = useRouter();
   const { id } = router.query;
   const { thread, isLoading } = useSingleThread(id);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -29,28 +34,17 @@ export default function Thread() {
           {isLoading && <ThreadSkeleton total={1} />}
           {thread && (
             <>
-              <SingleThread thread={thread} />
+              <SingleThread thread={thread} isLink={false} />
               <div className="w-full md:w-11/12 flex flex-col gap-3">
                 <div className="lg:hidden flex flex-col items-center gap-5 w-full py-4 border">
                   <div className="w-11/12 flex flex-wrap gap-1">
-                    <div className="badge badge-ghost">Adventure</div>
-                    <div className="badge badge-ghost">Scifi</div>
-                    <div className="badge badge-ghost">Drama</div>
-                    <div className="badge badge-ghost">Slice of Life</div>
-                    <div className="badge badge-ghost">Horror</div>
-                    <div className="badge badge-ghost">School</div>
-                    <div className="badge badge-ghost">Musical</div>
-                    <div className="badge badge-ghost">Fantasy</div>
+                    {thread.tags.map((tag) => (
+                      <TagItem tag={tag} />
+                    ))}
                   </div>
                 </div>
-                <div className="w-full flex flex-col gap-2">
-                  <span className="font-semibold">Comment as Xooos</span>
-                  <textarea
-                    className="textarea textarea-bordered h-36 resize-none focus:outline-none text-lg"
-                    placeholder="what are you thoughts?"
-                  ></textarea>
-                </div>
-                <hr />
+                {session && <CommentForm thread={thread} />}
+                {/* <hr />
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="avatar">
@@ -75,17 +69,92 @@ export default function Thread() {
                           <IoCaretUpOutline size={27} />
                         </button>
                         <span className="w-10 text-center font-semibold text-black">
-                          {/* {thread._count.votedUpBy - thread._count.votedDownBy} */}
                           200
                         </span>
                         <button>
                           <IoCaretDownOutline
-                            // color={!thread.votedDownBy?.length ? "gray" : ""}
                             size={27}
                           />
                         </button>
                       </div>
-                      <button className="px-5 focus:bg-zinc-400">Reply</button>
+                      <div>
+                        <label
+                          htmlFor="my-modal-4"
+                          className="btn btn-sm rounded bg-transparent border-none text-black capitalize hover:bg-zinc-400"
+                        >
+                          Reply
+                        </label>
+                        <input
+                          type="checkbox"
+                          id="my-modal-4"
+                          className="modal-toggle"
+                        />
+                        <label
+                          htmlFor="my-modal-4"
+                          className="modal cursor-pointer"
+                        >
+                          <label
+                            className="modal-box max-w-xl p-4 absolute top-9 flex flex-col gap-2"
+                            htmlFor=""
+                          >
+                            <label
+                              htmlFor="my-modal-4"
+                              className="btn btn-sm w-9 h-9 btn-circle absolute left-2 top-2 bg-transparent text-black text-base border-none hover:bg-zinc-200"
+                            >
+                              ✕
+                            </label>
+                            <div className="mt-12 flex flex-col gap-5">
+                              <div className="w-full flex gap-2">
+                                <div class="w-14">
+                                  <div className="avatar">
+                                    <div className="w-12 rounded-full border">
+                                      <Image
+                                        src={thread.user.image}
+                                        alt={thread.user.name}
+                                        width={50}
+                                        height={50}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="group-hover:underline font-semibold">
+                                    {thread.user.name}
+                                  </span>
+                                  <p className="flex gap-1">
+                                    <span>Replying to</span>
+                                    <span className="text-blue-400">
+                                      {thread.user.name}
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="w-full flex gap-1">
+                                <div className="w-14">
+                                  <div className="avatar">
+                                    <div className="w-12 rounded-full border">
+                                      <img
+                                        src="https://4kwallpapers.com/images/wallpapers/saitama-one-punch-man-2560x2560-10084.jpg"
+                                        width={50}
+                                        height={50}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <textarea
+                                  className="w-full mt-2 textarea textarea-bordered h-36 resize-none focus:outline-none text-lg"
+                                  placeholder="Express your reply"
+                                ></textarea>
+                              </div>
+                            </div>
+                            <div className=" flex justify-end">
+                              <button className="px-4 py-2 bg-primary text-sm text-white font-semibold capitalize tracking-wider rounded-full border-2 border-primary hover:bg-[#554f95] transition">
+                                Reply
+                              </button>
+                            </div>
+                          </label>
+                        </label>
+                      </div>
                       <div className="dropdown dropdown-bottom dropdown-end my-auto w-7 h-7 hover:bg-zinc-400">
                         <label
                           tabIndex={0}
@@ -132,24 +201,96 @@ export default function Thread() {
                           <div className="flex items-center text-primary">
                             <button>
                               <IoCaretUpOutline
-                                // color={!thread.votedUpBy?.length ? "gray" : ""}
                                 size={27}
                               />
                             </button>
                             <span className="w-10 text-center font-semibold text-black">
-                              {/* {thread._count.votedUpBy - thread._count.votedDownBy} */}
                               200
                             </span>
                             <button>
                               <IoCaretDownOutline
-                                // color={!thread.votedDownBy?.length ? "gray" : ""}
                                 size={27}
                               />
                             </button>
                           </div>
-                          <button className="px-5 focus:bg-zinc-400">
-                            Reply
-                          </button>
+                          <div>
+                            <label
+                              htmlFor="my-modal-4"
+                              className="btn btn-sm rounded bg-transparent border-none text-black capitalize hover:bg-zinc-400"
+                            >
+                              Reply
+                            </label>
+                            <input
+                              type="checkbox"
+                              id="my-modal-4"
+                              className="modal-toggle"
+                            />
+                            <label
+                              htmlFor="my-modal-4"
+                              className="modal cursor-pointer"
+                            >
+                              <label
+                                className="modal-box max-w-xl p-4 absolute top-9 flex flex-col gap-2"
+                                htmlFor=""
+                              >
+                                <label
+                                  htmlFor="my-modal-4"
+                                  className="btn btn-sm w-9 h-9 btn-circle absolute left-2 top-2 bg-transparent text-black text-base border-none hover:bg-zinc-200"
+                                >
+                                  ✕
+                                </label>
+                                <div className="mt-12 flex flex-col gap-5">
+                                  <div className="w-full flex gap-2">
+                                    <div class="w-14">
+                                      <div className="avatar">
+                                        <div className="w-12 rounded-full border">
+                                          <Image
+                                            src={thread.user.image}
+                                            alt={thread.user.name}
+                                            width={50}
+                                            height={50}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className="group-hover:underline font-semibold">
+                                        {thread.user.name}
+                                      </span>
+                                      <p className="flex gap-1">
+                                        <span>Replying to</span>
+                                        <span className="text-blue-400">
+                                          {thread.user.name}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="w-full flex gap-1">
+                                    <div className="w-14">
+                                      <div className="avatar">
+                                        <div className="w-12 rounded-full border">
+                                          <img
+                                            src="https://4kwallpapers.com/images/wallpapers/saitama-one-punch-man-2560x2560-10084.jpg"
+                                            width={50}
+                                            height={50}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <textarea
+                                      className="w-full mt-2 textarea textarea-bordered h-36 resize-none focus:outline-none text-lg"
+                                      placeholder="Express your reply"
+                                    ></textarea>
+                                  </div>
+                                </div>
+                                <div className=" flex justify-end">
+                                  <button className="px-4 py-2 bg-primary text-sm text-white font-semibold capitalize tracking-wider rounded-full border-2 border-primary hover:bg-[#554f95] transition">
+                                    Reply
+                                  </button>
+                                </div>
+                              </label>
+                            </label>
+                          </div>
                           <div className="dropdown dropdown-bottom dropdown-end my-auto w-7 h-7 hover:bg-zinc-400">
                             <label
                               tabIndex={0}
@@ -176,14 +317,10 @@ export default function Thread() {
                             </ul>
                           </div>
                         </div>
-                        <textarea
-                          className="w-full mt-2 textarea textarea-bordered h-36 resize-none focus:outline-none text-lg"
-                          placeholder="what are you thoughts?"
-                        ></textarea>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </>
           )}
