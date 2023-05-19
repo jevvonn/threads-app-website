@@ -20,7 +20,6 @@ export default function useDeleteThread(threadId, refreshPage) {
         await queryClient.invalidateQueries(["threads"], {
           refetchPage: (_, index) => index === refreshPage,
         });
-        await queryClient.invalidateQueries(["thread", { id: threadId }]);
         toast.custom(
           () => <AlertToast text={`Your thred's has been deleted!`} />,
           { position: "bottom-center" }

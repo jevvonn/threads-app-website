@@ -21,7 +21,6 @@ export default function useMutationLike(threadId, refreshPage) {
         await queryClient.invalidateQueries(["threads"], {
           refetchPage: (_, index) => index === refreshPage,
         });
-        await queryClient.invalidateQueries(["thread", { id: threadId }]);
         toast.custom(
           () => <AlertToast text={`Your like has been recorded!`} />,
           { position: "bottom-center", id: "action-notification" }
