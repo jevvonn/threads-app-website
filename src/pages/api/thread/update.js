@@ -14,25 +14,9 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res, authOptions);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const {
-    type,
-    title,
-    body,
-    threadSources,
-    isDraft,
-    tags,
-    categoryId,
-    threadId,
-  } = req.body;
-  if (
-    !type ||
-    !title ||
-    !body ||
-    !threadSources ||
-    !isDraft ||
-    !tags ||
-    !categoryId
-  )
+  const { type, title, body, threadSources, tags, categoryId, threadId } =
+    req.body;
+  if (!type || !title || !body || !threadSources || !tags || !categoryId)
     return res.status(400).json({ massage: "Bad Request" });
 
   const thread = await prisma.thread.update({
@@ -44,7 +28,6 @@ export default async function handler(req, res) {
       type,
       title,
       body,
-      isDraft,
       sources: {
         createMany: threadSources.map((source) => ({ data: source })),
       },

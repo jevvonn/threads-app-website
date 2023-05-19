@@ -19,7 +19,7 @@ export default function Create() {
 
   const { mutatePost, isLoading } = useMutationCreate();
 
-  async function handleSubmit(isDraft) {
+  async function handleSubmit() {
     if (!title)
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your title"} />
@@ -34,7 +34,7 @@ export default function Create() {
       ));
 
     if (activeTab == "POST_BODY") {
-      mutatePost({ title, body, tags, type: activeTab, isDraft });
+      mutatePost({ title, body, tags, type: activeTab });
     }
   }
 
@@ -108,14 +108,7 @@ export default function Create() {
           <hr />
           <div className="flex justify-end pr-6 gap-3">
             <button
-              onClick={() => handleSubmit(true)}
-              disabled={isLoading}
-              className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide disabled:opacity-50"
-            >
-              Save Draft
-            </button>
-            <button
-              onClick={() => handleSubmit(false)}
+              onClick={handleSubmit}
               disabled={isLoading}
               className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
             >

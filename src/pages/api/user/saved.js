@@ -18,6 +18,9 @@ export default async function handler(req, res) {
       .status(406)
       .json({ massage: "Please provide page and limit params" });
 
+  if (userId !== session.user.id) {
+    return res.status(403).json({ massage: "Forbidden request" });
+  }
   let orderBy = {};
   switch (filter) {
     case "most_voted":
@@ -63,7 +66,11 @@ export default async function handler(req, res) {
             },
           }
         : undefined,
-      userId: userId ? userId : undefined,
+      savedBy: {
+        some: {
+          id: session.user.id,
+        },
+      },
     },
     orderBy,
     include: {

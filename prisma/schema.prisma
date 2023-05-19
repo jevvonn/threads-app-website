@@ -114,7 +114,6 @@ model Thread {
   sources     ThreadSource[]
   votedUpBy   User[]         @relation("votedUpThread")
   votedDownBy User[]         @relation("votedDownThread")
-  isDraft     Boolean
   likedBy     User[]         @relation("likedThread")
   savedBy     User[]         @relation("savedThread")
   comments    Comment[]

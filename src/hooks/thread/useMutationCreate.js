@@ -7,13 +7,12 @@ export default function useMutationCreate() {
   const router = useRouter();
 
   const { mutate: mutatePost, isLoading } = useMutation(
-    async ({ title, body, tags, type, isDraft }) => {
+    async ({ title, body, tags, type }) => {
       const initialData = {
         title,
         body,
         tags,
         type,
-        isDraft,
       };
 
       const { data } = await axios.post("/api/thread/create", initialData);
