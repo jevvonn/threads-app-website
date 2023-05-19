@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     ? { cursor: { id: session.user.id }, select: { id: true } }
     : false;
 
-  const user = await prisma.user.findMany({
+  const users = await prisma.user.findMany({
     include: {
       _count: {
         select: {
@@ -32,7 +32,6 @@ export default async function handler(req, res) {
         },
       },
       followedBy: cursorUser,
-      follows: cursorUser,
     },
 
     take: parseInt(limit) + 1,
@@ -41,14 +40,14 @@ export default async function handler(req, res) {
 
   let nextPage = undefined;
 
-  if (user.length > parseInt(limit)) {
-    user.pop();
+  if (users.length > parseInt(limit)) {
+    users.pop();
     nextPage = parseInt(page) + 1;
   }
 
   res.status(200).json({
     massage: "Success get user",
-    user,
+    users,
     nextPage,
   });
 }
