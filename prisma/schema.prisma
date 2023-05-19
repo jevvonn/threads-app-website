@@ -146,6 +146,8 @@ model Comment {
   votedDownBy User[] @relation("votedDownComment")
   likedBy     User[] @relation("likedComment")
 
+  createdAt DateTime @default(now())
+
   @@index([userId])
   @@index([threadId])
   @@index([parentId])
