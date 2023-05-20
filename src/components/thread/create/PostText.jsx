@@ -54,6 +54,7 @@ export default function PostText({ value, onChange }) {
           },
           {
             alt: "post-image",
+            loading: "lazy",
           }
         )
       );
