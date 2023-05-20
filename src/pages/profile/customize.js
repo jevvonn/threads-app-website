@@ -1,29 +1,6 @@
 import Navbar from "@/components/navigation/Navbar";
-import React, { useState } from "react";
-import { BsLink45Deg } from "react-icons/bs";
-import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function Customize() {
-  const [socialLinks, setSocialLinks] = useState([
-    {
-      id: Math.random().toString(),
-      value: "https://instagram.com/vidi123",
-    },
-  ]);
-
-  function handleChangeSocialLinks(value, id) {
-    setSocialLinks((prev) =>
-      prev.map((prevLink) =>
-        prevLink.id == id
-          ? {
-              ...prevLink,
-              value,
-            }
-          : prevLink
-      )
-    );
-  }
-
   return (
     <>
       <Navbar />
@@ -71,43 +48,6 @@ export default function Customize() {
                   </span>
                 </label>
                 <textarea className="textarea textarea-bordered border-primary h-24 resize-none focus:outline-none"></textarea>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div>
-                  <span className="label-text text-xl font-semibold">
-                    Social links ( 5 <span className="text-primary">Max</span> )
-                  </span>
-                  <p>
-                    people who visit your profile will see your social links.
-                  </p>
-                </div>
-                {socialLinks.map((link) => (
-                  <div className="relative flex items-center" key={link.id}>
-                    <BsLink45Deg size={27} className="absolute left-2" />
-                    <input
-                      type="text"
-                      value={link.value}
-                      onChange={(e) =>
-                        handleChangeSocialLinks(e.target.value, link.id)
-                      }
-                      className="w-full px-10 py-2 focus:outline-primary"
-                    />
-                    <button className="absolute right-2 text-red-600">
-                      <RiDeleteBin6Line size={23} />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={() =>
-                    setSocialLinks((prev) => [
-                      ...prev,
-                      { id: Math.random().toString(), value: "https://" },
-                    ])
-                  }
-                  className="w-40 px-2 flex justify-center items-center rounded-lg gap-3 font-semibold bg-primary text-white"
-                >
-                  <span className="text-3xl">+</span> Add social link
-                </button>
               </div>
               <hr />
               <button className="w-52 h-12 block mx-auto border border-primary rounded-lg text-primary text-xl font-semibold hover:bg-primary hover:text-white transition">
