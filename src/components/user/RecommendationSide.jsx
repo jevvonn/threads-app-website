@@ -14,7 +14,7 @@ export default function RecommendationSide() {
           <AiOutlineUsergroupAdd size={30} />
         </div>
         {users?.map((user) => (
-          <UserCard user={user} />
+          <UserCard key={user.id} user={user} />
         ))}
         {isFetching && <UserSkeleton total={5} />}
       </div>
