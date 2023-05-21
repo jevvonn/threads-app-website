@@ -16,6 +16,7 @@ export default function Create() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("<p><br></p>");
   const [tags, setTags] = useState([]);
+  const [source, setSource] = useState([]);
 
   const { mutatePost, isLoading } = useMutationCreate();
 
@@ -28,14 +29,19 @@ export default function Create() {
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your content"} />
       ));
+    if (activeTab == "POST_SOURCE" && !source.length)
+      return toast.custom(() => (
+        <AlertToast
+          isSuccess={false}
+          text={"Please upload some image or video"}
+        />
+      ));
     if (!tags.length)
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please add at least one tag"} />
       ));
 
-    if (activeTab == "POST_BODY") {
-      mutatePost({ title, body, tags, type: activeTab });
-    }
+    mutatePost({ title, body, tags, type: activeTab, threadSources: source });
   }
 
   return (
@@ -100,7 +106,7 @@ export default function Create() {
           {activeTab === "POST_BODY" ? (
             <PostText value={body} onChange={setBody} />
           ) : (
-            <PostFile />
+            <PostFile setSource={setSource} source={source} />
           )}
           <div className="flex flex-col gap-2">
             <TagInput

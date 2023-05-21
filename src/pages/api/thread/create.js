@@ -25,9 +25,9 @@ export default async function handler(req, res) {
       type,
       title,
       body,
-      sources: threadSources
+      sources: threadSources.length
         ? {
-            createMany: threadSources.map((source) => ({ data: source })),
+            create: threadSources,
           }
         : undefined,
       tags: {
