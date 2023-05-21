@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 
-export const TagInput = ({ onNewTags }) => {
+export const TagInput = ({ onNewTags, tags }) => {
   const [input, setInput] = useState("");
   const [defaultTags, setDefaultTags] = useState([]);
 
@@ -40,6 +40,7 @@ export const TagInput = ({ onNewTags }) => {
     <TagSelector
       isMulti
       placeholder="Tags..."
+      value={tags}
       options={defaultTags}
       onChange={(newVal) => onNewTags(newVal.map((x) => x.value))}
     />

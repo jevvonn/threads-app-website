@@ -103,7 +103,10 @@ export default function Create() {
             <PostFile />
           )}
           <div className="flex flex-col gap-2">
-            <TagInput onNewTags={setTags} />
+            <TagInput
+              tags={tags.map((tag) => ({ value: tag, label: tag }))}
+              onNewTags={setTags}
+            />
           </div>
           <hr />
           <div className="flex justify-end pr-6 gap-3">
