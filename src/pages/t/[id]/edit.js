@@ -6,7 +6,7 @@ import { getServerAuthSession } from "@/pages/api/auth/[...nextauth]";
 import autosize from "autosize";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState, usesel } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function EditThread({ threadId, userId }) {
