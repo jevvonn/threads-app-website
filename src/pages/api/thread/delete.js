@@ -9,7 +9,9 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { threadId } = req.body;
+  const { threadId, userId } = req.query;
+  if (userId !== session.user.id)
+    return res.status(403).json({ massage: "Forbidden request" });
 
   const thread = await prisma.thread.delete({
     where: {
