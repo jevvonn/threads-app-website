@@ -1,11 +1,13 @@
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import ImageContent from "./ImageContent";
 
 export default function BodyContent({ thread, needToCut }) {
   const contentRef = useRef(null);
   const [needCut, setNeedCut] = useState(false);
 
   useEffect(() => {
-    if (contentRef.current.clientHeight > 250 && needToCut) {
+    if (contentRef.current?.clientHeight > 250 && needToCut) {
       setNeedCut(true);
     }
   }, [contentRef]);
@@ -13,10 +15,7 @@ export default function BodyContent({ thread, needToCut }) {
   return (
     <>
       <h3 className="font-semibold text-xl">{thread.title}</h3>
-      {thread.type == "POST_SOURCE" &&
-        thread.sources.map((src) => (
-          <Image key={src.id} src={src.url} className="w-full" />
-        ))}
+      {thread.type == "POST_SOURCE" && <ImageContent slides={thread.sources} />}
       {thread.type == "POST_BODY" && (
         <div
           ref={contentRef}
