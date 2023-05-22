@@ -14,6 +14,7 @@ import Image from "next/image";
 import TagItem from "@/components/thread/addition/TagItem";
 import { useSession } from "next-auth/react";
 import CommentForm from "@/components/comment/create/CommentForm";
+import UserInfoSkeleton from "@/components/skeleton/UserInfoSkeleton";
 
 export default function Thread() {
   const router = useRouter();
@@ -325,7 +326,7 @@ export default function Thread() {
             </>
           )}
         </div>
-        {thread && <UserInfo thread={thread} />}
+        {thread ? <UserInfo thread={thread} />: <UserInfoSkeleton/>}
       </div>
       {thread === null && (
         <div className="w-full flex justify-center flex-col items-center gap-3">
