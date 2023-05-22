@@ -5,6 +5,8 @@ import Image from "next/image";
 import { getServerAuthSession } from "../api/auth/[...nextauth]";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { SingleUpload } from "../../../firebase/upload";
+import { toast } from "react-hot-toast";
 
 const Settings = () => {
   const { data: session, update } = useSession();
@@ -37,9 +39,22 @@ const Settings = () => {
     if (!inputForm.name || !inputForm.image) {
       return;
     }
+    toast.loading("Saving your profile...", { id: "save-setting" });
     await update(inputForm);
     await update();
+    toast.success("Redirect you in a moment...", { id: "save-setting" });
     router.push(`/`);
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    toast.loading("Uploading Image...", { id: "upload-image" });
+    const url = await SingleUpload(file, `user-${session.user.id}`, "users-pp");
+    toast.success("Image Uploaded Successfully", { id: "upload-image" });
+    setInputForm((prev) => ({
+      ...prev,
+      image: url,
+    }));
   };
 
   return (
@@ -73,7 +88,12 @@ const Settings = () => {
                 </div>
               </div>
               <label className="w-10 h-10 flex justify-center items-center bg-white border rounded-full cursor-pointer absolute bottom-0 right-0 text-black text-xl">
-                <input type="file" className="hidden"></input>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
                 <BiEdit />
               </label>
             </div>
