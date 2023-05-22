@@ -28,6 +28,7 @@ export default function useMutationVote(threadId, refetchPage) {
           () => <AlertToast text={`Your vote has been recorded!`} />,
           {
             position: "bottom-center",
+            id: "action-notification",
           }
         );
       },
