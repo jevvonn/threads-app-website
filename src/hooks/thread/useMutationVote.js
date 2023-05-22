@@ -23,7 +23,6 @@ export default function useMutationVote(threadId, refetchPage) {
         await queryClient.invalidateQueries(["threads"], {
           refetchPage: (_, index) => index === refetchPage,
         });
-        await queryClient.invalidateQueries(["thread", { id: threadId }]);
         toast.custom(
           () => <AlertToast text={`Your vote has been recorded!`} />,
           {

@@ -5,7 +5,7 @@ import React from "react";
 
 export default function UserCard({ user }) {
   const { data: session } = useSession();
-  const hasFollowed = !!user.followedBy.length;
+  const hasFollowed = !!user.followedBy?.length;
 
   return (
     <div className="w-full flex justify-between items-center gap-3">
