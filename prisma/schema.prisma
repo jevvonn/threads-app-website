@@ -61,8 +61,6 @@ model User {
   votedDownComments Comment[] @relation("votedDownComment")
   likedComments     Comment[] @relation("likedComment")
 
-  socialLinks UserSocialLink[]
-
   followedBy User[] @relation("followedUser")
   follows    User[] @relation("followedUser")
 }
@@ -73,17 +71,6 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-// Social Links
-model UserSocialLink {
-  id  String @id @default(cuid())
-  url String
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@index([userId])
 }
 
 // enum
