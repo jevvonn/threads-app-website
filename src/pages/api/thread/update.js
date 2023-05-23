@@ -14,9 +14,18 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { title, body, threadSources, tags, userId, threadId } = req.body;
+  const {
+    title,
+    body,
+    deletedSources,
+    newSources,
+    tags,
+    userId,
+    threadId,
+    deletedTags,
+  } = req.body;
 
-  if (!userId || !threadId || !title || !body || !tags.length) {
+  if (!userId || !threadId || !title || !body || !tags.length || !deletedTags) {
     return res.status(400).json({ massage: "Bad Request" });
   }
 
@@ -27,15 +36,16 @@ export default async function handler(req, res) {
     data: {
       title,
       body,
-      sources: threadSources
-        ? {
-            createMany: threadSources.map((source) => ({ data: source })),
-          }
-        : undefined,
+      sources: {
+        create: newSources.length ? newSources : undefined,
+        delete: deletedSources.length ? deletedSources : undefined,
+      },
       tags: {
-        connectOrCreate: tags.map((tag) => {
-          return { where: { name: tag }, create: { name: tag } };
-        }),
+        connectOrCreate: tags.map((tag) => ({
+          where: { name: tag },
+          create: { name: tag },
+        })),
+        disconnect: deletedTags.map((tag) => ({ where: { name: tag } })),
       },
     },
   });
