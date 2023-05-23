@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     deletedTags,
   } = req.body;
 
-  if (!userId || !threadId || !title || !body || !tags.length || !deletedTags) {
+  if (!userId || !threadId || !title || !body || !tags.length) {
     return res.status(400).json({ massage: "Bad Request" });
   }
 
@@ -37,8 +37,8 @@ export default async function handler(req, res) {
       title,
       body,
       sources: {
-        create: newSources.length ? newSources : undefined,
-        delete: deletedSources.length ? deletedSources : undefined,
+        create: newSources?.length ? newSources : undefined,
+        delete: deletedSources?.length ? deletedSources : undefined,
       },
       tags: {
         connectOrCreate: tags.map((tag) => ({
