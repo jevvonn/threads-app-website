@@ -62,6 +62,8 @@ export default async function handler(req, res) {
           likedBy: true,
           votedDownBy: true,
           votedUpBy: true,
+          repliedBy: true,
+          childrens: true,
         },
       },
       likedBy: cursorUser,
