@@ -8,7 +8,7 @@ import { getServerAuthSession } from "../auth/[...nextauth]";
  */
 
 export default async function handler(req, res) {
-  if (req.method != "POST")
+  if (req.method != "PUT")
     return res.status(405).json({ massage: "Method not allowed" });
 
   const session = await getServerAuthSession(req, res);
@@ -38,14 +38,16 @@ export default async function handler(req, res) {
       body,
       sources: {
         create: newSources?.length ? newSources : undefined,
-        delete: deletedSources?.length ? deletedSources : undefined,
+        delete: deletedSources?.length
+          ? deletedSources.map((src) => ({ id: src.id }))
+          : undefined,
       },
       tags: {
         connectOrCreate: tags.map((tag) => ({
           where: { name: tag },
           create: { name: tag },
         })),
-        disconnect: deletedTags.map((tag) => ({ where: { name: tag } })),
+        disconnect: deletedTags.map((tag) => ({ name: tag })),
       },
     },
   });

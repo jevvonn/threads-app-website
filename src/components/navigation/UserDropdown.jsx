@@ -42,6 +42,8 @@ function UserDropdown() {
               src={session.user.image}
               alt={session.user.name}
               width={40}
+              priority
+              className="w-auto h-auto"
               height={40}
             />
           </div>
