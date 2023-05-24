@@ -8,46 +8,49 @@ import { getServerAuthSession } from "../auth/[...nextauth]";
  */
 
 export default async function handler(req, res) {
-  if (req.method != "UPDATE")
+  if (req.method != "PUT")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const session = await getServerAuthSession(req, res, authOptions);
+  const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, threadSources, tags, categoryId, threadId } =
-    req.body;
-  if (!type || !title || !body || !threadSources || !tags || !categoryId)
+  const {
+    title,
+    body,
+    deletedSources,
+    newSources,
+    tags,
+    userId,
+    threadId,
+    deletedTags,
+  } = req.body;
+
+  if (!userId || !threadId || !title || !body || !tags.length) {
     return res.status(400).json({ massage: "Bad Request" });
+  }
 
   const thread = await prisma.thread.update({
     where: {
       id: threadId,
     },
-
     data: {
-      type,
       title,
       body,
       sources: {
-        createMany: threadSources.map((source) => ({ data: source })),
+        create: newSources?.length ? newSources : undefined,
+        delete: deletedSources?.length
+          ? deletedSources.map((src) => ({ id: src.id }))
+          : undefined,
       },
       tags: {
-        connectOrCreate: tags.map((tag) => {
-          return { where: { name: tag.name }, create: { name: tag.name } };
-        }),
-      },
-      category: {
-        connect: {
-          id: categoryId,
-        },
-      },
-      user: {
-        connect: {
-          id: session.user.id,
-        },
+        connectOrCreate: tags.map((tag) => ({
+          where: { name: tag },
+          create: { name: tag },
+        })),
+        disconnect: deletedTags.map((tag) => ({ name: tag })),
       },
     },
   });
 
-  res.status(201).json({ massage: "Thread updated", threadId: thread.id });
+  res.status(201).json({ massage: "Thread updates", threadId: thread.id });
 }
