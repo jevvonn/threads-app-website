@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { SingleUpload } from "../../../../firebase/upload";
 import { toast } from "react-hot-toast";
 import ReactQuill from "@/components/quill/ReactQuill";
+import Delta from "quill-delta";
 
 export default function PostText({ value, onChange }) {
   let toastLoadingId;
@@ -33,8 +34,8 @@ export default function PostText({ value, onChange }) {
     input.setAttribute("accept", "image/*");
     input.click();
 
-    const quillObj = quillRef?.current?.getEditor();
-    const range = quillObj?.getSelection();
+    const quillObj = quillRef?.current;
+    const range = quillObj?.getEditor().getSelection();
 
     input.onchange = async () => {
       const file = input.files[0];
@@ -46,7 +47,16 @@ export default function PostText({ value, onChange }) {
       );
       input.remove();
       toast.success("Uploaded Successfully", { id: toastLoadingId });
-      quillObj.editor.insertEmbed(range.index, "image", url);
+      quillObj.editor.updateContents(
+        new Delta().retain(range.index).insert(
+          {
+            image: url,
+          },
+          {
+            alt: "post-image",
+          }
+        )
+      );
     };
   }
 

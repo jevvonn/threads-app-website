@@ -54,7 +54,6 @@ export default async function handler(req, res) {
 
   const threads = await prisma.thread.findMany({
     where: {
-      isDraft: false,
       tags: tag
         ? {
             some: {

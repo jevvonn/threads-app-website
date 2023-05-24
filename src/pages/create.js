@@ -14,28 +14,34 @@ import AlertToast from "@/components/toast/AlertToast";
 export default function Create() {
   const [activeTab, setActiveTab] = useState("POST_BODY");
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState("<p><br></p>");
   const [tags, setTags] = useState([]);
+  const [source, setSource] = useState([]);
 
   const { mutatePost, isLoading } = useMutationCreate();
 
-  async function handleSubmit(isDraft) {
+  async function handleSubmit() {
     if (!title)
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your title"} />
       ));
-    if (activeTab == "POST_BODY" && !body)
+    if (activeTab == "POST_BODY" && (!body || body == "<p><br></p>"))
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please fill your content"} />
+      ));
+    if (activeTab == "POST_SOURCE" && !source.length)
+      return toast.custom(() => (
+        <AlertToast
+          isSuccess={false}
+          text={"Please upload some image or video"}
+        />
       ));
     if (!tags.length)
       return toast.custom(() => (
         <AlertToast isSuccess={false} text={"Please add at least one tag"} />
       ));
 
-    if (activeTab == "POST_BODY") {
-      mutatePost({ title, body, tags, type: activeTab, isDraft });
-    }
+    mutatePost({ title, body, tags, type: activeTab, threadSources: source });
   }
 
   return (
@@ -100,22 +106,18 @@ export default function Create() {
           {activeTab === "POST_BODY" ? (
             <PostText value={body} onChange={setBody} />
           ) : (
-            <PostFile />
+            <PostFile setSource={setSource} source={source} />
           )}
           <div className="flex flex-col gap-2">
-            <TagInput onNewTags={setTags} />
+            <TagInput
+              tags={tags.map((tag) => ({ value: tag, label: tag }))}
+              onNewTags={setTags}
+            />
           </div>
           <hr />
           <div className="flex justify-end pr-6 gap-3">
             <button
-              onClick={() => handleSubmit(true)}
-              disabled={isLoading}
-              className="px-4 py-1 border border-primary rounded-full text-primary font-semibold tracking-wide disabled:opacity-50"
-            >
-              Save Draft
-            </button>
-            <button
-              onClick={() => handleSubmit(false)}
+              onClick={handleSubmit}
               disabled={isLoading}
               className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
             >

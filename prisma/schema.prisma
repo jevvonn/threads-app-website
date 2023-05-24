@@ -61,8 +61,6 @@ model User {
   votedDownComments Comment[] @relation("votedDownComment")
   likedComments     Comment[] @relation("likedComment")
 
-  socialLinks UserSocialLink[]
-
   followedBy User[] @relation("followedUser")
   follows    User[] @relation("followedUser")
 }
@@ -73,17 +71,6 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-// Social Links
-model UserSocialLink {
-  id  String @id @default(cuid())
-  url String
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@index([userId])
 }
 
 // enum
@@ -114,7 +101,6 @@ model Thread {
   sources     ThreadSource[]
   votedUpBy   User[]         @relation("votedUpThread")
   votedDownBy User[]         @relation("votedDownThread")
-  isDraft     Boolean
   likedBy     User[]         @relation("likedThread")
   savedBy     User[]         @relation("savedThread")
   comments    Comment[]
@@ -127,23 +113,31 @@ model Thread {
 
 // Comment
 model Comment {
-  id       String  @id @unique @default(cuid())
+  id       String   @id @unique @default(cuid())
   userId   String
-  user     User    @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
   threadId String
-  thread   Thread  @relation(fields: [threadId], references: [id])
-  parentId String
-  parent   Comment @relation("childrens_comment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  thread   Thread   @relation(fields: [threadId], references: [id])
+  parentId String?
+  parent   Comment? @relation("childrensComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  replies     Comment[] @relation("childrens_comment")
-  body        String    @db.Text
-  votedUpBy   User[]    @relation("votedUpComment")
-  votedDownBy User[]    @relation("votedDownComment")
-  likedBy     User[]    @relation("likedComment")
+  repliedToId String?
+  repliedTo   Comment? @relation("repliedComment", fields: [repliedToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  repliedBy Comment[] @relation("repliedComment")
+  childrens Comment[] @relation("childrensComment")
+
+  body        String @db.Text
+  votedUpBy   User[] @relation("votedUpComment")
+  votedDownBy User[] @relation("votedDownComment")
+  likedBy     User[] @relation("likedComment")
+
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([threadId])
   @@index([parentId])
+  @@index([repliedToId])
 }
 
 // Tags

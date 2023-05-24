@@ -7,7 +7,7 @@ export default function useSingleThread(id) {
       const { data } = await axios.get(`/api/thread/${id}`);
       return data.thread;
     },
-    queryKey: ["thread", { id }],
+    queryKey: ["threads", { id }],
   });
 
   return { thread, isLoading };

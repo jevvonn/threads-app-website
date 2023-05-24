@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const session = await getServerAuthSession(req, res);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { type, title, body, threadSources, isDraft, tags } = req.body;
+  const { type, title, body, threadSources, tags } = req.body;
 
   if (!type || !title || !body || !tags.length) {
     return res.status(400).json({ massage: "Bad Request" });
@@ -25,10 +25,9 @@ export default async function handler(req, res) {
       type,
       title,
       body,
-      isDraft,
-      sources: threadSources
+      sources: threadSources.length
         ? {
-            createMany: threadSources.map((source) => ({ data: source })),
+            create: threadSources,
           }
         : undefined,
       tags: {

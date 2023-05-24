@@ -21,9 +21,9 @@ export default function useMutationSave(threadId, refreshPage) {
         await queryClient.invalidateQueries(["threads"], {
           refetchPage: (_, index) => index === refreshPage,
         });
-        await queryClient.invalidateQueries(["thread", { id: threadId }]);
         toast.custom(() => <AlertToast text={`Your save has been update!`} />, {
           position: "bottom-center",
+          id: "action-notification",
         });
       },
     }

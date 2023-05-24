@@ -7,10 +7,13 @@ export async function SingleUpload(file, name, bucket) {
   }
 
   const storageRef = ref(storage, `/${bucket}/${name}`);
-  const uploadTask = uploadBytesResumable(storageRef, file);
 
-  const result = await uploadTask;
-  const url = await getDownloadURL(result.ref);
+  try {
+    const result = await uploadBytesResumable(storageRef, file);
+    const url = await getDownloadURL(result.ref);
 
-  return url;
+    return url;
+  } catch (error) {
+    throw new Error("Something went wrong");
+  }
 }
