@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       };
       break;
     default:
-      orderBy = undefined;
+      orderBy.createdAt = "desc";
       break;
   }
 

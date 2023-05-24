@@ -5,6 +5,7 @@ export default function usePaginateReply(
   threadId,
   commentId,
   cacheKey,
+  enabled,
   filter
 ) {
   const URL = (pageParam) =>
@@ -21,7 +22,7 @@ export default function usePaginateReply(
       queryKey: [...cacheKey],
       getNextPageParam: (lastPage) => lastPage.nextPage,
       refetchOnWindowFocus: false,
-      enabled: false,
+      enabled,
     });
 
   const comments = data?.pages.flatMap((page, idx) =>

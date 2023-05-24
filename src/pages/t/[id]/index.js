@@ -1,22 +1,17 @@
 import Navbar from "@/components/navigation/Navbar";
 import SingleThread from "@/components/thread/SingleThread";
-import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
-import { FiMoreHorizontal } from "react-icons/fi";
-import { BsShareFill } from "react-icons/bs";
-import { HiUserAdd } from "react-icons/hi";
 import useSingleThread from "@/hooks/thread/useSingleThread";
 import { useRouter } from "next/router";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import UserInfo from "@/components/user/UserInfo";
 import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
 import TagItem from "@/components/thread/addition/TagItem";
 import { useSession } from "next-auth/react";
 import CommentForm from "@/components/comment/create/CommentForm";
 import UserInfoSkeleton from "@/components/skeleton/UserInfoSkeleton";
 import SingleComment from "@/components/comment/SingleComment";
 import useInfiniteComments from "@/hooks/comment/useInfiniteComment";
+import Link from "next/link";
 
 export default function Thread() {
   const router = useRouter();
@@ -43,7 +38,7 @@ export default function Thread() {
                 <div className="lg:hidden flex flex-col items-center gap-5 w-full py-4 border">
                   <div className="w-11/12 flex flex-wrap gap-1">
                     {thread.tags.map((tag) => (
-                      <TagItem tag={tag} />
+                      <TagItem key={tag.name} tag={tag} />
                     ))}
                   </div>
                 </div>
@@ -56,6 +51,11 @@ export default function Thread() {
                     key={comment.id}
                   />
                 ))}
+                {!comments?.length && (
+                  <p className="flex w-full justify-center">
+                    Be the first comment !
+                  </p>
+                )}
               </div>
             </>
           )}

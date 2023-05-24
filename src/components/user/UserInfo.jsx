@@ -20,6 +20,7 @@ export default function UserInfo({ thread }) {
                     src={thread.user.image}
                     width={50}
                     height={50}
+                    alt={thread.user.name}
                     className="rounded-full"
                   />
                 </div>
@@ -43,7 +44,7 @@ export default function UserInfo({ thread }) {
           </h2>
           <div className="w-11/12 flex flex-wrap gap-1 py-4">
             {thread.tags.map((tag) => (
-              <TagItem tag={tag} />
+              <TagItem tag={tag} key={tag.name} />
             ))}
           </div>
         </div>
