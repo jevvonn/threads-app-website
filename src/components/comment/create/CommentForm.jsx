@@ -32,6 +32,10 @@ export default function CommentForm({ thread }) {
             { threadId: thread.id },
           ]);
           setBody(``);
+          toast.custom(
+            () => <AlertToast text={`Your comment has been added!`} />,
+            { position: "top-center", id: "action-notification" }
+          );
         },
       }
     );

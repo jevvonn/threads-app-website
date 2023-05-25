@@ -81,7 +81,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
       </div>
       {comments && (
         <div className="flex">
-          <div className="flex justify-end w-10">
+          <div className="flex justify-end w-6">
             <div className="h-full border border-slate-300" />
           </div>
           <div className="w-full flex flex-col gap-2 py-2">

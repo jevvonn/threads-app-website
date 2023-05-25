@@ -13,14 +13,6 @@ export default function useCreateComment() {
         body,
       });
       return data;
-    },
-    {
-      onSuccess: async () => {
-        toast.custom(
-          () => <AlertToast text={`Your comment has been added!`} />,
-          { position: "bottom-center", id: "action-notification" }
-        );
-      },
     }
   );
 
