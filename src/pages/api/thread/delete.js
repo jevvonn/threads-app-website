@@ -13,6 +13,38 @@ export default async function handler(req, res) {
   if (userId !== session.user.id)
     return res.status(403).json({ massage: "Forbidden request" });
 
+  await prisma.comment.deleteMany({
+    where: {
+      thread: {
+        id: threadId,
+      },
+      repliedTo: {
+        isNot: null,
+      },
+    },
+  });
+
+  await prisma.comment.deleteMany({
+    where: {
+      thread: {
+        id: threadId,
+      },
+
+      parent: {
+        isNot: null,
+      },
+    },
+  });
+
+  await prisma.comment.deleteMany({
+    where: {
+      thread: {
+        id: threadId,
+      },
+      parent: null,
+    },
+  });
+
   const thread = await prisma.thread.delete({
     where: {
       id: threadId,

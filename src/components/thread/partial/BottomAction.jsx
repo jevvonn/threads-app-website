@@ -1,6 +1,7 @@
 import useMutationLike from "@/hooks/thread/useMutationLike";
 import useMutationSave from "@/hooks/thread/useMutationSave";
 import useMutationVote from "@/hooks/thread/useMutationVote";
+import Link from "next/link";
 import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
@@ -53,9 +54,9 @@ export default function BotomAction({ thread }) {
         <p>{thread._count.likedBy}</p>
       </div>
       <div className="flex items-center gap-1 font-semibold">
-        <button>
+        <Link href={`/t/${thread.id}`}>
           <AiOutlineComment size={27} />
-        </button>
+        </Link>
         <p>{thread._count.comments}</p>
       </div>
       <div className="flex items-center gap-1 font-semibold">
