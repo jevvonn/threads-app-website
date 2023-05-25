@@ -72,7 +72,7 @@ export default function ReplyModal({ comment, thread, parentPage }) {
           >
             ✕
           </label>
-          <div className="mt-12 flex flex-col gap-5">
+          <div className="mt-12 flex flex-col">
             <div className="w-full flex gap-2">
               <div className="w-14">
                 <div className="avatar">
@@ -86,18 +86,24 @@ export default function ReplyModal({ comment, thread, parentPage }) {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col">
-                <span className="group-hover:underline font-semibold">
-                  {comment.user.name}
-                </span>
-                <p className="flex gap-1">
-                  <span>Replying to</span>
-                  <span className="text-blue-400">{comment.user.name}</span>
-                </p>
+              <div className="flex flex-col gap-2">
+                <div className="h-12 flex flex-col justify-center">
+                  <span className="group-hover:underline font-semibold">
+                    {comment.user.name}
+                  </span>
+                  <p className="flex gap-1">
+                    <span>Replying to</span>
+                    <span className="text-blue-400">{comment.user.name}</span>
+                  </p>
+                </div>
+                <div>
+                  <p className="line-clamp-4">{comment.body}</p>
+                </div>
               </div>
             </div>
+            <div className="divider" />
             <div className="w-full flex gap-1">
-              <div className="w-14">
+              <div className="w-14 hidden md:block">
                 <div className="avatar">
                   <div className="w-12 rounded-full border">
                     <Image
@@ -109,18 +115,24 @@ export default function ReplyModal({ comment, thread, parentPage }) {
                   </div>
                 </div>
               </div>
-              <textarea
-                className="w-full mt-2 textarea textarea-bordered h-36 resize-none focus:outline-none text-lg"
-                placeholder="Wdyt about the comment ?"
-                onKeyDown={(e) => {
-                  autosize(e.target);
-                }}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-              />
+              <div className="w-full flex flex-col gap-2">
+                <p>
+                  Replying as{" "}
+                  <span className="font-semibold">{session.user.name}</span>
+                </p>
+                <textarea
+                  className=" w-full px-4 pr-16 py-2 h-32 border rounded focus:outline-none resize-none overflow-x-hidden"
+                  placeholder="What do you think about this comment ?"
+                  onKeyDown={(e) => {
+                    autosize(e.target);
+                  }}
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                />
+              </div>
             </div>
           </div>
-          <div className=" flex justify-end">
+          <div className="flex justify-end">
             <button
               className="px-4 py-2 bg-primary text-sm text-white font-semibold capitalize tracking-wider rounded-full border-2 border-primary hover:bg-[#554f95] transition disabled:opacity-50"
               disabled={isLoading}

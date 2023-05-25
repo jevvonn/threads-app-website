@@ -4,13 +4,15 @@ import Image from "next/image";
 import { AiOutlineDown } from "react-icons/ai";
 import ReplyModal from "./create/ReplyModal";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomActionComment from "./partial/BottomAction";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function SingleComment({ comment, thread, parentPage = null }) {
   const timestamp = new Date(comment.createdAt).getTime();
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
   const {
     comments,
     hasNextPage,
@@ -22,6 +24,12 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
     ["comments", { parentId: comment.id }],
     open
   );
+
+  useEffect(() => {
+    if (comment.parentId == null) {
+      queryClient.removeQueries(["comments", { parentId: comment.id }]);
+    }
+  }, [comment]);
 
   return (
     <>
@@ -57,7 +65,11 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
           </div>
           <div className="flex flex-col gap-2">
             <p className=" whitespace-pre-wrap">{comment.body}</p>
-            <BottomActionComment comment={comment} thread={thread} />
+            <BottomActionComment
+              parentPage={parentPage}
+              comment={comment}
+              thread={thread}
+            />
           </div>
           <div>
             {comment.parentId == null &&
