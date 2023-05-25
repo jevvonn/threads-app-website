@@ -25,12 +25,6 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
     open
   );
 
-  useEffect(() => {
-    if (comment.parentId == null) {
-      queryClient.removeQueries(["comments", { parentId: comment.id }]);
-    }
-  }, [comment]);
-
   return (
     <>
       <div className={`flex mt-2 border p-2 gap-2 rounded w-full`}>
