@@ -34,7 +34,6 @@ export default function PostFile({ source, setSource }) {
     },
     accept: {
       "image/*": [".png", ".jpg", ".jpeg"],
-      "video/*": [".mp4"],
     },
     maxSize: 15000000,
     maxFiles: 5,
