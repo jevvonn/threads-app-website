@@ -67,7 +67,7 @@ export default function DropdownMore({ thread }) {
               )}
               <button
                 disabled={isLoading}
-                className="btn btn-error disabled:opacity-80 disabled:pointer-events-none"
+                className="btn btn-error text-white disabled:opacity-80 disabled:pointer-events-none"
                 onClick={mutateDelete}
               >
                 {!isLoading ? (

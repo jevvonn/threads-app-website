@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
+import DropdownMoreComment from "./DropdownMore";
 
 export default function BottomActionComment({ comment, thread, parentPage }) {
   const { data: session } = useSession();
@@ -146,6 +147,13 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
         >
           Reply
         </label>
+      )}
+      {session?.user?.id === comment.user.id && (
+        <DropdownMoreComment
+          comment={comment}
+          thread={thread}
+          parentPage={parentPage}
+        />
       )}
     </div>
   );
