@@ -1,14 +1,14 @@
 import useDeleteThread from "@/hooks/thread/useDeleteThread";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { AiOutlineMore } from "react-icons/ai";
+import { AiOutlineLoading, AiOutlineMore } from "react-icons/ai";
 import { BsFillTrashFill, BsPencilFill, BsShareFill } from "react-icons/bs";
 
 export default function DropdownMore({ thread }) {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const { mutateDelete } = useDeleteThread(thread.id, thread.page);
+  const { mutateDelete, isLoading } = useDeleteThread(thread.id, thread.page);
 
   return (
     <>
@@ -57,14 +57,24 @@ export default function DropdownMore({ thread }) {
               This action is irreversible. You will not be able to recover it.
             </p>
             <div className="modal-action">
-              <label
-                htmlFor={`modal-delete-${thread.id}`}
-                className="btn btn-ghost bg-base-300"
+              {!isLoading && (
+                <label
+                  htmlFor={`modal-delete-${thread.id}`}
+                  className="btn btn-ghost bg-base-300"
+                >
+                  Cancel
+                </label>
+              )}
+              <button
+                disabled={isLoading}
+                className="btn btn-error text-white disabled:opacity-80 disabled:pointer-events-none"
+                onClick={mutateDelete}
               >
-                Cancel
-              </label>
-              <button className="btn btn-error" onClick={mutateDelete}>
-                Delete
+                {!isLoading ? (
+                  "Delete"
+                ) : (
+                  <AiOutlineLoading color="black" className="animate-spin" />
+                )}
               </button>
             </div>
           </div>

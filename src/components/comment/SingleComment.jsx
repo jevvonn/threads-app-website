@@ -1,11 +1,11 @@
 import usePaginateReply from "@/hooks/comment/usePaginateReply";
 import relativeDateTime from "@/utils/relativeDateTime";
 import Image from "next/image";
-import { AiOutlineDown, AiOutlineHeart } from "react-icons/ai";
-import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
+import { AiOutlineDown } from "react-icons/ai";
 import ReplyModal from "./create/ReplyModal";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import BottomActionComment from "./partial/BottomAction";
 
 export default function SingleComment({ comment, thread, parentPage = null }) {
   const timestamp = new Date(comment.createdAt).getTime();
@@ -13,7 +13,6 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
   const [open, setOpen] = useState(false);
   const {
     comments,
-    refetch,
     hasNextPage,
     fetchNextPage,
     isFetching: replyLoading,
@@ -25,8 +24,8 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
   );
 
   return (
-    <div>
-      <div className={`flex gap-2 ${comment.parentId != null && "ml-12"}`}>
+    <>
+      <div className={`flex mt-2 border p-2 gap-2 rounded w-full`}>
         <div>
           <div className="avatar">
             <div className="w-12 rounded-full border">
@@ -50,7 +49,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
                     <span className="group-hover:underline">
                       {comment.repliedTo.user.name}
                     </span>
-                  </span>{" "}
+                  </span>
                 </>
               )}
             </span>
@@ -58,35 +57,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
           </div>
           <div className="flex flex-col gap-2">
             <p className=" whitespace-pre-wrap">{comment.body}</p>
-            <div className="flex gap-2">
-              <div className="flex items-center font-semibold">
-                <button>
-                  <IoCaretUpOutline size={27} />
-                </button>
-                <span className="w-10 text-center font-semibold text-black">
-                  {comment._count.votedUpBy - comment._count.votedDownBy}
-                </span>
-                <button>
-                  <IoCaretDownOutline size={27} />
-                </button>
-              </div>
-              <div className="flex items-center font-semibold">
-                <button>
-                  <AiOutlineHeart size={27} />
-                </button>
-                <span className="w-6 text-center font-semibold text-black">
-                  {comment._count.likedBy}
-                </span>
-              </div>
-              {session && (
-                <label
-                  htmlFor={`comment-modal-${comment.id}`}
-                  className="btn btn-sm rounded bg-transparent border-none text-black capitalize hover:bg-zinc-400"
-                >
-                  Reply
-                </label>
-              )}
-            </div>
+            <BottomActionComment comment={comment} thread={thread} />
           </div>
           <div>
             {comment.parentId == null &&
@@ -108,37 +79,50 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
           </div>
         </div>
       </div>
+      {comments && (
+        <div className="flex">
+          <div className="flex justify-end w-10">
+            <div className="h-full border border-slate-300" />
+          </div>
+          <div className="w-full flex flex-col gap-2 py-2">
+            {comments.map((replyComment, idx) => (
+              <>
+                <div className="flex items-center w-full">
+                  <div className="w-4 border border-slate-300" />
+                  <SingleComment
+                    comment={replyComment}
+                    key={replyComment.id}
+                    parentPage={comment.page}
+                    thread={thread}
+                  />
+                </div>
+                {idx == comments.length - 1 && hasNextPage && (
+                  <button
+                    onClick={fetchNextPage}
+                    className="flex items-center gap-2 hover:underline ml-4"
+                  >
+                    {replyLoading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <>
+                        <span>
+                          Other Replies (
+                          {comment._count.childrens - comments.length})
+                        </span>{" "}
+                        <AiOutlineDown />
+                      </>
+                    )}
+                  </button>
+                )}
+              </>
+            ))}
+          </div>
+        </div>
+      )}
 
       {session && (
         <ReplyModal comment={comment} thread={thread} parentPage={parentPage} />
       )}
-      {comments?.map((replyComment, idx) => (
-        <>
-          <SingleComment
-            comment={replyComment}
-            key={replyComment.id}
-            parentPage={comment.page}
-            thread={thread}
-          />
-          {idx == comments.length - 1 && hasNextPage && (
-            <button
-              onClick={fetchNextPage}
-              className="flex items-center gap-2 hover:underline ml-12"
-            >
-              {replyLoading ? (
-                <span>Loading...</span>
-              ) : (
-                <>
-                  <span>
-                    Other Replies ({comment._count.childrens - comments.length})
-                  </span>{" "}
-                  <AiOutlineDown />
-                </>
-              )}
-            </button>
-          )}
-        </>
-      ))}
-    </div>
+    </>
   );
 }

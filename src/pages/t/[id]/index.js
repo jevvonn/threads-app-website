@@ -44,13 +44,15 @@ export default function Thread() {
                 </div>
                 {session && <CommentForm thread={thread} />}
                 <div className="divider text-slate-400">comments</div>
-                {comments?.map((comment) => (
-                  <SingleComment
-                    comment={comment}
-                    thread={thread}
-                    key={comment.id}
-                  />
-                ))}
+                <div>
+                  {comments?.map((comment) => (
+                    <SingleComment
+                      comment={comment}
+                      thread={thread}
+                      key={comment.id}
+                    />
+                  ))}
+                </div>
                 {!comments?.length && (
                   <p className="flex w-full justify-center">
                     Be the first comment !
