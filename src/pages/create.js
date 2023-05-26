@@ -1,160 +1,147 @@
-import AlertToast from "@/components/toast/AlertToast";
-import useLikeComment from "@/hooks/comment/useLikeComment";
-import useVoteComment from "@/hooks/comment/useVoteComment";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import PostFile from "@/components/thread/create/PostFile";
+import PostText from "@/components/thread/create/PostText";
+import Navbar from "@/components/navigation/Navbar";
+import { useState } from "react";
+import { BsFileRichtext, BsCardImage } from "react-icons/bs";
+import { getServerAuthSession } from "./api/auth/[...nextauth]";
+import Head from "next/head";
+import autosize from "autosize";
+import { TagInput } from "@/components/thread/create/TagInput";
 import { toast } from "react-hot-toast";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
-import DropdownMoreComment from "./DropdownMore";
+import useMutationCreate from "@/hooks/thread/useMutationCreate";
+import AlertToast from "@/components/toast/AlertToast";
 
-export default function BottomActionComment({ comment, thread, parentPage }) {
-  const { data: session } = useSession();
-  const queryClient = useQueryClient();
-  const hasVotedUp = !!comment.votedUpBy?.length;
-  const hasVotedDown = !!comment.votedDownBy?.length;
-  const hasLiked = !!comment.likedBy?.length;
+export default function Create() {
+  const [activeTab, setActiveTab] = useState("POST_BODY");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("<p><br></p>");
+  const [tags, setTags] = useState([]);
+  const [source, setSource] = useState([]);
 
-  const { mutateVote } = useVoteComment(comment.id);
-  const { mutateLike } = useLikeComment(comment.id);
+  const { mutatePost, isLoading } = useMutationCreate();
 
-  const handleVote = (voteType) => {
-    if (!session) {
-      return toast.custom(
-        () => (
-          <AlertToast text={`Login to vote this Thred's!`} isSuccess={false} />
-        ),
-        { position: "top-center" }
-      );
-    }
+  async function handleSubmit() {
+    if (!title)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your title"} />
+      ));
+    if (activeTab == "POST_BODY" && (!body || body == "<p><br></p>"))
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      ));
+    if (activeTab == "POST_SOURCE" && !source.length)
+      return toast.custom(() => (
+        <AlertToast
+          isSuccess={false}
+          text={"Please upload some image or video"}
+        />
+      ));
+    if (!tags.length)
+      return toast.custom(() => (
+        <AlertToast isSuccess={false} text={"Please add at least one tag"} />
+      ));
 
-    const data = {
-      hasVoted: hasVotedUp || hasVotedDown ? true : false,
-      hasVotedType: hasVotedUp ? "voted_up" : "voted_down",
-      voteType,
-    };
-
-    mutateVote(data, {
-      onSuccess: async () => {
-        if (!comment.parentId) {
-          await queryClient.invalidateQueries(
-            ["comments", { threadId: thread.id }],
-            {
-              refetchPage: (_, idx) =>
-                idx === (parentPage ? parentPage : comment.page),
-            }
-          );
-        }
-        await queryClient.invalidateQueries(
-          [
-            "comments",
-            { parentId: comment.parentId ? comment.parentId : comment.id },
-          ],
-          {
-            refetchPage: (_, idx) => idx === 0,
-          }
-        );
-        toast.custom(
-          () => <AlertToast text={`Your vote has been recorded.`} />,
-          { position: "top-center", id: "action-notification" }
-        );
-      },
-    });
-  };
-
-  const handleLike = () => {
-    if (!session) {
-      return toast.custom(
-        () => (
-          <AlertToast text={`Login to likes this Thred's!`} isSuccess={false} />
-        ),
-        { position: "top-center" }
-      );
-    }
-
-    mutateLike(
-      { hasLiked },
-      {
-        onSuccess: async () => {
-          if (!comment.parentId) {
-            await queryClient.invalidateQueries(
-              ["comments", { threadId: thread.id }],
-              {
-                refetchPage: (_, idx) =>
-                  idx === (parentPage ? parentPage : comment.page),
-              }
-            );
-          }
-          await queryClient.invalidateQueries(
-            [
-              "comments",
-              { parentId: comment.parentId ? comment.parentId : comment.id },
-            ],
-            {
-              refetchPage: (_, idx) => idx === 0,
-            }
-          );
-          toast.custom(
-            () => <AlertToast text={`Your like has been recorded.`} />,
-            { position: "top-center", id: "action-notification" }
-          );
-        },
-      }
-    );
-  };
+    mutatePost({ title, body, tags, type: activeTab, threadSources: source });
+  }
 
   return (
-    <div className="flex gap-2">
-      <div className="flex items-center font-semibold text-primary">
-        <button onClick={() => handleVote("vote_up")}>
-          <IoCaretUpOutline
-            className={hasVotedUp ? "animate-up-up" : ""}
-            color={hasVotedUp ? "" : "gray"}
-            size={27}
-          />
-        </button>
-        <span className="w-10 text-center font-semibold text-black">
-          {comment._count.votedUpBy - comment._count.votedDownBy}
-        </span>
-        <button onClick={() => handleVote("vote_down")}>
-          <IoCaretDownOutline
-            className={hasVotedDown ? "animate-down-down" : ""}
-            color={hasVotedDown ? "" : "gray"}
-            size={27}
-          />
-        </button>
-      </div>
-      <div className="flex items-center font-semibold">
-        <button onClick={() => handleLike(hasLiked)}>
-          {hasLiked ? (
-            <AiFillHeart
-              className="animate-zoom-in-down"
-              color="red"
-              size={27}
+    <>
+      <Head>
+        <title>Create a Thred</title>
+      </Head>
+
+      <Navbar />
+      <div className="lg:w-3/5 p-2 mx-auto mt-20">
+        <h1 className="text-center text-3xl font-semibold">
+          Create <span className="text-primary">a</span> {`Thred${"'"}s`}
+        </h1>
+        <div className="mt-5 flex flex-col gap-3">
+          <div className="flex">
+            <button
+              onClick={() => setActiveTab("POST_BODY")}
+              className={
+                activeTab === "POST_BODY"
+                  ? `activeTabStyle rounded-l font-semibold`
+                  : `baseStyleTab rounded-l font-semibold`
+              }
+            >
+              <BsFileRichtext size={30} />
+              Article
+            </button>
+            <button
+              onClick={() => setActiveTab("POST_SOURCE")}
+              className={
+                activeTab === "POST_SOURCE"
+                  ? `activeTabStyle rounded-r font-semibold`
+                  : `baseStyleTab rounded-r font-semibold`
+              }
+            >
+              <BsCardImage size={30} />
+              Images
+            </button>
+          </div>
+          <div className="flex justify-between items-center relative">
+            <textarea
+              type="text"
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                }
+                autosize(e.target);
+              }}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              placeholder="Title"
+              className="w-full px-4 pr-16 py-2 border rounded focus:outline-none resize-none"
             />
+            <p
+              className={`absolute right-5 ${
+                title.length > 300 && "text-red-500"
+              }`}
+            >
+              <span>{title.length}</span>/300
+            </p>
+          </div>
+          {activeTab === "POST_BODY" ? (
+            <PostText value={body} onChange={setBody} />
           ) : (
-            <AiOutlineHeart size={27} />
+            <PostFile setSource={setSource} source={source} />
           )}
-        </button>
-        <span className="w-6 text-center font-semibold text-black">
-          {comment._count.likedBy}
-        </span>
+          <div className="flex flex-col gap-2">
+            <TagInput
+              tags={tags.map((tag) => ({ value: tag, label: tag }))}
+              onNewTags={setTags}
+            />
+          </div>
+          <hr />
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="px-4 py-1 bg-primary rounded-full text-white font-semibold tracking-wide disabled:opacity-50"
+            >
+              Post
+            </button>
+          </div>
+        </div>
       </div>
-      {session && (
-        <label
-          htmlFor={`comment-modal-${comment.id}`}
-          className="btn btn-sm rounded bg-transparent border-none text-black capitalize hover:bg-zinc-400"
-        >
-          Reply
-        </label>
-      )}
-      {session?.user?.id === comment.user.id && (
-        <DropdownMoreComment
-          comment={comment}
-          thread={thread}
-          parentPage={parentPage}
-        />
-      )}
-    </div>
+    </>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context.req, context.res);
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};
