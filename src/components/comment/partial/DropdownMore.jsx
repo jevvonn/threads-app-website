@@ -1,14 +1,14 @@
 import { FiMoreHorizontal } from "react-icons/fi";
 import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
 import { AiOutlineLoading } from "react-icons/ai";
-import useDeleteComent from "@/hooks/comment/useDeleteComent";
+import useDeleteComment from "@/hooks/comment/useDeleteComment";
 import { toast } from "react-hot-toast";
 import AlertToast from "@/components/toast/AlertToast";
 import { useQueryClient } from "@tanstack/react-query";
 import EditModal from "./EditModal";
 
 export default function DropdownMoreComment({ comment, thread, parentPage }) {
-  const { mutateDelete, isLoading } = useDeleteComent(comment.id);
+  const { mutateDelete, isLoading } = useDeleteComment(comment.id);
   const queryClient = useQueryClient();
 
   const handleDelete = () => {
