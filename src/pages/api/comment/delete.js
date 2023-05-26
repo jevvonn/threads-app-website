@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ massage: "User not authorized" });
 
-  const { commentId, userId } = req.body;
+  const { commentId, userId } = req.query;
 
   if (!commentId || !userId) {
     return res.status(400).json({ massage: "Bad request" });
@@ -19,7 +19,22 @@ export default async function handler(req, res) {
     return res.status(403).json({ massage: "Forbidden request" });
   }
 
-  const comment = await prisma.comment.delete({
+  await prisma.comment.updateMany({
+    where: {
+      parentId: commentId,
+    },
+    data: {
+      repliedToId: null,
+    },
+  });
+
+  await prisma.comment.deleteMany({
+    where: {
+      parentId: commentId,
+    },
+  });
+
+  await prisma.comment.delete({
     where: {
       id: commentId,
     },

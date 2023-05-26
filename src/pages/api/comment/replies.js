@@ -28,6 +28,9 @@ export default async function handler(req, res) {
       parentId: commentId,
       threadId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       _count: {
         select: {
