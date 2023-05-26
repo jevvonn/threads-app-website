@@ -115,7 +115,7 @@ export default function Create() {
             />
           </div>
           <hr />
-          <div className="flex justify-end pr-6 gap-3">
+          <div className="flex justify-end gap-3">
             <button
               onClick={handleSubmit}
               disabled={isLoading}
