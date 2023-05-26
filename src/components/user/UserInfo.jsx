@@ -43,7 +43,7 @@ export default function UserInfo({ thread }) {
           </h2>
           <div className="w-11/12 flex flex-wrap gap-1 py-4">
             {thread.tags.map((tag) => (
-              <TagItem tag={tag} />
+              <TagItem key={tag.name} tag={tag} />
             ))}
           </div>
         </div>
