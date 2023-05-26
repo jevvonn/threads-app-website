@@ -57,7 +57,7 @@ export default async function handler(req, res) {
           break;
         }
 
-        if (hasVotedType == "voted_up") {
+        if (hasVotedType === "voted_up") {
           data.votedUpBy = {
             disconnect: {
               id: session.user.id,

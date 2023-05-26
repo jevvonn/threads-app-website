@@ -66,7 +66,7 @@ export default function Create() {
               }
             >
               <BsFileRichtext size={30} />
-              Story
+              Article
             </button>
             <button
               onClick={() => setActiveTab("POST_SOURCE")}
@@ -77,7 +77,7 @@ export default function Create() {
               }
             >
               <BsCardImage size={30} />
-              Images & Video
+              Images
             </button>
           </div>
           <div className="flex justify-between items-center relative">
@@ -115,7 +115,7 @@ export default function Create() {
             />
           </div>
           <hr />
-          <div className="flex justify-end pr-6 gap-3">
+          <div className="flex justify-end gap-3">
             <button
               onClick={handleSubmit}
               disabled={isLoading}
