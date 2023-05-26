@@ -5,6 +5,7 @@ import useDeleteComent from "@/hooks/comment/useDeleteComent";
 import { toast } from "react-hot-toast";
 import AlertToast from "@/components/toast/AlertToast";
 import { useQueryClient } from "@tanstack/react-query";
+import EditModal from "./EditModal";
 
 export default function DropdownMoreComment({ comment, thread, parentPage }) {
   const { mutateDelete, isLoading } = useDeleteComent(comment.id);
@@ -61,12 +62,14 @@ export default function DropdownMoreComment({ comment, thread, parentPage }) {
             </label>
           </li>
           <li>
-            <button>
+            <label htmlFor={`comment-edit-modal-${comment.id}`}>
               <BsPencilFill /> Edit
-            </button>
+            </label>
           </li>
         </ul>
       </div>
+
+      <EditModal comment={comment} thread={thread} parentPage={parentPage} />
 
       <>
         <input
