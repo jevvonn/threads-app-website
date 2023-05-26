@@ -15,7 +15,12 @@ export default function BodyContent({ thread, needToCut }) {
   return (
     <>
       <h3 className="font-semibold text-xl">{thread.title}</h3>
-      {thread.type == "POST_SOURCE" && <ImageContent slides={thread.sources} />}
+      {thread.type == "POST_SOURCE" &&
+        (thread.sources.length === 1 ? (
+          <img src={thread.sources[0].url} alt={thread.sources[0].title} />
+        ) : (
+          <ImageContent slides={thread.sources} />
+        ))}
       {thread.type == "POST_BODY" && (
         <div
           ref={contentRef}

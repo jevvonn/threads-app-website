@@ -66,7 +66,7 @@ export default function Create() {
               }
             >
               <BsFileRichtext size={30} />
-              Story
+              Article
             </button>
             <button
               onClick={() => setActiveTab("POST_SOURCE")}
@@ -77,7 +77,7 @@ export default function Create() {
               }
             >
               <BsCardImage size={30} />
-              Images & Video
+              Images
             </button>
           </div>
           <div className="flex justify-between items-center relative">
