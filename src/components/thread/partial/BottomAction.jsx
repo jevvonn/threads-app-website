@@ -1,77 +1,85 @@
-import useMutationLike from "@/hooks/thread/useMutationLike";
-import useMutationSave from "@/hooks/thread/useMutationSave";
-import useMutationVote from "@/hooks/thread/useMutationVote";
-import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { IoCaretDownOutline, IoCaretUpOutline } from "react-icons/io5";
+import useDeleteThread from "@/hooks/thread/useDeleteThread";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { AiOutlineLoading, AiOutlineMore } from "react-icons/ai";
+import { BsFillTrashFill, BsPencilFill, BsShareFill } from "react-icons/bs";
 
-export default function BotomAction({ thread }) {
-  const hasVotedUp = !!thread.votedUpBy?.length;
-  const hasVotedDown = !!thread.votedDownBy?.length;
-  const hasLiked = !!thread.likedBy?.length;
-  const hasSaved = !!thread.savedBy?.length;
+export default function DropdownMore({ thread }) {
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  const { handleLike } = useMutationLike(thread.id, thread.page);
-  const { handleSave } = useMutationSave(thread.id, thread.page);
-  const { handleVote } = useMutationVote(thread.id, thread.page);
+  const { mutateDelete, isLoading } = useDeleteThread(thread.id, thread.page);
 
   return (
-    <div className="flex justify-end gap-3">
-      <div className="md:hidden flex items-center text-primary">
-        <button onClick={() => handleVote("vote_up", hasVotedUp, hasVotedDown)}>
-          <IoCaretUpOutline
-            className={hasVotedUp ? "animate-up-up" : ""}
-            color={hasVotedUp ? "" : "gray"}
-            size={27}
-          />
+    <>
+      <div className="dropdown dropdown-end">
+        <button tabIndex={0} className="btn btn-ghost btn-square btn-sm">
+          <AiOutlineMore size={25} />
         </button>
-        <span className="w-10 text-center font-semibold text-black">
-          {thread._count.votedUpBy - thread._count.votedDownBy}
-        </span>
-        <button
-          onClick={() => handleVote("vote_down", hasVotedUp, hasVotedDown)}
+        <ul
+          tabIndex={0}
+          className="dropdown-content shadow bg-base-100 rounded menu p-1 w-40 font-semibold border"
         >
-          <IoCaretDownOutline
-            className={hasVotedDown ? "animate-down-down" : ""}
-            color={hasVotedDown ? "" : "gray"}
-            size={27}
-          />
-        </button>
-      </div>
-      <div className="flex items-center gap-1 font-semibold">
-        <button onClick={() => handleLike(hasLiked)}>
-          {hasLiked ? (
-            <AiFillHeart
-              className="animate-zoom-in-down"
-              color="red"
-              size={27}
-            />
-          ) : (
-            <AiOutlineHeart size={27} />
+          <li>
+            <button>
+              <BsShareFill /> Share
+            </button>
+          </li>
+          {session?.user?.id === thread.user.id && (
+            <>
+              <li>
+                <label htmlFor={`modal-delete-${thread.id}`}>
+                  <BsFillTrashFill /> Delete
+                </label>
+              </li>
+              <li>
+                <button onClick={() => router.push(`/t/${thread.id}/edit`)}>
+                  <BsPencilFill /> Edit
+                </button>
+              </li>
+            </>
           )}
-        </button>
-        <p>{thread._count.likedBy}</p>
+        </ul>
       </div>
-      <div className="flex items-center gap-1 font-semibold">
-        <button>
-          <AiOutlineComment size={27} />
-        </button>
-        <p>{thread._count.comments}</p>
-      </div>
-      <div className="flex items-center gap-1 font-semibold">
-        <button onClick={() => handleSave(hasSaved)}>
-          {hasSaved ? (
-            <BsBookmarkFill
-              className="animate-down-up"
-              color="orange"
-              size={25}
-            />
-          ) : (
-            <BsBookmark size={25} />
-          )}
-        </button>
-        <p>{thread._count.savedBy}</p>
-      </div>
-    </div>
+
+      <>
+        <input
+          type="checkbox"
+          id={`modal-delete-${thread.id}`}
+          className="modal-toggle"
+        />
+        <div className="modal" tabIndex={-1}>
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">
+              Are you sure you want to delete this {`thred's ?`}
+            </h3>
+            <p className="py-4">
+              This action is irreversible. You will not be able to recover it.
+            </p>
+            <div className="modal-action">
+              {!isLoading && (
+                <label
+                  htmlFor={`modal-delete-${thread.id}`}
+                  className="btn btn-ghost bg-base-300"
+                >
+                  Cancel
+                </label>
+              )}
+              <button
+                disabled={isLoading}
+                className="btn btn-error disabled:opacity-80 disabled:pointer-events-none"
+                onClick={mutateDelete}
+              >
+                {!isLoading ? (
+                  "Delete"
+                ) : (
+                  <AiOutlineLoading color="black" className="animate-spin" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    </>
   );
 }

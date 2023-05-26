@@ -60,7 +60,8 @@ export default function Thread() {
             </>
           )}
         </div>
-        {thread ? <UserInfo thread={thread} /> : <UserInfoSkeleton />}
+        {thread && <UserInfo thread={thread} />}
+        {isLoading && <UserInfoSkeleton />}
       </div>
       {thread === null && (
         <div className="w-full flex justify-center flex-col items-center gap-3">
