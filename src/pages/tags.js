@@ -8,13 +8,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export default function Tags({ q }) {
-  const queryKey = ["threads"];
+  const queryKey = ["threads", { tag: q }];
   const queryClient = useQueryClient();
 
   const [filter, setFilter] = useState("");
   const scrollPosition = useScrollPosition();
   const { threads, isFetching, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteThreads(["threads", { tag: q }], filter, q);
+    useInfiniteThreads(queryKey, filter, q);
 
   const handleClickFilter = (filterName) => {
     queryClient.removeQueries({ queryKey });
