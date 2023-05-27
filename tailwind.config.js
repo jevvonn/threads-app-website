@@ -34,6 +34,14 @@ module.exports = {
             transform: "scale(1)",
           },
         },
+        enter: {
+          "0%": { transform: "scale(0.9)", opacity: 0 },
+          "100%": { transform: "scale(1)", opacity: 1 },
+        },
+        leave: {
+          "0%": { transform: "scale(1)", opacity: 1 },
+          "100%": { transform: "scale(0.9)", opacity: 0 },
+        },
         "down-up": {
           "0%": {
             transform: "translateY(0)",

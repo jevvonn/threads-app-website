@@ -29,9 +29,6 @@ export default async function handler(req, res) {
       followedBy: cursorUser,
       follows: cursorUser,
     },
-
-    take: parseInt(limit) + 1,
-    skip: (page - 1) * limit,
   });
 
   res.status(200).json({ massage: "Success get user", user });

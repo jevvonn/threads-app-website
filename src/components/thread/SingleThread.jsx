@@ -12,23 +12,30 @@ function SingleThread({ thread, needToCut = false, isLink = true }) {
     <div className="w-full flex">
       <SideVote thread={thread} />
       <div className="w-full md:w-11/12 border rounded p-3 flex flex-col gap-2 ">
-        <div className="w-full flex gap-2 items-center">
-          <div className="avatar">
-            <div className="w-12 rounded-full border">
-              <Image
-                src={thread.user.image}
-                alt={thread.user.name}
-                width={50}
-                height={50}
-              />
+        <div className="w-full flex gap-2 items-center group">
+          <Link
+            href={`/u/${thread.user.id}`}
+            className="w-full flex gap-2 items-center"
+          >
+            <div className="avatar">
+              <div className="w-12 rounded-full border">
+                <Image
+                  src={thread.user.image}
+                  alt={thread.user.name}
+                  width={50}
+                  height={50}
+                />
+              </div>
             </div>
-          </div>
-          <div className="w-full">
-            <span className="font-semibold">{thread.user.name}</span>
-            <div className="flex gap-1 font-normal">
-              {relativeDateTime(timestamp)}
+            <div className="w-full">
+              <span className="font-semibold group-hover:underline">
+                {thread.user.name}
+              </span>
+              <div className="flex gap-1 font-normal">
+                {relativeDateTime(timestamp)}
+              </div>
             </div>
-          </div>
+          </Link>
           <div className="flex justify-end w-full">
             <DropdownMore thread={thread} />
           </div>

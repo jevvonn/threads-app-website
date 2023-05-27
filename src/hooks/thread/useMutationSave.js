@@ -21,10 +21,13 @@ export default function useMutationSave(threadId, refreshPage) {
         await queryClient.invalidateQueries(["threads"], {
           refetchPage: (_, index) => index === refreshPage,
         });
-        toast.custom(() => <AlertToast text={`Your save has been update!`} />, {
-          position: "bottom-center",
-          id: "action-notification",
-        });
+        toast.custom(
+          (t) => <AlertToast t={t} text={`Your save has been update!`} />,
+          {
+            position: "bottom-center",
+            id: "action-notification",
+          }
+        );
       },
     }
   );
@@ -32,8 +35,12 @@ export default function useMutationSave(threadId, refreshPage) {
   const handleSave = (hasSaved) => {
     if (!session) {
       return toast.custom(
-        () => (
-          <AlertToast text={`Login to save this Thred's!`} isSuccess={false} />
+        (t) => (
+          <AlertToast
+            t={t}
+            text={`Login to save this Thred's!`}
+            isSuccess={false}
+          />
         ),
         { position: "bottom-center" }
       );

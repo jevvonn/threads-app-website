@@ -17,8 +17,8 @@ export default function EditModal({ comment, thread, parentPage }) {
 
   const handleSubmit = () => {
     if (!body || body == "")
-      return toast.custom(() => (
-        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      return toast.custom((t) => (
+        <AlertToast t={t} isSuccess={false} text={"Please fill your content"} />
       ));
 
     mutateUpdate(
@@ -45,7 +45,7 @@ export default function EditModal({ comment, thread, parentPage }) {
           );
           modalCloseRef.current.click();
           toast.custom(
-            () => <AlertToast text={`Your comment has been update!`} />,
+            (t) => <AlertToast t={t} text={`Your comment has been update!`} />,
             { position: "top-center", id: "action-notification" }
           );
         },

@@ -3,14 +3,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import useScrollPosition from "../useScrollPosition";
 
-export default function useInfiniteThreads(cacheKey, tag, userId, search) {
+export default function useInfiniteSavedThread(cacheKey, tag) {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("");
 
   const URL = (pageParam) =>
-    `/api/thread?page=${pageParam}&limit=5&filter=${filter ? filter : ""}&tag=${
-      tag ? tag : ""
-    }&userId=${userId ? userId : ""}&search=${search ? search : ""}`;
+    `/api/user/saved?page=${pageParam}&limit=5&filter=${
+      filter ? filter : ""
+    }&tag=${tag ? tag : ""}`;
   const scrollPosition = useScrollPosition();
 
   const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =

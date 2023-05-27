@@ -1,6 +1,5 @@
-import { FiMoreHorizontal } from "react-icons/fi";
 import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
-import { AiOutlineLoading } from "react-icons/ai";
+import { AiOutlineLoading, AiOutlineMore } from "react-icons/ai";
 import useDeleteComment from "@/hooks/comment/useDeleteComment";
 import { toast } from "react-hot-toast";
 import AlertToast from "@/components/toast/AlertToast";
@@ -35,7 +34,7 @@ export default function DropdownMoreComment({ comment, thread, parentPage }) {
             }
           );
           toast.custom(
-            () => <AlertToast text={`Your comment has been deleted.`} />,
+            (t) => <AlertToast t={t} text={`Your comment has been deleted.`} />,
             { position: "top-center", id: "action-notification" }
           );
         },
@@ -50,7 +49,7 @@ export default function DropdownMoreComment({ comment, thread, parentPage }) {
           tabIndex={0}
           className="btn btn-sm rounded bg-transparent border-none text-black capitalize hover:bg-zinc-400"
         >
-          <FiMoreHorizontal size={25} />
+          <AiOutlineMore size={25} />
         </button>
         <ul
           tabIndex={0}

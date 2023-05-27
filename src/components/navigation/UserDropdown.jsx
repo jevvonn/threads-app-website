@@ -55,14 +55,21 @@ function UserDropdown() {
         className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 w-52 border rounded"
       >
         <li>
-          <Link className="justify-between text-lg" href={`profile`}>
+          <Link
+            className="justify-between text-lg"
+            href={`/u/${session.user.id}`}
+          >
             Profile
-            <span className="badge">New</span>
           </Link>
         </li>
         <li>
-          <Link className="text-lg" href={`settings`}>
+          <Link className="text-lg" href={`/profile-setting`}>
             Settings
+          </Link>
+        </li>
+        <li>
+          <Link className="text-lg" href={`/saved`}>
+            My Save
           </Link>
         </li>
         <li>

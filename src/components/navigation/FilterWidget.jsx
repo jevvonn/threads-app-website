@@ -2,9 +2,11 @@ import Link from "next/link";
 import { BsBarChartFill, BsFire } from "react-icons/bs";
 import { MdAccessTimeFilled } from "react-icons/md";
 
-export default function FilterWidget({ onFilter }) {
+export default function FilterWidget({ onFilter, isFull = false }) {
   return (
-    <div className="w-full md:w-11/12 flex border rounded">
+    <div
+      className={`w-full ${!isFull ? "md:w-11/12" : ""}  flex border rounded`}
+    >
       <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
         <button
           onClick={() => onFilter("")}
