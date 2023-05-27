@@ -1,9 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useScrollPosition from "../useScrollPosition";
+import { useEffect } from "react";
 
 export default function useInfiniteUsers(cacheKey, search) {
   const URL = (pageParam) =>
     `/api/user?page=${pageParam}&limit=5&search=${search ? search : ""}`;
+  const scrollPosition = useScrollPosition();
 
   const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
     useInfiniteQuery({
@@ -20,5 +23,11 @@ export default function useInfiniteUsers(cacheKey, search) {
     page.users.map((user) => ({ ...user, page: idx }))
   );
 
-  return { users, hasNextPage, fetchNextPage, isFetching, isLoading };
+  useEffect(() => {
+    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
+
+  return { users, isFetching, isLoading };
 }

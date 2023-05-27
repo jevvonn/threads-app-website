@@ -1,13 +1,16 @@
 import FilterWidget from "@/components/navigation/FilterWidget";
 import Navbar from "@/components/navigation/Navbar";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
+import UserSkeleton from "@/components/skeleton/UserSkeleton";
 import SingleThread from "@/components/thread/SingleThread";
+import UserCard from "@/components/user/UserCard";
 import useInfiniteThreads from "@/hooks/thread/useInfiniteThreads";
+import useInfiniteUsers from "@/hooks/user/useInfiniteUsers";
 import Head from "next/head";
 import { useState } from "react";
 
 export default function Search({ q }) {
-  // const { users, isFetching } = useInfiniteUsers(["users", "recommendation"]);
+  const { users } = useInfiniteUsers(["users", { search: q }], q);
   const [tab, setTab] = useState("THREAD");
   const queryKey = ["threads", { search: q }];
   const { threads, isLoading, onFilter } = useInfiniteThreads(
@@ -38,7 +41,7 @@ export default function Search({ q }) {
                   : `baseStyleTab rounded-l font-semibold`
               }
             >
-              Threads
+              {"Thred's"}
             </button>
             <button
               onClick={() => setTab("USER")}
@@ -53,8 +56,10 @@ export default function Search({ q }) {
           </div>
           {tab == "THREAD" ? (
             <>
-              <FilterWidget onFilter={onFilter} isFull={true} />
-              <div className="flex flex-col gap-5">
+              {!!threads?.length && (
+                <FilterWidget onFilter={onFilter} isFull={true} />
+              )}
+              <div className="flex flex-col gap-2">
                 {threads?.map((thread) => (
                   <SingleThread
                     thread={thread}
@@ -64,9 +69,37 @@ export default function Search({ q }) {
                 ))}
                 {isLoading && <ThreadSkeleton total={5} />}
               </div>
+
+              {!threads?.length && !isLoading && (
+                <div className="flex justify-center w-full mt-20">
+                  <h1 className="text-2xl">
+                    No results for{" "}
+                    <span className="text-primary italic">"{q}"</span>
+                  </h1>
+                </div>
+              )}
+
+              {isLoading && <ThreadSkeleton total={5} />}
             </>
           ) : (
-            <div>ok</div>
+            <>
+              <div className="flex flex-col gap-2">
+                {users?.map((user) => (
+                  <UserCard key={user.id} user={user} />
+                ))}
+              </div>
+
+              {!users?.length && !isLoading && (
+                <div className="flex justify-center w-full mt-20">
+                  <h1 className="text-2xl">
+                    No users name like{" "}
+                    <span className="text-primary italic">"{q}"</span>
+                  </h1>
+                </div>
+              )}
+
+              {isLoading && <UserSkeleton total={5} />}
+            </>
           )}
         </div>
       </div>
