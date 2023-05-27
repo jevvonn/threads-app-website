@@ -21,7 +21,7 @@ export default function useDeleteThread(threadId, refreshPage) {
           refetchPage: (_, index) => index === refreshPage,
         });
         toast.custom(
-          () => <AlertToast text={`Your thred's has been deleted!`} />,
+          () => <AlertToast t={t} text={`Your thred's has been deleted!`} />,
           { position: "bottom-center" }
         );
       },

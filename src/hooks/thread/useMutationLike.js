@@ -22,7 +22,7 @@ export default function useMutationLike(threadId, refreshPage) {
           refetchPage: (_, index) => index === refreshPage,
         });
         toast.custom(
-          () => <AlertToast text={`Your like has been recorded!`} />,
+          () => <AlertToast t={t} text={`Your like has been recorded!`} />,
           { position: "bottom-center", id: "action-notification" }
         );
       },
@@ -32,8 +32,12 @@ export default function useMutationLike(threadId, refreshPage) {
   const handleLike = (hasLiked) => {
     if (!session) {
       return toast.custom(
-        () => (
-          <AlertToast text={`Login to likes this Thred's!`} isSuccess={false} />
+        (t) => (
+          <AlertToast
+            t={t}
+            text={`Login to likes this Thred's!`}
+            isSuccess={false}
+          />
         ),
         { position: "bottom-center" }
       );

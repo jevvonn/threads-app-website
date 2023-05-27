@@ -21,8 +21,12 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
   const handleVote = (voteType) => {
     if (!session) {
       return toast.custom(
-        () => (
-          <AlertToast text={`Login to vote this Comment!`} isSuccess={false} />
+        (t) => (
+          <AlertToast
+            t={t}
+            text={`Login to vote this Comment!`}
+            isSuccess={false}
+          />
         ),
         { position: "top-center" }
       );
@@ -55,7 +59,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
           }
         );
         toast.custom(
-          () => <AlertToast text={`Your vote has been recorded.`} />,
+          () => <AlertToast t={t} text={`Your vote has been recorded.`} />,
           { position: "top-center", id: "action-notification" }
         );
       },
@@ -65,8 +69,12 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
   const handleLike = () => {
     if (!session) {
       return toast.custom(
-        () => (
-          <AlertToast text={`Login to likes this Comment!`} isSuccess={false} />
+        (t) => (
+          <AlertToast
+            t={t}
+            text={`Login to likes this Comment!`}
+            isSuccess={false}
+          />
         ),
         { position: "top-center" }
       );
@@ -95,7 +103,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
             }
           );
           toast.custom(
-            () => <AlertToast text={`Your like has been recorded.`} />,
+            () => <AlertToast t={t} text={`Your like has been recorded.`} />,
             { position: "top-center", id: "action-notification" }
           );
         },

@@ -14,8 +14,8 @@ export default function CommentForm({ thread }) {
 
   const handleSubmit = () => {
     if (!body || body == "")
-      return toast.custom(() => (
-        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      return toast.custom((t) => (
+        <AlertToast t={t} isSuccess={false} text={"Please fill your content"} />
       ));
 
     mutateCreateComment(
@@ -33,7 +33,7 @@ export default function CommentForm({ thread }) {
           ]);
           setBody(``);
           toast.custom(
-            () => <AlertToast text={`Your comment has been added!`} />,
+            () => <AlertToast t={t} text={`Your comment has been added!`} />,
             { position: "top-center", id: "action-notification" }
           );
         },

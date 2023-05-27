@@ -85,8 +85,9 @@ export default function User() {
             {isFetching && <ThreadSkeleton total={5} />}
             {!threads?.length && !isFetching && (
               <div className="flex justify-center w-full mt-20">
-                <h1 className="text-2xl">
-                  <span className="text-primary italic">{user.name}</span>{" "}
+                <h1 className="text-2xl text-center">
+                  <span className="text-primary italic">{user.name}</span>
+                  <br />
                   doesn't have any thred yet.
                 </h1>
               </div>

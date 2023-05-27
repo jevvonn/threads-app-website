@@ -83,23 +83,28 @@ export default function EditThread({ threadId, userId }) {
 
   async function handleSubmit() {
     if (!title)
-      return toast.custom(() => (
-        <AlertToast isSuccess={false} text={"Please fill your title"} />
+      return toast.custom((t) => (
+        <AlertToast t={t} isSuccess={false} text={"Please fill your title"} />
       ));
     if (thread.type == "POST_BODY" && (!body || body == "<p><br></p>"))
-      return toast.custom(() => (
-        <AlertToast isSuccess={false} text={"Please fill your content"} />
+      return toast.custom((t) => (
+        <AlertToast t={t} isSuccess={false} text={"Please fill your content"} />
       ));
     if (thread.type == "POST_SOURCE" && !source.length)
-      return toast.custom(() => (
+      return toast.custom((t) => (
         <AlertToast
+          t={t}
           isSuccess={false}
           text={"Please upload some image or video"}
         />
       ));
     if (!tags.length)
-      return toast.custom(() => (
-        <AlertToast isSuccess={false} text={"Please add at least one tag"} />
+      return toast.custom((t) => (
+        <AlertToast
+          t={t}
+          isSuccess={false}
+          text={"Please add at least one tag"}
+        />
       ));
 
     mutateUpdatePost({

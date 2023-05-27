@@ -12,8 +12,12 @@ export default function ButtonFollow({ user, className }) {
 
   const handleFollow = async () => {
     if (!session)
-      return toast.custom(() => (
-        <AlertToast text={`Login to follow ${user.name}`} isSuccess={false} />
+      return toast.custom((t) => (
+        <AlertToast
+          t={t}
+          text={`Login to follow ${user.name}`}
+          isSuccess={false}
+        />
       ));
     followUser({ id: user.id, hasFollowed });
   };
