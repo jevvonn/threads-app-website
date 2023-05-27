@@ -7,19 +7,20 @@ export default function useInfiniteThreads(cacheKey, filter, tag, userId) {
       tag ? tag : ""
     }&userId=${userId ? userId : ""}`;
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await axios.get(URL(pageParam));
-      return data;
-    },
-    queryKey: [...cacheKey],
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-    refetchOnWindowFocus: false,
-  });
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
+    useInfiniteQuery({
+      queryFn: async ({ pageParam = 1 }) => {
+        const { data } = await axios.get(URL(pageParam));
+        return data;
+      },
+      queryKey: [...cacheKey],
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      refetchOnWindowFocus: false,
+    });
 
   const threads = data?.pages.flatMap((page, idx) =>
     page.threads.map((thread) => ({ ...thread, page: idx }))
   );
 
-  return { threads, hasNextPage, fetchNextPage, isFetching };
+  return { threads, hasNextPage, fetchNextPage, isFetching, isLoading };
 }
