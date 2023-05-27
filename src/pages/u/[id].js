@@ -2,8 +2,10 @@ import FilterWidget from "@/components/navigation/FilterWidget";
 import Navbar from "@/components/navigation/Navbar";
 import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import SingleThread from "@/components/thread/SingleThread";
+import ButtonFollow from "@/components/user/ButtonFollow";
 import useInfiniteThreads from "@/hooks/thread/useInfiniteThreads";
 import useScrollPosition from "@/hooks/useScrollPosition";
+import useFollowUser from "@/hooks/user/useFollowUser";
 import useSingleUser from "@/hooks/user/useSingleUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -12,6 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
+import { BiCheck, BiPlus } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
 
 export default function User() {
@@ -54,7 +58,7 @@ export default function User() {
       {user && (
         <div className="w-full lg:w-3/4 py-3 flex gap-3 mx-auto mt-16">
           <div className="lg:w-8/12 w-full md:px-3 lg:px-0 flex flex-col items-end gap-3">
-            <div className="w-full md:w-11/12 lg:h-32 flex gap-4 lg:items-center border rounded p-2">
+            <div className="w-full md:w-11/12 lg:h-32 flex gap-4 lg:items-center border rounded p-4">
               <div>
                 <div className="avatar w-16">
                   <div className="w-16 rounded-full border">
@@ -73,35 +77,20 @@ export default function User() {
                   <div className="lg:hidden flex gap-2">
                     <div className=" flex gap-2">
                       <span className="font-semibold">
-                        {user._count.followedBy}
+                        {user._count.follows}
                       </span>
                       <p>Following</p>
                     </div>
                     <div className="flex gap-2">
                       <span className="font-semibold">
-                        {user._count.follows}
+                        {user._count.followedBy}
                       </span>
                       <p>Follower</p>
                     </div>
                   </div>
                 </div>
                 {user.id !== session.user.id ? (
-                  user.followedBy?.length ? (
-                    <button
-                      onClick={() => setFollow(false)}
-                      className="md:w-1/2 border border-primary rounded text-primary flex justify-center items-center gap-1 text-lg transition"
-                    >
-                      <MdDone />
-                      <span>Following</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setFollow(true)}
-                      className="md:w-1/2 bg-primary rounded text-white flex justify-center items-center gap-1 text-lg transition"
-                    >
-                      <span className="text-2xl font-medium">+</span>Follow
-                    </button>
-                  )
+                  <ButtonFollow user={user} />
                 ) : (
                   <Link
                     href={"/profile-setting"}
@@ -111,7 +100,6 @@ export default function User() {
                   </Link>
                 )}
               </div>
-              {/* <div className="hidden lg:flex divider divider-horizontal mx-0 items-end" /> */}
             </div>
             <FilterWidget onFilter={handleClickFilter} />
             {threads?.map((thread) => (

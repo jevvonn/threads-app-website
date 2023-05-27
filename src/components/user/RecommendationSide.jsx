@@ -4,7 +4,7 @@ import UserCard from "./UserCard";
 import UserSkeleton from "../skeleton/UserSkeleton";
 
 export default function RecommendationSide() {
-  const { users, isFetching } = useInfiniteUsers(["users", "recommendation"]);
+  const { users, isFetching, isLoading } = useInfiniteUsers(["users"]);
 
   return (
     <div className="hidden w-2/6 lg:block">
@@ -16,7 +16,7 @@ export default function RecommendationSide() {
         {users?.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}
-        {isFetching && <UserSkeleton total={5} />}
+        {isLoading && <UserSkeleton total={5} />}
       </div>
     </div>
   );

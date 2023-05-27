@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import ButtonFollow from "./ButtonFollow";
 
 export default function UserCard({ user }) {
   const { data: session } = useSession();
@@ -18,17 +19,7 @@ export default function UserCard({ user }) {
         <span className="font-semibold">{user.name}</span>
       </div>
       {session && session.user.id !== user.id ? (
-        <>
-          {hasFollowed ? (
-            <button className="btn btn-sm btn-ghost border-primary capitalize tracking-wider">
-              Unfollow
-            </button>
-          ) : (
-            <button className="btn btn-sm btn-primary text-white capitalize tracking-wider">
-              Follow
-            </button>
-          )}
-        </>
+        <ButtonFollow user={user} />
       ) : (
         <Link
           href={`/u/${user.id}`}
