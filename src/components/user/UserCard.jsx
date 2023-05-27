@@ -6,28 +6,32 @@ import ButtonFollow from "./ButtonFollow";
 
 export default function UserCard({ user }) {
   const { data: session } = useSession();
-  const hasFollowed = !!user.followedBy?.length;
 
   return (
     <div className="w-full flex justify-between items-center gap-3">
-      <div className="flex items-center gap-2">
+      <Link
+        href={`/u/${user.id}`}
+        className="flex items-center gap-2 tooltip"
+        data-tip={user.name}
+      >
         <div className="avatar">
           <div className="w-12 rounded-full border">
             <Image alt="post-user" src={user.image} width={100} height={100} />
           </div>
         </div>
-        <span className="font-semibold">{user.name}</span>
+      </Link>
+      <div className="w-full">
+        {session && session.user.id !== user.id ? (
+          <ButtonFollow user={user} />
+        ) : (
+          <Link
+            href={`/u/${user.id}`}
+            className="btn btn-sm btn-primary btn-outline capitalize tracking-wider w-full rounded"
+          >
+            See Profile
+          </Link>
+        )}
       </div>
-      {session && session.user.id !== user.id ? (
-        <ButtonFollow user={user} />
-      ) : (
-        <Link
-          href={`/u/${user.id}`}
-          className="btn btn-sm btn-ghost border-primary border capitalize tracking-wider"
-        >
-          See Profile
-        </Link>
-      )}
     </div>
   );
 }

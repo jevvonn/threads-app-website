@@ -94,7 +94,7 @@ export default function User() {
                 ) : (
                   <Link
                     href={"/profile-setting"}
-                    className="md:w-1/2 border border-primary rounded text-primary flex justify-center items-center gap-1 text-lg transition"
+                    className="btn btn-primary btn-outline text-white w-full btn-sm flex gap-1 text-sm rounded normal-case hover:text-white items-center"
                   >
                     Profile Setting
                   </Link>

@@ -2,7 +2,7 @@ import useFollowUser from "@/hooks/user/useFollowUser";
 import { AiOutlineLoading } from "react-icons/ai";
 import { BiCheck, BiPlus } from "react-icons/bi";
 
-export default function ButtonFollow({ user }) {
+export default function ButtonFollow({ user, className }) {
   const hasFollowed = !!user.followedBy?.length;
   const { followUser, isLoading: isFollowLoading } = useFollowUser();
 
@@ -15,7 +15,9 @@ export default function ButtonFollow({ user }) {
       onClick={handleFollow}
       className={`btn btn-primary ${
         hasFollowed ? "btn-outline" : ""
-      } text-white md:w-1/2 btn-sm flex gap-1 text-sm rounded normal-case hover:text-white items-center`}
+      } text-white w-full btn-sm flex gap-1 text-sm rounded normal-case hover:text-white items-center ${
+        className ? className : ""
+      }`}
     >
       {hasFollowed ? (
         <>
