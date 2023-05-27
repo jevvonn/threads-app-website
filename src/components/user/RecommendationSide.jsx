@@ -1,10 +1,10 @@
 import useInfiniteUsers from "@/hooks/user/useInfiniteUsers";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import UserCard from "./UserCard";
 import UserSkeleton from "../skeleton/UserSkeleton";
+import RecommendationCard from "./RecommendationCard";
 
 export default function RecommendationSide() {
-  const { users, isFetching, isLoading } = useInfiniteUsers(["users"]);
+  const { users, isLoading } = useInfiniteUsers(["users"]);
 
   return (
     <div className="hidden w-2/6 lg:block">
@@ -14,7 +14,7 @@ export default function RecommendationSide() {
           <AiOutlineUsergroupAdd size={30} />
         </div>
         {users?.map((user) => (
-          <UserCard key={user.id} user={user} />
+          <RecommendationCard key={user.id} user={user} />
         ))}
         {isLoading && <UserSkeleton total={5} />}
       </div>
