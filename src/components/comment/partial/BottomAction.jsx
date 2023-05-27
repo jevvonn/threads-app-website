@@ -22,7 +22,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
     if (!session) {
       return toast.custom(
         () => (
-          <AlertToast text={`Login to vote this Thred's!`} isSuccess={false} />
+          <AlertToast text={`Login to vote this Comment!`} isSuccess={false} />
         ),
         { position: "top-center" }
       );
@@ -66,7 +66,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
     if (!session) {
       return toast.custom(
         () => (
-          <AlertToast text={`Login to likes this Thred's!`} isSuccess={false} />
+          <AlertToast text={`Login to likes this Comment!`} isSuccess={false} />
         ),
         { position: "top-center" }
       );
