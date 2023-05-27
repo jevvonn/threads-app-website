@@ -43,13 +43,13 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
         </div>
         <div className="flex flex-col gap-2 w-full">
           <div className="flex w-full">
-            <divc className="w-full">
+            <div className="w-full">
               <span className="font-semibold">
                 {comment.user.name}{" "}
                 {comment.repliedTo && (
                   <>
                     <span className="text-sm text-slate-500 group cursor-pointer">
-                      <span className="text-xs">Reply To</span>{" "}
+                      <span className="text-xs">Reply to</span>{" "}
                       <span className="group-hover:underline">
                         {comment.repliedTo.user.name}
                       </span>
@@ -58,7 +58,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
                 )}
               </span>
               <p>{relativeDateTime(timestamp)}</p>
-            </divc>
+            </div>
             <div className="flex w-full justify-end">
               {session?.user?.id === comment.user.id && (
                 <DropdownMoreComment
@@ -104,7 +104,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
           </div>
           <div className="w-full flex flex-col gap-2 py-2">
             {comments.map((replyComment, idx) => (
-              <>
+              <div key={replyComment.id}>
                 <div className="flex items-center w-full">
                   <div className="w-4 border border-slate-300" />
                   <SingleComment
@@ -132,7 +132,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
                     )}
                   </button>
                 )}
-              </>
+              </div>
             ))}
           </div>
         </div>

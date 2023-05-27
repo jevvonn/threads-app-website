@@ -12,13 +12,23 @@ import UserInfoSkeleton from "@/components/skeleton/UserInfoSkeleton";
 import SingleComment from "@/components/comment/SingleComment";
 import useInfiniteComments from "@/hooks/comment/useInfiniteComment";
 import Link from "next/link";
+import useScrollPosition from "@/hooks/useScrollPosition";
+import { useEffect } from "react";
 
 export default function Thread() {
   const router = useRouter();
   const { id } = router.query;
   const { thread, isLoading } = useSingleThread(id);
-  const { comments } = useInfiniteComments(id, ["comments", { threadId: id }]);
+  const { comments, hasNextPage, isFetching, fetchNextPage } =
+    useInfiniteComments(id, ["comments", { threadId: id }]);
   const { data: session } = useSession();
+  const scrollPosition = useScrollPosition();
+
+  useEffect(() => {
+    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <>
