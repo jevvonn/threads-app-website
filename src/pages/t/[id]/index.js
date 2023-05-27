@@ -14,6 +14,7 @@ import useInfiniteComments from "@/hooks/comment/useInfiniteComment";
 import Link from "next/link";
 import useScrollPosition from "@/hooks/useScrollPosition";
 import { useEffect } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Thread() {
   const router = useRouter();
@@ -62,6 +63,11 @@ export default function Thread() {
                       key={comment.id}
                     />
                   ))}
+                  {isFetching && (
+                    <div className="w-full flex justify-center">
+                      <AiOutlineLoading className="animate-spin" size={40} />
+                    </div>
+                  )}
                 </div>
                 {!comments?.length && (
                   <p className="flex w-full justify-center">

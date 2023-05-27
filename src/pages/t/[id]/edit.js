@@ -9,7 +9,7 @@ import autosize from "autosize";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function EditThread({ threadId, userId }) {
   const { thread, isLoading } = useSingleThread(threadId);
@@ -188,7 +188,7 @@ export default function EditThread({ threadId, userId }) {
 
       {isLoading && (
         <div className="w-full flex justify-center flex-col items-center gap-3 mt-24">
-          <AiOutlineLoading3Quarters size={40} className="animate-spin" />
+          <AiOutlineLoading size={40} className="animate-spin" />
         </div>
       )}
     </>
