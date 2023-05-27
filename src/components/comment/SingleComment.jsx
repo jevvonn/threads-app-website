@@ -13,6 +13,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
   const timestamp = new Date(comment.createdAt).getTime();
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+
   const {
     comments,
     hasNextPage,

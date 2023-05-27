@@ -16,6 +16,7 @@ import useScrollPosition from "@/hooks/useScrollPosition";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 
+
 export default function Thread() {
   const router = useRouter();
   const { id } = router.query;
