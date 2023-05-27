@@ -56,7 +56,11 @@ export default function Search({ q }) {
               <FilterWidget onFilter={onFilter} isFull={true} />
               <div className="flex flex-col gap-5">
                 {threads?.map((thread) => (
-                  <SingleThread thread={thread} key={thread.id} />
+                  <SingleThread
+                    thread={thread}
+                    key={thread.id}
+                    needToCut={true}
+                  />
                 ))}
                 {isLoading && <ThreadSkeleton total={5} />}
               </div>
