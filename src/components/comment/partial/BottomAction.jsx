@@ -59,7 +59,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
           }
         );
         toast.custom(
-          () => <AlertToast t={t} text={`Your vote has been recorded.`} />,
+          (t) => <AlertToast t={t} text={`Your vote has been recorded.`} />,
           { position: "top-center", id: "action-notification" }
         );
       },
@@ -103,7 +103,7 @@ export default function BottomActionComment({ comment, thread, parentPage }) {
             }
           );
           toast.custom(
-            () => <AlertToast t={t} text={`Your like has been recorded.`} />,
+            (t) => <AlertToast t={t} text={`Your like has been recorded.`} />,
             { position: "top-center", id: "action-notification" }
           );
         },

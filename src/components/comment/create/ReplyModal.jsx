@@ -48,7 +48,7 @@ export default function ReplyModal({ comment, thread, parentPage }) {
           setBody(``);
           modalCloseRef.current.click();
           toast.custom(
-            () => <AlertToast t={t} text={`Your comment has been added!`} />,
+            (t) => <AlertToast t={t} text={`Your comment has been added!`} />,
             { position: "top-center", id: "action-notification" }
           );
         },

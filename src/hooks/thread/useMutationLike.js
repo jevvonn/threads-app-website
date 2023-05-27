@@ -22,7 +22,7 @@ export default function useMutationLike(threadId, refreshPage) {
           refetchPage: (_, index) => index === refreshPage,
         });
         toast.custom(
-          () => <AlertToast t={t} text={`Your like has been recorded!`} />,
+          (t) => <AlertToast t={t} text={`Your like has been recorded!`} />,
           { position: "bottom-center", id: "action-notification" }
         );
       },

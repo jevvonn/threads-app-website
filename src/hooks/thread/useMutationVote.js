@@ -24,7 +24,7 @@ export default function useMutationVote(threadId, refetchPage) {
           refetchPage: (_, index) => index === refetchPage,
         });
         toast.custom(
-          () => <AlertToast t={t} text={`Your vote has been recorded!`} />,
+          (t) => <AlertToast t={t} text={`Your vote has been recorded!`} />,
           {
             position: "bottom-center",
             id: "action-notification",

@@ -45,7 +45,7 @@ export default function EditModal({ comment, thread, parentPage }) {
           );
           modalCloseRef.current.click();
           toast.custom(
-            () => <AlertToast t={t} text={`Your comment has been update!`} />,
+            (t) => <AlertToast t={t} text={`Your comment has been update!`} />,
             { position: "top-center", id: "action-notification" }
           );
         },
