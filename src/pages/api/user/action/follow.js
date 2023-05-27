@@ -23,15 +23,15 @@ export default async function handler(req, res) {
 
     data: hasFollowed
       ? {
-          follows: {
+          followedBy: {
             disconnect: {
               id: session.user.id,
             },
           },
         }
       : {
-          follows: {
-            disconnect: {
+          followedBy: {
+            connect: {
               id: session.user.id,
             },
           },

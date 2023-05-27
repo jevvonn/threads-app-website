@@ -32,6 +32,7 @@ export default async function handler(req, res) {
         },
       },
       followedBy: cursorUser,
+      follows: cursorUser,
     },
 
     take: parseInt(limit) + 1,
