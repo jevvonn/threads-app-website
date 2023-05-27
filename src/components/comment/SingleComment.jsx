@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import BottomActionComment from "./partial/BottomAction";
 import { useQueryClient } from "@tanstack/react-query";
+import DropdownMoreComment from "./partial/DropdownMore";
 
 export default function SingleComment({ comment, thread, parentPage = null }) {
   const timestamp = new Date(comment.createdAt).getTime();
@@ -40,22 +41,33 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <div>
-            <span className="font-semibold">
-              {comment.user.name}{" "}
-              {comment.repliedTo && (
-                <>
-                  <span className="text-sm text-slate-500 group cursor-pointer">
-                    <span className="text-xs">Reply To</span>{" "}
-                    <span className="group-hover:underline">
-                      {comment.repliedTo.user.name}
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex w-full">
+            <divc className="w-full">
+              <span className="font-semibold">
+                {comment.user.name}{" "}
+                {comment.repliedTo && (
+                  <>
+                    <span className="text-sm text-slate-500 group cursor-pointer">
+                      <span className="text-xs">Reply To</span>{" "}
+                      <span className="group-hover:underline">
+                        {comment.repliedTo.user.name}
+                      </span>
                     </span>
-                  </span>
-                </>
+                  </>
+                )}
+              </span>
+              <p>{relativeDateTime(timestamp)}</p>
+            </divc>
+            <div className="flex w-full justify-end">
+              {session?.user?.id === comment.user.id && (
+                <DropdownMoreComment
+                  comment={comment}
+                  thread={thread}
+                  parentPage={parentPage}
+                />
               )}
-            </span>
-            <p>{relativeDateTime(timestamp)}</p>
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <p className=" whitespace-pre-wrap">{comment.body}</p>
