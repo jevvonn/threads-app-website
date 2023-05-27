@@ -76,9 +76,9 @@ export default function Customize() {
         <div className="w-full">
           <div className="mt-6">
             <div className="flex justify-center gap-7 md:gap-36 mt-3">
-              <div className="w-32 h-32 relative">
+              <div className="w-24 h-24 relative">
                 <div className="avatar">
-                  <div className="rounded-full border">
+                  <div className="w-24 rounded-full border">
                     <Image
                       src={inputForm.image}
                       alt={inputForm.name}
