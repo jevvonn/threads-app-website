@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit, filter, tag, userId } = req.query;
+  const { page, limit, filter, tag, userId, search } = req.query;
 
   if (!page || !limit)
     return res
@@ -64,6 +64,14 @@ export default async function handler(req, res) {
           }
         : undefined,
       userId: userId ? userId : undefined,
+      OR: search
+        ? [
+            { title: { contains: search } },
+            { body: { contains: search } },
+            { user: { name: { contains: search } } },
+            { tags: { some: { name: { contains: search } } } },
+          ]
+        : undefined,
     },
     orderBy,
     include: {

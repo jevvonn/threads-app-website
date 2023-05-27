@@ -4,49 +4,26 @@ import ThreadSkeleton from "@/components/skeleton/ThreadSkeleton";
 import SingleThread from "@/components/thread/SingleThread";
 import ButtonFollow from "@/components/user/ButtonFollow";
 import useInfiniteThreads from "@/hooks/thread/useInfiniteThreads";
-import useScrollPosition from "@/hooks/useScrollPosition";
-import useFollowUser from "@/hooks/user/useFollowUser";
 import useSingleUser from "@/hooks/user/useSingleUser";
-import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { AiOutlineLoading } from "react-icons/ai";
-import { BiCheck, BiPlus } from "react-icons/bi";
-import { MdDone } from "react-icons/md";
 
 export default function User() {
   const router = useRouter();
   const { id } = router.query;
-  const { user, isLoading } = useSingleUser(id);
+  const { user } = useSingleUser(id);
   const { data: session } = useSession();
 
   const queryKey = ["threads", { userId: id }];
-  const queryClient = useQueryClient();
 
-  const [filter, setFilter] = useState("");
-  const scrollPosition = useScrollPosition();
-
-  const { threads, isFetching, fetchNextPage, hasNextPage } =
-    useInfiniteThreads(queryKey, filter, "", id);
-
-  const handleClickFilter = (filterName) => {
-    queryClient.removeQueries({ queryKey });
-    setFilter(filterName);
-  };
-
-  useEffect(() => {
-    queryClient.refetchQueries({ queryKey });
-  }, [filter]);
-
-  useEffect(() => {
-    if (scrollPosition > 90 && hasNextPage && !isFetching) {
-      fetchNextPage();
-    }
-  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
+  const { threads, isFetching, onFilter } = useInfiniteThreads(
+    queryKey,
+    "",
+    id
+  );
 
   return (
     <>
@@ -101,7 +78,7 @@ export default function User() {
                 )}
               </div>
             </div>
-            <FilterWidget onFilter={handleClickFilter} />
+            <FilterWidget onFilter={onFilter} />
             {threads?.map((thread) => (
               <SingleThread thread={thread} needToCut={true} key={thread.id} />
             ))}

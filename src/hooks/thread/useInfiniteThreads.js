@@ -1,11 +1,17 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import useScrollPosition from "../useScrollPosition";
 
-export default function useInfiniteThreads(cacheKey, filter, tag, userId) {
+export default function useInfiniteThreads(cacheKey, tag, userId, search) {
+  const queryClient = useQueryClient();
+  const [filter, setFilter] = useState("");
+
   const URL = (pageParam) =>
     `/api/thread?page=${pageParam}&limit=5&filter=${filter ? filter : ""}&tag=${
       tag ? tag : ""
-    }&userId=${userId ? userId : ""}`;
+    }&userId=${userId ? userId : ""}&search=${search ? search : ""}`;
+  const scrollPosition = useScrollPosition();
 
   const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
     useInfiniteQuery({
@@ -22,5 +28,25 @@ export default function useInfiniteThreads(cacheKey, filter, tag, userId) {
     page.threads.map((thread) => ({ ...thread, page: idx }))
   );
 
-  return { threads, hasNextPage, fetchNextPage, isFetching, isLoading };
+  const onFilter = (filterName) => {
+    queryClient.removeQueries({ queryKey: [...cacheKey] });
+    setFilter(filterName);
+  };
+
+  useEffect(() => {
+    queryClient.refetchQueries({ queryKey: [...cacheKey] });
+  }, [filter]);
+
+  useEffect(() => {
+    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
+
+  return {
+    threads,
+    isFetching,
+    isLoading,
+    onFilter,
+  };
 }
