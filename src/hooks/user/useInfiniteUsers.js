@@ -1,8 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function useInfiniteUsers(cacheKey) {
-  const URL = (pageParam) => `/api/user?page=${pageParam}&limit=5`;
+export default function useInfiniteUsers(cacheKey, search) {
+  const URL = (pageParam) =>
+    `/api/user?page=${pageParam}&limit=5&search=${search ? search : ""}`;
 
   const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
     useInfiniteQuery({
@@ -16,7 +17,7 @@ export default function useInfiniteUsers(cacheKey) {
     });
 
   const users = data?.pages.flatMap((page, idx) =>
-    page.users.map((thread) => ({ ...thread, page: idx }))
+    page.users.map((user) => ({ ...user, page: idx }))
   );
 
   return { users, hasNextPage, fetchNextPage, isFetching, isLoading };

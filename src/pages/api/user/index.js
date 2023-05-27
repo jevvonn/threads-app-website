@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit } = req.query;
+  const { page, limit, search } = req.query;
 
   if (!page || !limit)
     return res
@@ -24,6 +24,13 @@ export default async function handler(req, res) {
     : false;
 
   const users = await prisma.user.findMany({
+    where: {
+      name: search
+        ? {
+            contains: search,
+          }
+        : undefined,
+    },
     include: {
       _count: {
         select: {
