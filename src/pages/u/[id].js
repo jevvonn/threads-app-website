@@ -66,7 +66,7 @@ export default function User() {
                     </div>
                   </div>
                 </div>
-                {user.id !== session.user.id ? (
+                {user.id !== session?.user.id ? (
                   <ButtonFollow user={user} />
                 ) : (
                   <Link
@@ -83,6 +83,14 @@ export default function User() {
               <SingleThread thread={thread} needToCut={true} key={thread.id} />
             ))}
             {isFetching && <ThreadSkeleton total={5} />}
+            {!threads?.length && !isFetching && (
+              <div className="flex justify-center w-full mt-20">
+                <h1 className="text-2xl">
+                  <span className="text-primary italic">{user.name}</span>{" "}
+                  doesn't have any thred yet.
+                </h1>
+              </div>
+            )}
           </div>
           <div className="hidden w-4/12 lg:flex flex-col gap-6">
             <div className="h-32 flex justify-center items-center font-semibold border rounded">
