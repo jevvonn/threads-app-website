@@ -11,16 +11,13 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit, filter, tag, userId } = req.query;
+  const { page, limit, filter } = req.query;
 
   if (!page || !limit)
     return res
       .status(406)
       .json({ massage: "Please provide page and limit params" });
 
-  if (userId !== session.user.id) {
-    return res.status(403).json({ massage: "Forbidden request" });
-  }
   let orderBy = {};
   switch (filter) {
     case "most_voted":
@@ -57,15 +54,6 @@ export default async function handler(req, res) {
 
   const threads = await prisma.thread.findMany({
     where: {
-      tags: tag
-        ? {
-            some: {
-              name: {
-                equals: tag,
-              },
-            },
-          }
-        : undefined,
       savedBy: {
         some: {
           id: session.user.id,

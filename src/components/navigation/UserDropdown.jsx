@@ -68,6 +68,11 @@ function UserDropdown() {
           </Link>
         </li>
         <li>
+          <Link className="text-lg" href={`/saved`}>
+            My Save
+          </Link>
+        </li>
+        <li>
           <button onClick={() => signOut()} className="text-red-500 text-lg">
             Logout
           </button>
