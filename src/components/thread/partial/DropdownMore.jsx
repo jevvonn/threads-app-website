@@ -76,10 +76,12 @@ export default function DropdownMore({ thread }) {
             <h3 className="font-bold text-xl text-center">
               Share This {`Thred's`}.
             </h3>
-            <div className="flex items-center justify-center prose bg-base-200 py-2 rounded text-lg">
-              <code>{shareURL}</code>{" "}
-              <div onClick={copyToClipboard} className="cursor-pointer">
-                {!copied ? <BiCopy /> : <BiCheck />}
+            <div className="flex items-center justify-center bg-base-200 p-2 rounded text-lg gap-2">
+              <div className="overflow-x-auto prose text-lg">
+                <code>{shareURL}</code>
+              </div>
+              <div onClick={copyToClipboard} className="cursor-pointer w-max">
+                {!copied ? <BiCopy size={22} /> : <BiCheck size={22} />}
               </div>
             </div>
             <div className="divider mx-0">OR</div>
