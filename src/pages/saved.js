@@ -20,7 +20,7 @@ export default function SavedThread() {
             My <span className="text-primary">Saved</span> Post
           </h1>
           {threads?.map((thread) => (
-            <SingleThread key={thread.id} thread={thread} />
+            <SingleThread key={thread.id} needToCut={true} thread={thread} />
           ))}
 
           {!threads?.length && !isLoading && (
