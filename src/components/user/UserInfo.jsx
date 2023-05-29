@@ -1,6 +1,7 @@
 import Image from "next/image";
 import TagItem from "../thread/addition/TagItem";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function UserInfo({ thread }) {
   const { data: session } = useSession();
@@ -31,9 +32,12 @@ export default function UserInfo({ thread }) {
             {session && (
               <>
                 <hr />
-                <button className="w-11/12 mx-auto py-1 border border-primary rounded-full font-semibold text-xl text-primary hover:bg-primary hover:text-white transition">
-                  Follow
-                </button>
+                <Link
+                  href={`/u/${thread.user.id}`}
+                  className="btn btn-sm btn-primary btn-outline capitalize tracking-wider w-full rounded"
+                >
+                  See Profile
+                </Link>
               </>
             )}
           </div>
