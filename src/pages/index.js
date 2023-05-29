@@ -42,6 +42,11 @@ export default function Home() {
                 />
               ))
             : null}
+          {!threads?.length && !isFetching && (
+            <div className="flex justify-center w-full mt-20">
+              <h1 className="text-2xl text-center">Nothing to show here.</h1>
+            </div>
+          )}
           {isFetching && <ThreadSkeleton total={5} />}
         </div>
         <RecommendationSide />
