@@ -65,7 +65,7 @@ export default function DropdownMore({ thread }) {
           id={`share-modal-${thread.id}`}
           className="modal-toggle"
         />
-        <div className="modal">
+        <div className="modal modal-bottom sm:modal-middle">
           <div className="modal-box relative flex flex-col gap-4">
             <label
               htmlFor={`share-modal-${thread.id}`}
