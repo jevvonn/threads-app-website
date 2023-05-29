@@ -3,7 +3,7 @@ import axios from "axios";
 import useScrollPosition from "../useScrollPosition";
 import { useEffect } from "react";
 
-export default function useInfiniteUsers(cacheKey, search) {
+export default function useInfiniteUsers(cacheKey, search, infinite = true) {
   const URL = (pageParam) =>
     `/api/user?page=${pageParam}&limit=5&search=${search ? search : ""}`;
   const scrollPosition = useScrollPosition();
@@ -24,7 +24,7 @@ export default function useInfiniteUsers(cacheKey, search) {
   );
 
   useEffect(() => {
-    if (scrollPosition > 90 && hasNextPage && !isFetching) {
+    if (scrollPosition > 90 && hasNextPage && !isFetching && infinite) {
       fetchNextPage();
     }
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);

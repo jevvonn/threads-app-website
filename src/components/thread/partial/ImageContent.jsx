@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import Skeleton from "react-loading-skeleton";
 
-export default function ImageContent({ slides }) {
+export default function ImageContent({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentIndex === slides.length - 1;
+    const isLastSlide = currentIndex === images.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
@@ -19,10 +21,17 @@ export default function ImageContent({ slides }) {
   return (
     <div className="relative group">
       <img
-        src={slides[currentIndex].url}
-        alt={slides[currentIndex].url}
+        src={images[currentIndex].url}
+        alt={images[currentIndex].url}
+        onLoad={(e) => setIsLoaded(false)}
+        onLoadStart={(e) => setIsLoaded(true)}
         className="rounded object-contain"
       />
+      {isLoaded && (
+        <div className="w-full">
+          <Skeleton width="100%" height={200} />
+        </div>
+      )}
       {/* Left Arrow */}
       <button className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
         <AiOutlineLeft onClick={prevSlide} size={30} />
