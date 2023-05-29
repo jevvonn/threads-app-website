@@ -27,7 +27,7 @@ function SingleThread({ thread, needToCut = false, isLink = true }) {
                 />
               </div>
             </div>
-            <div className="w-full">
+            <div className="w-max">
               <span className="font-semibold group-hover:underline">
                 {thread.user.name}
               </span>
