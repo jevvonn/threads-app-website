@@ -4,7 +4,7 @@ import UserSkeleton from "../skeleton/UserSkeleton";
 import RecommendationCard from "./RecommendationCard";
 
 export default function RecommendationSide() {
-  const { users, isLoading } = useInfiniteUsers(["users"]);
+  const { users, isLoading } = useInfiniteUsers(["users"], "", false);
 
   return (
     <div className="hidden w-2/6 lg:block">
