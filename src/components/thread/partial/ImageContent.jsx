@@ -24,6 +24,7 @@ export default function ImageContent({ images }) {
         src={images[currentIndex].url}
         alt={images[currentIndex].url}
         onLoad={(e) => setIsLoaded(false)}
+        onLoadStart={(e) => setIsLoaded(true)}
         className="rounded object-contain"
       />
       {isLoaded && (
