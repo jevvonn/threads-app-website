@@ -1,14 +1,31 @@
 import useDeleteThread from "@/hooks/thread/useDeleteThread";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { AiOutlineLoading, AiOutlineMore } from "react-icons/ai";
+import { BiCheck, BiCopy } from "react-icons/bi";
 import { BsFillTrashFill, BsPencilFill, BsShareFill } from "react-icons/bs";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
 
 export default function DropdownMore({ thread }) {
   const { data: session } = useSession();
   const router = useRouter();
+  const [copied, setCopied] = useState(false);
+  const shareURL = `https://${window.location.hostname}/t/${thread.id}`;
 
   const { mutateDelete, isLoading } = useDeleteThread(thread.id, thread.page);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareURL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
 
   return (
     <>
@@ -21,9 +38,9 @@ export default function DropdownMore({ thread }) {
           className="dropdown-content shadow bg-base-100 rounded menu p-1 w-40 font-semibold border"
         >
           <li>
-            <button>
+            <label htmlFor={`share-modal-${thread.id}`}>
               <BsShareFill /> Share
-            </button>
+            </label>
           </li>
           {session?.user?.id === thread.user.id && (
             <>
@@ -41,6 +58,47 @@ export default function DropdownMore({ thread }) {
           )}
         </ul>
       </div>
+
+      <>
+        <input
+          type="checkbox"
+          id={`share-modal-${thread.id}`}
+          className="modal-toggle"
+        />
+        <div className="modal">
+          <div className="modal-box flex flex-col gap-4">
+            <label
+              htmlFor={`share-modal-${thread.id}`}
+              className="btn bg-base-200 btn-ghost btn-sm btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="font-bold text-xl text-center">
+              Share This {`Thred's`}.
+            </h3>
+            <div className="flex items-center justify-center bg-base-200 p-2 rounded text-lg gap-2">
+              <div className="overflow-x-auto prose text-lg">
+                <code>{shareURL}</code>
+              </div>
+              <div onClick={copyToClipboard} className="cursor-pointer w-max">
+                {!copied ? <BiCopy size={22} /> : <BiCheck size={22} />}
+              </div>
+            </div>
+            <div className="divider mx-0">OR</div>
+            <div className="flex gap-4 justify-center">
+              <TwitterShareButton url={shareURL}>
+                <TwitterIcon className="rounded-full w-10 h-10" />
+              </TwitterShareButton>
+              <FacebookShareButton url={shareURL}>
+                <FacebookIcon className="rounded-full w-10 h-10" />
+              </FacebookShareButton>
+              <WhatsappShareButton url={shareURL}>
+                <WhatsappIcon className="rounded-full w-10 h-10" />
+              </WhatsappShareButton>
+            </div>
+          </div>
+        </div>
+      </>
 
       <>
         <input
