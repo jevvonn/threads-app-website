@@ -35,7 +35,7 @@ export default function DropdownMoreComment({ comment, thread, parentPage }) {
           );
           toast.custom(
             (t) => <AlertToast t={t} text={`Your comment has been deleted.`} />,
-            { position: "top-center", id: "action-notification" }
+            { position: "top-center" }
           );
         },
       }

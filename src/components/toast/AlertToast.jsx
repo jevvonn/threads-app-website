@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import { CheckmarkIcon, ErrorIcon, toast } from "react-hot-toast";
 
 export default function AlertToast({ text, isSuccess = true, t }) {
+  useEffect(() => {
+    setTimeout(() => {
+      toast.dismiss(t.id);
+    }, 2000);
+  }, [t]);
+
   return (
     <div
       className={`${

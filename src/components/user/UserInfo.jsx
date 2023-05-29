@@ -29,17 +29,13 @@ export default function UserInfo({ thread }) {
               <span className="font-semibold">{thread.user.name}</span>
             </div>
             {thread.user.bio && <p>{thread.user.bio}</p>}
-            {session && (
-              <>
-                <hr />
-                <Link
-                  href={`/u/${thread.user.id}`}
-                  className="btn btn-sm btn-primary btn-outline capitalize tracking-wider w-full rounded"
-                >
-                  See Profile
-                </Link>
-              </>
-            )}
+            <hr />
+            <Link
+              href={`/u/${thread.user.id}`}
+              className="btn btn-sm btn-primary btn-outline capitalize tracking-wider w-full rounded"
+            >
+              See Profile
+            </Link>
           </div>
         </div>
         <div className="hidden lg:flex flex-col items-center  w-full  border">
