@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BsBarChartFill, BsFire } from "react-icons/bs";
 import { MdAccessTimeFilled } from "react-icons/md";
 
-export default function FilterWidget({ onFilter, isFull = false }) {
+export default function FilterWidget({ onFilter, isFull = false, filter }) {
   return (
     <div
       className={`w-full ${!isFull ? "md:w-11/12" : ""}  flex border rounded`}
@@ -10,7 +10,9 @@ export default function FilterWidget({ onFilter, isFull = false }) {
       <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
         <button
           onClick={() => onFilter("")}
-          className="w-14 h-14 flex justify-center items-center text-yellow-400 border rounded-full"
+          className={`w-14 h-14 flex justify-center items-center text-yellow-400 border rounded-full ${
+            filter === "" ? "border-primary" : ""
+          }`}
         >
           <MdAccessTimeFilled size={30} />
         </button>
@@ -19,7 +21,9 @@ export default function FilterWidget({ onFilter, isFull = false }) {
       <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
         <button
           onClick={() => onFilter("most_liked")}
-          className="w-14 h-14 flex justify-center items-center text-red-600 border rounded-full"
+          className={`w-14 h-14 flex justify-center items-center text-red-600 border rounded-full  ${
+            filter === "most_liked" ? "border-primary" : ""
+          }`}
         >
           <BsFire size={30} />
         </button>
@@ -28,7 +32,9 @@ export default function FilterWidget({ onFilter, isFull = false }) {
       <div className="w-2/6 h-28 flex flex-col justify-center items-center gap-2">
         <button
           onClick={() => onFilter("most_voted")}
-          className="w-14 h-14 flex justify-center items-center text-primary border rounded-full"
+          className={`w-14 h-14 flex justify-center items-center text-primary border rounded-full ${
+            filter === "most_voted" ? "border-primary" : ""
+          }`}
         >
           <BsBarChartFill size={30} />
         </button>

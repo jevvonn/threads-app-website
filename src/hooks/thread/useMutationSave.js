@@ -25,7 +25,6 @@ export default function useMutationSave(threadId, refreshPage) {
           (t) => <AlertToast t={t} text={`Your save has been update!`} />,
           {
             position: "bottom-center",
-            id: "action-notification",
           }
         );
       },

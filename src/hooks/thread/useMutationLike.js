@@ -23,7 +23,7 @@ export default function useMutationLike(threadId, refreshPage) {
         });
         toast.custom(
           (t) => <AlertToast t={t} text={`Your like has been recorded!`} />,
-          { position: "bottom-center", id: "action-notification" }
+          { position: "bottom-center" }
         );
       },
     }

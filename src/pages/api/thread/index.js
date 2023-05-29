@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (req.method != "GET")
     return res.status(405).json({ massage: "Method not allowed" });
 
-  const { page, limit, filter, tag, userId, search } = req.query;
+  const { page, limit, filter, tag, userId, search, base } = req.query;
 
   if (!page || !limit)
     return res
@@ -51,6 +51,22 @@ export default async function handler(req, res) {
   const cursorUser = session
     ? { cursor: { id: session.user.id }, select: { id: true } }
     : false;
+  let user;
+
+  if (session && base == "following") {
+    user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      include: {
+        follows: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
 
   const threads = await prisma.thread.findMany({
     where: {
@@ -63,7 +79,12 @@ export default async function handler(req, res) {
             },
           }
         : undefined,
-      userId: userId ? userId : undefined,
+      // userId: userId ? userId : undefined,
+      userId: user
+        ? { in: user.follows.map((f) => f.id) }
+        : userId
+        ? userId
+        : undefined,
       OR: search
         ? [
             { title: { contains: search } },

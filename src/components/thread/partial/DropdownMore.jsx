@@ -65,8 +65,8 @@ export default function DropdownMore({ thread }) {
           id={`share-modal-${thread.id}`}
           className="modal-toggle"
         />
-        <div className="modal">
-          <div className="modal-box flex flex-col gap-4">
+        <div className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box relative flex flex-col gap-4">
             <label
               htmlFor={`share-modal-${thread.id}`}
               className="btn bg-base-200 btn-ghost btn-sm btn-circle absolute right-2 top-2"
@@ -76,11 +76,12 @@ export default function DropdownMore({ thread }) {
             <h3 className="font-bold text-xl text-center">
               Share This {`Thred's`}.
             </h3>
-            <div className="flex items-center justify-center bg-base-200 p-2 rounded text-lg gap-2">
-              <div className="overflow-x-auto prose text-lg">
-                <code>{shareURL}</code>
-              </div>
-              <div onClick={copyToClipboard} className="cursor-pointer w-max">
+            <div className="flex items-center justify-center">
+              <div
+                onClick={copyToClipboard}
+                className="cursor-pointer flex items-center gap-2 w-max bg-base-200 py-2 px-4 rounded-full text-lg"
+              >
+                Copy Link{" "}
                 {!copied ? <BiCopy size={22} /> : <BiCheck size={22} />}
               </div>
             </div>

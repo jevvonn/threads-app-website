@@ -3,14 +3,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import useScrollPosition from "../useScrollPosition";
 
-export default function useInfiniteThreads(cacheKey, tag, userId, search) {
+export default function useInfiniteThreads(
+  cacheKey,
+  tag = "",
+  userId = "",
+  search = ""
+) {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("");
+  const [base, setBase] = useState("");
 
   const URL = (pageParam) =>
-    `/api/thread?page=${pageParam}&limit=5&filter=${filter ? filter : ""}&tag=${
-      tag ? tag : ""
-    }&userId=${userId ? userId : ""}&search=${search ? search : ""}`;
+    `/api/thread?page=${pageParam}&limit=5&filter=${filter}&tag=${tag}&userId=${userId}&search=${search}&base=${base}`;
   const scrollPosition = useScrollPosition();
 
   const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
@@ -33,6 +37,11 @@ export default function useInfiniteThreads(cacheKey, tag, userId, search) {
     setFilter(filterName);
   };
 
+  const changeBase = (baseName) => {
+    queryClient.removeQueries({ queryKey: [...cacheKey] });
+    setBase(baseName);
+  };
+
   useEffect(() => {
     queryClient.refetchQueries({ queryKey: [...cacheKey] });
   }, [filter]);
@@ -48,5 +57,8 @@ export default function useInfiniteThreads(cacheKey, tag, userId, search) {
     isFetching,
     isLoading,
     onFilter,
+    filter,
+    base,
+    changeBase,
   };
 }
