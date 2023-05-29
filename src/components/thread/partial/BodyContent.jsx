@@ -19,7 +19,7 @@ export default function BodyContent({ thread, needToCut }) {
         (thread.sources.length === 1 ? (
           <img src={thread.sources[0].url} alt={thread.sources[0].title} />
         ) : (
-          <ImageContent slides={thread.sources} />
+          <ImageContent images={thread.sources} />
         ))}
       {thread.type == "POST_BODY" && (
         <div

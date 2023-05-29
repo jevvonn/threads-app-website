@@ -10,7 +10,7 @@ export default function Navbar() {
   const { q } = router.query;
 
   return (
-    <div className="w-full fixed top-0 z-[1] border-b py-2 px-2 lg:px-12 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
+    <div className="w-full fixed top-0 z-50 border-b py-2 px-2 lg:px-12 flex justify-between items-center gap-1 md:gap-20 bg-base-100">
       <div className="w-8 md:w-1/5">
         <Link href="/" title="Thred's">
           <SingleLogo className="hidden lg:w-2/4 md:block" />
