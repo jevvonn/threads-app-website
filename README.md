@@ -1,4 +1,4 @@
-![Logo](https://thred-s.vercel.app/img/logo-combine.png)
+![Logo](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fthred-logo-bg-white.jpg?alt=media&token=630bde78-fa8a-4947-8f0b-864f12f11adc&_gl=1*1k394xl*_ga*MTI4OTE5NDg3NC4xNjgzMDgwNjkx*_ga_CW55HF8NVT*MTY4NTQwODY2Mi4xMC4xLjE2ODU0MDg4NzQuMC4wLjA.)
 
 
 
