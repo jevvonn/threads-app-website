@@ -70,7 +70,7 @@ export default function SingleComment({ comment, thread, parentPage = null }) {
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <p className=" whitespace-pre-wrap">{comment.body}</p>
+            <p className=" whitespace-pre-wrap break-all">{comment.body}</p>
             <BottomActionComment
               parentPage={parentPage}
               comment={comment}
