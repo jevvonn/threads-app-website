@@ -1,38 +1,140 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Logo](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fthred-logo-bg-white.jpg?alt=media&token=630bde78-fa8a-4947-8f0b-864f12f11adc&_gl=1*1k394xl*_ga*MTI4OTE5NDg3NC4xNjgzMDgwNjkx*_ga_CW55HF8NVT*MTY4NTQwODY2Mi4xMC4xLjE2ODU0MDg4NzQuMC4wLjA.)
 
-## Getting Started
 
-First, run the development server:
+
+
+# Thred's Forum Website
+
+Thred's is a website forum application where users can share something useful. Users can also discuss in the comments section with other users. Users can follow other user accounts to receive the most updated posts. There are many topics that you can search and find. For example, posts about business, posts about how to do something, posts to discuss something, and so on. The purpose of creating the Thred's website forum is to establish communication, relationships between internet users, so that they can get to know each other, and provide mutual benefits.
+
+## Screenshots
+
+![Home Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fhome-page-thred.jpeg?alt=media&token=15d33540-bad9-4217-ac02-6e81e1f1169f)
+
+![Create Thred Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fcreate-page-thred.jpeg?alt=media&token=7f9ebc3b-5e12-47d1-bc6d-fdc9f7e64908)
+
+![User Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fuser-page-thred.png?alt=media&token=8c34be69-90b9-48af-8a9e-38ad2a1fbf7c)
+
+
+## Features
+
+There are a myriad of features that this Thred's application has. Here are its features:
+
+- Login via Google or Twitter
+- Create an article post
+- Post a bunch of images
+- Commenting on post 
+- Reply on specific comment
+- Vote, like, save post
+- Vote, like comment
+- Follow other user (Thred'er)
+- Filter posts by followed user
+- Filter posts by vote, like.
+- Filter post by tags
+- Showing saved posts
+- Search for post or user
+- Share post to twitter, facebook, or whatsapp
+- Update user profile settings
+- etc.
+
+
+## Tech Stack
+
+**Client:** Next Js, TailwindCSS, Daisy UI
+
+**Server:** Prisma ORM, PlanetScale DB, Firebase Storage
+
+**3rd Library:** 
+- Quill Rich Text Editor
+- React Skeleton
+- React Icons
+- React Dropzone
+- React Hot Toast
+- React Select
+- React Share
+
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+  git clone https://github.com/jevvonn/threads-app-website.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+  cd threads-app-website
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Install dependencies
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+  npm install
+```
+To run this project, you will need to add the following environment variables to your .env file
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+PlanetScale Database URL : 
 
-## Learn More
+`DATABASE_URL=""`
 
-To learn more about Next.js, take a look at the following resources:
+Google Credential Auth :
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`GOOGLE_CLIENT_ID=""`
+`GOOGLE_SECRET=""`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Twitter Credential Auth :
 
-## Deploy on Vercel
+`TWITTER_CLIENT_ID=""`
+`TWITTER_CLIENT_SECRET=""`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Next Auth Config :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+`NEXTAUTH_SECRET=""`
+`NEXTAUTH_URL="http://localhost:3000"`
+
+Firebase Storage Config :
+
+`NEXT_PUBLIC_FIREBASE_API_KEY=""`
+`NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=""`
+`NEXT_PUBLIC_FIREBASE_PROJECT_ID=""`
+`NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=""`
+`NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=""`
+`NEXT_PUBLIC_FIREBASE_APP_ID=""`
+
+Push Prisma Schema
+
+```bash
+  npx prisma db push
+```
+
+Sync Your Prisma Client Module
+
+```bash
+  npx prisma generate
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+
+## Contributors / Team
+
+- [@jevvonn](https://github.com/jevvonn) Project Manager
+- [@ItsWormy69](https://github.com/DiandraRifqiM) Backend Developer
+- [@vidi123](https://github.com/vidi123) Frontend Developer
+- [@Febriyyy](https://github.com/Febriyyy) UI/UX Design
+- [@atalaxirpl](https://github.com/atalaxirpl) QA Tester
+- [@FarrelBadag](https://github.com/FarrelBadag) QA Tester
+
+
+## Support
+
+For support and feedback, please reach out to us at jmcb160@gmail.com.
+
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/) 
