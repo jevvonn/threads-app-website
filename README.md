@@ -2,21 +2,23 @@
 
 
 
-
 # Thred's Forum Website
 
 Thred's is a website forum application where users can share something useful. Users can also discuss in the comments section with other users. Users can follow other user accounts to receive the most updated posts. There are many topics that you can search and find. For example, posts about business, posts about how to do something, posts to discuss something, and so on. The purpose of creating the Thred's website forum is to establish communication, relationships between internet users, so that they can get to know each other, and provide mutual benefits.
 
-## Screenshots
+## 📸 Screenshots
+<div>
+<img src="https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fhome-page-thred.jpeg?alt=media&token=15d33540-bad9-4217-ac02-6e81e1f1169f" width="450px" height="200px"/>
 
-![Home Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fhome-page-thred.jpeg?alt=media&token=15d33540-bad9-4217-ac02-6e81e1f1169f)
+<img src="https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fcreate-page-thred.jpeg?alt=media&token=7f9ebc3b-5e12-47d1-bc6d-fdc9f7e64908" width="450px" height="200px"/>
 
-![Create Thred Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fcreate-page-thred.jpeg?alt=media&token=7f9ebc3b-5e12-47d1-bc6d-fdc9f7e64908)
+<img src="https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fuser-page-thred.png?alt=media&token=8c34be69-90b9-48af-8a9e-38ad2a1fbf7c" width="450px" height="200px"/>
+  
+<img src="https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fsearch-page.jfif?alt=media&token=9abe835e-117e-4c02-a635-9a35b8e42b43&_gl=1*lwr0dw*_ga*MTI4OTE5NDg3NC4xNjgzMDgwNjkx*_ga_CW55HF8NVT*MTY4NTUwNTM1OS4xMi4xLjE2ODU1MDU4MDcuMC4wLjA" width="450px" height="200px"/>
+</div>
 
-![User Page](https://firebasestorage.googleapis.com/v0/b/threds.appspot.com/o/ss-product%2Fuser-page-thred.png?alt=media&token=8c34be69-90b9-48af-8a9e-38ad2a1fbf7c)
 
-
-## Features
+## 🌟 Features
 
 There are a myriad of features that this Thred's application has. Here are its features:
 
@@ -38,11 +40,13 @@ There are a myriad of features that this Thred's application has. Here are its f
 - etc.
 
 
-## Tech Stack
+## 📚 Tech Stack
 
-**Client:** Next Js, TailwindCSS, Daisy UI
+**Client:**
+## [![My Skills](https://skillicons.dev/icons?i=nextjs,tailwind&theme=dark)](https://skillicons.dev), Daisy UI🌼
 
-**Server:** Prisma ORM, PlanetScale DB, Firebase Storage
+**Server:**
+# [![My Skills](https://skillicons.dev/icons?i=prisma,planetscale,firebase&theme=dark)](https://skillicons.dev)
 
 **3rd Library:** 
 - Quill Rich Text Editor
@@ -54,7 +58,7 @@ There are a myriad of features that this Thred's application has. Here are its f
 - React Share
 
 
-## Run Locally
+## 🚀 Run Locally
 
 Clone the project
 
@@ -122,7 +126,7 @@ Start the server
 ```
 
 
-## Contributors / Team
+## 👨‍💻 Contributors / Team
 
 - [@jevvonn](https://github.com/jevvonn) Project Manager
 - [@ItsWormy69](https://github.com/DiandraRifqiM) Backend Developer
@@ -132,7 +136,7 @@ Start the server
 - [@FarrelBadag](https://github.com/FarrelBadag) QA Tester
 
 
-## Support
+## 🤝 Support
 
 For support and feedback, please reach out to us at jmcb160@gmail.com.
 
